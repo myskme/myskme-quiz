@@ -1,0 +1,7 @@
+# 立绘等静态资产：长缓存 + immutable（换图靠改 plain.html 里的 ART_V 击穿，勿删此纪律）
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 页面本体：保持每次协商，发版即生效
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark" data-themepref="auto">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script>(function(){try{var p=localStorage.getItem('myskme-theme')||'auto';var d=p==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):p;var e=document.documentElement;e.setAttribute('data-theme',d);e.setAttribute('data-themepref',p)}catch(e){}})();</script>
+<title>词灵对决 · WORD DUEL 进阶版 — MYSKME</title>
+<style>
+/* ============ 黑金编年史 · Token ============ */
+:root{
+  --bg:#0a0a0c;--bg2:#111114;--bg3:#16161a;--bg4:#1c1c22;
+  --ink:#f0e6d2;--ink2:#a8a090;--ink3:#6a6458;--ink4:#3a382f;
+  --gold:#c9a64a;--gold2:#e8c768;--gold3:#7a6320;
+  --red:#a83030;--red2:#d56060;
+  --purple:#9d72d6;--blue:#5a8ec8;--green:#6aa86a;
+  --line:rgba(201,166,74,.22);--line2:rgba(201,166,74,.09);
+  --glow-gold:0 0 24px rgba(201,166,74,.4);
+  --glow-red:0 0 24px rgba(168,48,48,.5);
+  --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+}
+:root[data-theme="light"]{
+  --bg:#ece2cc;--bg2:#e4d8bc;--bg3:#f8f2e4;--bg4:#e0d3b3;
+  --ink:#2a2218;--ink2:#574b37;--ink3:#635943;--ink4:#9c8f6f;
+  --gold:#6f5410;--gold2:#5f470e;--gold3:#b89a52;
+  --red:#9a271d;--red2:#7a1c14;
+  --purple:#6b3fa0;--blue:#33548c;--green:#2f6a3e;
+  --line:rgba(120,90,20,.30);--line2:rgba(120,90,20,.13);
+  --glow-gold:0 4px 16px rgba(120,90,20,.18);--glow-red:0 4px 16px rgba(150,40,30,.2);
+}
+:root[data-theme="light"] body{transition:background-color .35s,color .35s}
+/* 主题切换控件（左下，避开右下水印）*/
+.ctrl{position:fixed;left:14px;bottom:14px;z-index:50;display:flex;gap:8px;
+  background:linear-gradient(180deg,#15110a,rgba(20,16,10,.97));border:1px solid var(--line);border-radius:999px;padding:5px;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+:root[data-theme="light"] .ctrl{background:linear-gradient(180deg,#f2e8d2,rgba(242,232,210,.97))}
+.ctrl button{width:38px;height:38px;border-radius:50%;border:1px solid transparent;background:transparent;color:var(--ink);
+  font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .25s,color .25s}
+.ctrl button:hover{border-color:var(--gold);color:var(--gold2)}
+/* 主菜单层级：主操作大、次操作小排一行 */
+.menu-sub{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
+.menu-btns .menu-sub .btn{font-size:13px;padding:8px 15px;width:auto;min-width:0;flex:0 0 auto}
+/* 数据管理折叠 */
+.adv{margin-top:6px;border:1px solid var(--line2);padding:8px 14px}
+.adv summary{cursor:pointer;color:var(--ink2);font-size:13px;letter-spacing:.08em;list-style:none}
+.adv summary::-webkit-details-marker{display:none}
+.adv[open] summary{color:var(--gold2);margin-bottom:6px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:var(--serif);background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden}
+::selection{background:var(--gold);color:var(--bg)}
+button{font-family:var(--serif);cursor:pointer;background:none;border:none;color:inherit}
+button:disabled{opacity:.35;cursor:not-allowed}
+
+/* 军规一：噪点 + 暗角 + 漂移光斑 */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.3;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 14s ease-in-out infinite}
+@keyframes grain{25%{transform:translate(-2%,-3%)}50%{transform:translate(3%,2%)}75%{transform:translate(-2%,3%)}}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(201,166,74,.06),transparent 55%),
+             radial-gradient(ellipse at 85% 90%,rgba(157,114,214,.05),transparent 50%),
+             radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.5) 100%)}
+
+.screen{display:none;min-height:100vh;position:relative;z-index:2;padding:24px 22px 60px;max-width:1120px;margin:0 auto;animation:scrIn .45s cubic-bezier(.16,1,.3,1)}
+.screen.on{display:block}
+@keyframes scrIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ============ 通用 ============ */
+.eyebrow{font-size:11px;letter-spacing:.5em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.h-big{font-size:clamp(30px,5vw,54px);font-weight:300;letter-spacing:.16em;line-height:1.2}
+.h-big em{font-style:normal;color:var(--gold);font-weight:500}
+.sub{color:var(--ink2);font-size:14px;margin-top:10px;letter-spacing:.05em}
+.btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);padding:13px 34px;font-size:16px;letter-spacing:.28em;transition:transform .12s,box-shadow .12s,background .2s,color .2s;background:rgba(201,166,74,.04)}
+.btn:hover:not(:disabled){background:var(--gold);color:var(--bg);transform:translateY(-2px);box-shadow:var(--glow-gold)}
+.btn:active{transform:translateY(1px) scale(.97);box-shadow:none;transition-duration:.05s}
+.btn.dim{border-color:var(--ink3);color:var(--ink2);letter-spacing:.18em;font-size:13px;padding:10px 22px}
+.btn.dim:hover:not(:disabled){background:var(--ink3);color:var(--ink);box-shadow:none}
+.tag{display:inline-block;font-size:10.5px;letter-spacing:.22em;padding:2px 10px;border:1px solid var(--line);color:var(--ink3);text-transform:uppercase}
+.tag.gold{color:var(--gold);border-color:var(--gold)}
+.tag.red{color:var(--red2);border-color:var(--red)}
+.back-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:10px;flex-wrap:wrap}
+.hr{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:24px 0}
+
+/* ============ 主菜单 ============ */
+#scr-menu{text-align:center;padding-top:7vh}
+.menu-rune{font-size:88px;font-weight:200;color:transparent;-webkit-text-stroke:1px var(--gold);line-height:1;margin-bottom:26px;animation:breathe 6s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.45}50%{opacity:.9}}
+.title-hero{animation:titleIn 1.4s cubic-bezier(.16,1,.3,1) both}
+@keyframes titleIn{0%{opacity:0;letter-spacing:.4em;transform:translateY(18px);filter:blur(6px)}100%{opacity:1;letter-spacing:.16em;transform:translateY(0);filter:blur(0)}}
+.menu-btns{display:flex;flex-direction:column;gap:13px;align-items:center;margin-top:40px}
+.menu-btns .btn{min-width:300px}
+.menu-stat{margin-top:36px;display:flex;gap:34px;justify-content:center;flex-wrap:wrap;font-size:11px;letter-spacing:.25em;color:var(--ink3);text-transform:uppercase}
+.menu-stat b{display:block;color:var(--gold);font-size:24px;font-weight:300;letter-spacing:.08em;margin-bottom:3px}
+
+/* ============ 模块选择 ============ */
+.mod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:8px}
+.mod{border:1px solid var(--line);background:var(--bg2);padding:26px 24px;cursor:pointer;position:relative;transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .25s,box-shadow .25s;animation:cardIn .5s cubic-bezier(.16,1,.3,1) both}
+.mod:nth-child(1){animation-delay:.04s}.mod:nth-child(2){animation-delay:.1s}.mod:nth-child(3){animation-delay:.16s}
+.mod:nth-child(4){animation-delay:.22s}.mod:nth-child(5){animation-delay:.28s}.mod:nth-child(6){animation-delay:.34s}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.mod:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 18px 40px -16px rgba(0,0,0,.6)}
+.mod::before,.mod::after{content:'';position:absolute;width:14px;height:14px;border:1px solid var(--gold);transition:all .3s;opacity:.5}
+.mod::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.mod::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.mod:hover::before,.mod:hover::after{width:26px;height:26px;opacity:1}
+.mod-badge{width:64px;height:64px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:16px;position:relative;background:radial-gradient(ellipse at center,rgba(201,166,74,.12),transparent 70%)}
+.mod-badge::before{content:'';position:absolute;inset:5px;border:1px dashed var(--gold3);opacity:.45;transition:transform .8s cubic-bezier(.16,1,.3,1)}
+.mod:hover .mod-badge::before{transform:rotate(45deg)}
+.mod-badge span{font-size:30px;color:var(--gold);text-shadow:0 0 20px rgba(201,166,74,.4);transition:transform .5s}
+.mod:hover .mod-badge span{transform:scale(1.12)}
+.mod h3{font-size:21px;letter-spacing:.2em;margin-bottom:4px}
+.mod .en{font-size:10.5px;letter-spacing:.3em;color:var(--ink3);text-transform:uppercase;margin-bottom:12px}
+.mod p{font-size:12.5px;color:var(--ink2);line-height:1.8;margin-bottom:14px;min-height:44px}
+.mod-prog{height:6px;background:var(--bg4);overflow:hidden;position:relative;margin-bottom:6px}
+.mod-prog i{display:block;height:100%;background:linear-gradient(90deg,var(--gold3),var(--gold));transition:width .5s cubic-bezier(.16,1,.3,1)}
+.mod-prog-t{font-size:10.5px;color:var(--ink3);letter-spacing:.12em}
+.opt-row{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;align-items:center;justify-content:center}
+.toggle{display:flex;align-items:center;gap:10px;border:1px solid var(--line);padding:11px 20px;cursor:pointer;transition:all .2s;font-size:14px;letter-spacing:.1em;color:var(--ink2)}
+.toggle:hover{border-color:var(--gold);color:var(--gold)}
+.toggle.on{border-color:var(--gold);color:var(--gold2);background:rgba(201,166,74,.08);box-shadow:var(--glow-gold)}
+.toggle .dot{width:10px;height:10px;border:1px solid currentColor;transform:rotate(45deg);transition:background .2s}
+.toggle.on .dot{background:var(--gold)}
+
+/* ============ 对局通用 HUD ============ */
+.hud{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;border:1px solid var(--line2);background:var(--bg2);padding:13px 20px;margin-bottom:20px}
+.hud-item{font-size:12px;letter-spacing:.18em;color:var(--ink3);text-transform:uppercase}
+.hud-item b{display:block;font-size:24px;color:var(--gold2);font-weight:300;letter-spacing:.06em}
+.hud-item.combo b{color:var(--purple)}
+.hud-timer{font-size:12px;letter-spacing:.18em;color:var(--ink3);text-transform:uppercase;min-width:120px}
+.hud-timer b{display:block;font-size:24px;font-weight:300;color:var(--ink)}
+.hud-timer.danger b{color:var(--red2);animation:tick .8s steps(2) infinite}
+@keyframes tick{50%{opacity:.4}}
+.round-bar{height:7px;background:var(--bg4);overflow:hidden;position:relative;margin-bottom:22px}
+.round-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold3),var(--gold));transition:width .4s cubic-bezier(.16,1,.3,1);position:relative}
+.round-bar i::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:sheen 2.2s ease-in-out infinite;transform:translateX(-100%)}
+@keyframes sheen{60%,100%{transform:translateX(100%)}}
+
+/* ============ 配对盘 ============ */
+.pair-board{display:grid;grid-template-columns:1fr 1fr;gap:14px 32px}
+.pair-col{display:flex;flex-direction:column;gap:12px}
+.pcard{border:1px solid var(--line);background:var(--bg2);padding:16px 18px;font-size:clamp(17px,2.2vw,23px);letter-spacing:.04em;cursor:pointer;transition:transform .15s,border-color .2s,box-shadow .2s,background .2s;position:relative;text-align:center;line-height:1.45;animation:cardIn .4s cubic-bezier(.16,1,.3,1) both}
+.pcard:hover:not(.gone):not(.sel){border-color:var(--gold);transform:translateY(-2px)}
+.pcard.sel{border-color:var(--gold);background:rgba(201,166,74,.12);box-shadow:var(--glow-gold);transform:scale(1.02)}
+.pcard.gone{opacity:0;transform:scale(.85);pointer-events:none}
+.pcard.right-flash{animation:rightPulse .5s ease}
+@keyframes rightPulse{0%{box-shadow:0 0 0 rgba(106,168,106,0)}40%{border-color:var(--green);box-shadow:0 0 26px rgba(106,168,106,.55);filter:brightness(1.4)}}
+.pcard.wrong-flash{animation:wrongShake .4s ease}
+@keyframes wrongShake{0%{filter:brightness(1.8)}20%{transform:translateX(-6px);border-color:var(--red)}45%{transform:translateX(5px)}70%{transform:translateX(-3px)}100%{transform:translateX(0)}}
+.pcard .hint{display:block;font-size:10px;letter-spacing:.25em;color:var(--ink3);text-transform:uppercase;margin-bottom:2px}
+
+/* ============ 答题盘 ============ */
+.quiz-box{max-width:780px;margin:0 auto}
+.q-text{border:1px solid var(--line);background:var(--bg2);padding:30px 30px;font-size:clamp(20px,2.6vw,28px);line-height:1.8;letter-spacing:.02em;margin-bottom:22px;position:relative;animation:cardIn .4s both}
+.q-text .blank{color:var(--gold2);border-bottom:2px solid var(--gold);padding:0 16px;letter-spacing:.1em}
+.q-text .qno{position:absolute;top:-12px;left:18px;background:var(--bg);border:1px solid var(--gold3);color:var(--gold);font-size:11px;letter-spacing:.25em;padding:2px 12px}
+.q-passage{border:1px solid var(--line);background:var(--bg3);padding:16px 22px;font-size:clamp(15px,2vw,18px);line-height:1.95;letter-spacing:.02em;margin-bottom:16px;max-height:40vh;overflow:auto;color:var(--ink);animation:cardIn .4s both}
+.q-passage .pp-label{font-size:11px;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.q-passage .blank{color:var(--gold2);border-bottom:2px solid var(--gold);padding:0 12px}
+.q-ops{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.q-op{border:1px solid var(--line);background:var(--bg2);padding:18px 20px;font-size:clamp(17px,2.2vw,23px);letter-spacing:.04em;cursor:pointer;transition:transform .15s,border-color .2s,background .2s;text-align:center;animation:cardIn .4s both}
+.q-op:nth-child(2){animation-delay:.06s}.q-op:nth-child(3){animation-delay:.12s}.q-op:nth-child(4){animation-delay:.18s}
+.q-op:hover:not(:disabled){border-color:var(--gold);transform:translateY(-2px)}
+.q-op .key{color:var(--gold);margin-right:10px;font-size:.85em}
+.q-op.correct{border-color:var(--green);background:rgba(106,168,106,.12);box-shadow:0 0 22px rgba(106,168,106,.4)}
+.q-op.wrong{border-color:var(--red);background:rgba(168,48,48,.12);animation:wrongShake .4s ease}
+.why-box{margin-top:18px;border-left:2px solid var(--gold);background:rgba(201,166,74,.05);padding:16px 20px;font-size:15px;line-height:1.9;color:var(--ink2);animation:cardIn .35s both}
+.why-box b{color:var(--gold2);font-weight:500}
+.q-next{margin-top:20px;text-align:center}
+
+/* ============ 连击横幅 / 浮动数字 ============ */
+.combo-banner{position:fixed;top:18%;left:50%;transform:translateX(-50%);z-index:70;pointer-events:none;
+  font-size:clamp(28px,5vw,46px);font-weight:300;letter-spacing:.3em;color:var(--gold2);
+  text-shadow:0 0 30px rgba(201,166,74,.7);animation:comboIn .9s cubic-bezier(.16,1,.3,1) forwards;opacity:0}
+@keyframes comboIn{0%{opacity:0;transform:translateX(-50%) scale(.6)}25%{opacity:1;transform:translateX(-50%) scale(1.15)}60%{opacity:1;transform:translateX(-50%) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-22px)}}
+.float-num{position:fixed;font-size:27px;font-weight:600;pointer-events:none;z-index:60;text-shadow:0 2px 8px #000;animation:floatUp 1s ease forwards}
+@keyframes floatUp{0%{opacity:0;transform:translateY(8px) scale(.7)}25%{opacity:1;transform:translateY(-6px) scale(1.15)}100%{opacity:0;transform:translateY(-46px) scale(1)}}
+
+/* ============ 全屏反馈 ============ */
+#flash{position:fixed;inset:0;pointer-events:none;z-index:80;opacity:0}
+#flash.gold{background:radial-gradient(ellipse at center,rgba(232,199,104,.55),rgba(232,199,104,.1))}
+#flash.red{background:radial-gradient(ellipse at center,rgba(200,40,40,.5),rgba(200,40,40,.08))}
+#flash.go{animation:flashOut .45s ease-out}
+@keyframes flashOut{0%{opacity:.85}100%{opacity:0}}
+@keyframes shakeKf{10%,90%{transform:translate(-2px,1px)}20%,80%{transform:translate(3px,-1px)}30%,70%{transform:translate(-4px,2px)}40%,60%{transform:translate(4px,-2px)}50%{transform:translate(-3px,1px)}}
+body.shaking{animation:shakeKf .4s cubic-bezier(.36,.07,.19,.97)}
+
+/* ============ 结算 ============ */
+.result-box{text-align:center;padding-top:6vh;max-width:760px;margin:0 auto}
+.grade{font-size:clamp(80px,14vw,140px);font-weight:300;line-height:1;margin:10px 0;animation:gradeIn .9s cubic-bezier(.16,1,.3,1) both}
+@keyframes gradeIn{0%{opacity:0;transform:scale(2.2);filter:blur(10px)}60%{opacity:1;transform:scale(.95);filter:blur(0)}100%{transform:scale(1)}}
+.grade.S{color:var(--gold2);text-shadow:0 0 40px rgba(232,199,104,.8),0 0 90px rgba(232,199,104,.4)}
+.grade.A{color:var(--gold);text-shadow:var(--glow-gold)}
+.grade.B{color:var(--blue)}
+.grade.C{color:var(--ink3)}
+.result-stats{display:flex;gap:34px;justify-content:center;margin:24px 0;flex-wrap:wrap;font-size:11px;letter-spacing:.22em;color:var(--ink3);text-transform:uppercase}
+.result-stats b{display:block;font-size:26px;color:var(--ink);font-weight:300;margin-bottom:4px}
+.wrong-list{text-align:left;margin:26px auto;border:1px solid var(--line2);background:var(--bg2);padding:18px 22px;max-height:300px;overflow-y:auto}
+.wrong-list h4{font-size:12px;letter-spacing:.3em;color:var(--red2);text-transform:uppercase;margin-bottom:12px}
+.wrong-item{padding:10px 0;border-bottom:1px solid var(--line2);font-size:15px;line-height:1.8}
+.wrong-item:last-child{border:0}
+.wrong-item b{color:var(--gold2);font-weight:500}
+.wrong-item small{display:block;color:var(--ink2);font-size:13px}
+
+/* ============ 错题本 / 图鉴 ============ */
+.note-head{display:flex;gap:26px;align-items:center;flex-wrap:wrap;border:1px solid var(--line);background:var(--bg2);padding:18px 24px;margin-bottom:22px}
+.note-head .big{font-size:42px;font-weight:300;color:var(--red2);line-height:1}
+.note-head p{font-size:13px;color:var(--ink2);line-height:1.8;flex:1;min-width:200px}
+.chip-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:14px;letter-spacing:.04em;border:1px solid var(--line2);color:var(--ink3);padding:6px 13px;transition:all .2s}
+.chip.lit{border-color:var(--gold3);color:var(--gold2);background:rgba(201,166,74,.06)}
+.chip.bad{border-color:rgba(168,48,48,.5);color:var(--red2)}
+.cdx-sec{margin-bottom:30px}
+.cdx-sec h3{font-size:17px;letter-spacing:.2em;margin-bottom:4px}
+.cdx-sec .meta{font-size:11px;color:var(--ink3);letter-spacing:.15em;margin-bottom:10px}
+
+/* ============ 两队对抗 ============ */
+.vs-setup{max-width:680px;margin:0 auto;text-align:center}
+.vs-row{display:flex;gap:18px;justify-content:center;margin:26px 0;flex-wrap:wrap}
+.team-card{flex:1;min-width:220px;border:1px solid var(--line);padding:24px;background:var(--bg2)}
+.team-card input{width:100%;background:var(--bg3);border:1px solid var(--line);color:var(--ink);font-family:var(--serif);font-size:20px;letter-spacing:.1em;text-align:center;padding:10px}
+.team-card.t-gold{border-color:var(--gold3)}
+.team-card.t-purple{border-color:rgba(157,114,214,.5)}
+.team-card .lbl{font-size:11px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px}
+.t-gold .lbl{color:var(--gold)}
+.t-purple .lbl{color:var(--purple)}
+.vs-scoreboard{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-bottom:22px}
+.vs-team{border:1px solid var(--line);background:var(--bg2);padding:14px 20px;text-align:center;transition:all .3s;position:relative}
+.vs-team.active{border-color:var(--gold);box-shadow:var(--glow-gold)}
+.vs-team.t2.active{border-color:var(--purple);box-shadow:0 0 24px rgba(157,114,214,.4)}
+.vs-team .tn{font-size:16px;letter-spacing:.16em;margin-bottom:2px}
+.vs-team .ts{font-size:38px;font-weight:300;line-height:1.1}
+.vs-team.t1 .ts{color:var(--gold2)}
+.vs-team.t2 .ts{color:var(--purple)}
+.vs-team .turn-mark{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:9.5px;letter-spacing:.25em;background:var(--gold);color:var(--bg);padding:2px 10px;display:none}
+.vs-team.active .turn-mark{display:block}
+.vs-team.t2 .turn-mark{background:var(--purple)}
+.vs-mid{font-size:26px;color:var(--ink3);font-weight:300;letter-spacing:.1em}
+.steal-box{border:1px dashed var(--purple);background:rgba(157,114,214,.06);padding:18px 22px;margin-top:18px;text-align:center;animation:cardIn .35s both}
+.steal-box p{font-size:15px;color:var(--ink2);margin-bottom:13px}
+.steal-box b{color:var(--purple)}
+
+/* ============ 帮助/浮层 ============ */
+#toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(90px);background:var(--bg3);border:1px solid var(--gold);color:var(--ink);padding:13px 26px;font-size:14px;letter-spacing:.06em;z-index:99;opacity:0;transition:all .35s cubic-bezier(.16,1,.3,1);max-width:88vw;text-align:center;line-height:1.7}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.help-text{max-width:760px;font-size:14.5px;color:var(--ink2);line-height:2.1}
+.help-text em{color:var(--gold);font-style:italic}
+.help-text b{color:var(--ink);font-weight:500}
+.help-text p{margin-bottom:16px}
+
+/* ============ 战绩 / 成就 ============ */
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.ach{border:1px solid var(--line);background:var(--bg2);padding:15px 16px;display:flex;gap:14px;align-items:center;transition:all .25s}
+.ach:hover{border-color:var(--gold)}
+.ach .ico{font-size:26px;width:50px;height:50px;border:1px solid var(--gold3);display:flex;align-items:center;justify-content:center;flex:none;background:radial-gradient(ellipse at center,rgba(201,166,74,.12),transparent 70%)}
+.ach.locked{opacity:.35;filter:grayscale(1)}
+.ach h4{font-size:14.5px;letter-spacing:.1em;margin-bottom:2px}
+.ach p{font-size:11px;color:var(--ink2);line-height:1.6}
+.bars{display:flex;gap:10px;align-items:flex-end;height:110px;margin:26px 0 30px;max-width:520px}
+.bar7{flex:1;background:linear-gradient(180deg,var(--gold),var(--gold3));min-height:3px;position:relative;transition:height .5s cubic-bezier(.16,1,.3,1)}
+.bar7 b{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--gold2);font-weight:400}
+.bar7 i{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:9.5px;color:var(--ink3);font-style:normal;white-space:nowrap}
+.streak-flame{font-size:13px;color:var(--gold2);letter-spacing:.1em}
+.streak-hero{max-width:520px;margin:4px auto 20px;border:1px solid var(--line);background:linear-gradient(160deg,rgba(201,166,74,.08),transparent);padding:13px 18px}
+.streak-hero .sh-top{text-align:center}
+.streak-hero .sh-flame{font-size:24px;font-weight:500;color:var(--gold2);letter-spacing:.02em}
+.streak-hero .sh-flame b{font-weight:600;color:var(--gold2)}
+.streak-hero .sh-flame small{font-size:13px;color:var(--ink2);font-weight:400;letter-spacing:.05em}
+.streak-hero .sh-dots{display:flex;gap:8px;justify-content:center;margin:12px 0 2px}
+.streak-hero .sh-dot{font-size:9px;color:var(--ink3);letter-spacing:.04em;text-align:center}
+.streak-hero .sh-dot i{display:block;width:16px;height:16px;margin:0 auto 4px;border:1px solid var(--gold3);border-radius:50%}
+.streak-hero .sh-dot.lit i{background:radial-gradient(circle,var(--gold2),var(--gold3));border-color:var(--gold);box-shadow:0 0 8px rgba(201,166,74,.5)}
+.streak-hero .sh-dot.today i{border-width:2px;border-color:var(--gold2)}
+.streak-hero .sh-task{text-align:center;font-size:12.5px;letter-spacing:.05em;color:var(--ink2);margin-top:7px}
+.streak-hero .sh-task b{color:var(--gold2);font-weight:500}
+
+@media(max-width:760px){
+  .screen{padding:16px 12px 50px}
+  .pair-board{gap:10px 12px}
+  .pcard{padding:12px 8px;font-size:16px}
+  .q-ops{grid-template-columns:1fr}
+  .hud{padding:10px 12px;gap:8px}
+  .hud-item b{font-size:19px}
+  .menu-btns .btn{min-width:84vw}
+  .vs-scoreboard{grid-template-columns:1fr;gap:8px}
+  .vs-mid{display:none}
+}
+</style>
+</head>
+<body>
+<div class="ctrl"><button id="themeBtn" title="切换主题">◐</button></div>
+<script>
+(function(){var TLS='myskme-theme',order=['auto','light','dark'],name={auto:'跟随系统',light:'浅色',dark:'深色'},icon={auto:'◐',light:'☀',dark:'☾'},mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
+function pref(){try{return localStorage.getItem(TLS)||'auto'}catch(e){return 'auto'}}
+function resolve(p){return p==='auto'?((mq&&mq.matches)?'dark':'light'):p}
+function apply(p){var e=document.documentElement;e.setAttribute('data-theme',resolve(p));e.setAttribute('data-themepref',p);var b=document.getElementById('themeBtn');if(b){b.textContent=icon[p];b.title='主题：'+name[p]}}
+var _tb=document.getElementById('themeBtn');
+if(_tb)_tb.addEventListener('click',function(){var nx=order[(order.indexOf(pref())+1)%order.length];try{localStorage.setItem(TLS,nx)}catch(e){}apply(nx)});
+if(mq&&mq.addEventListener)mq.addEventListener('change',function(){if(pref()==='auto')apply('auto')});
+apply(pref());
+})();
+</script>
+
+<!-- ============ 主菜单 ============ -->
+<div class="screen on" id="scr-menu">
+  <div class="menu-rune">词</div>
+  <div class="eyebrow">MYSKME · Word Duel · Advanced</div>
+  <h1 class="h-big title-hero">词灵<em>对决</em></h1>
+  <p class="sub">中考进阶词场 · 五大试炼 · 错题必诛</p>
+  <div class="streak-hero" id="streak-hero"></div>
+  <div class="menu-btns">
+    <button class="btn" id="m-daily">每日特训 🔥</button>
+    <button class="btn" id="m-solo">单人试炼</button>
+    <button class="btn" id="m-vs">两队对抗 · 课堂模式</button>
+    <div class="menu-sub">
+      <button class="btn dim sm" id="m-stats">战绩 · 成就</button>
+      <button class="btn dim sm" id="m-note">错题本 · 复仇</button>
+      <button class="btn dim sm" id="m-codex">词条图鉴</button>
+      <button class="btn dim sm" id="m-help">玩法说明</button>
+      <button class="btn dim sm" id="m-fs">⛶ 全屏</button>
+    </div>
+  </div>
+  <div class="menu-stat" id="menu-stat"></div>
+</div>
+
+<!-- ============ 战绩 · 成就 ============ -->
+<div class="screen" id="scr-stats">
+  <div class="back-row">
+    <div>
+      <div class="eyebrow">Records &amp; Honors</div>
+      <h2 class="h-big" style="font-size:30px">战绩 · <em>成就</em></h2>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" id="m-rank">🏆 上榜</button>
+      <button class="btn" id="m-report">📋 家长周报</button>
+      <button class="btn dim" data-go="menu">返回</button>
+    </div>
+  </div>
+  <div class="result-stats" id="stats-top" style="justify-content:flex-start"></div>
+  <div id="lb-line" style="margin-top:14px;font-size:13px;color:var(--ink2);letter-spacing:.04em"></div>
+  <div class="eyebrow" style="margin-top:20px">近七日火力</div>
+  <div class="bars" id="stats-bars"></div>
+  <div class="eyebrow">最常失手 TOP 10</div>
+  <div class="chip-grid" id="stats-wrong" style="margin-bottom:30px"></div>
+  <div class="eyebrow">成就墙</div>
+  <div class="ach-grid" id="ach-grid" style="margin-top:14px"></div>
+</div>
+
+<!-- ============ 模块选择 ============ -->
+<div class="screen" id="scr-mods">
+  <div class="back-row">
+    <div>
+      <div class="eyebrow">Choose Your Trial</div>
+      <h2 class="h-big" style="font-size:30px">五大<em>试炼</em></h2>
+    </div>
+    <button class="btn dim" data-go="menu">返回</button>
+  </div>
+  <div class="eyebrow" style="margin-bottom:6px">难度</div>
+  <div class="opt-row" style="justify-content:flex-start;margin-top:0;margin-bottom:14px" id="diff-row">
+    <div class="toggle" data-d="1"><span class="dot"></span>基础 · 打牢</div>
+    <div class="toggle" data-d="2"><span class="dot"></span>冲刺 · 高阶易错</div>
+    <div class="toggle on" data-d="all"><span class="dot"></span>全部混合</div>
+  </div>
+  <div class="eyebrow" style="margin-bottom:6px">题库</div>
+  <div class="opt-row" style="justify-content:flex-start;margin-top:0;margin-bottom:18px" id="bank-row"></div>
+  <div class="mod-grid" id="mod-grid"></div>
+  <div class="opt-row">
+    <div class="toggle" id="tg-timer"><span class="dot"></span>限时挑战 · 倒计时压场</div>
+    <div class="toggle" id="tg-sound"><span class="dot"></span>音效</div>
+  </div>
+  <div class="hr"></div>
+  <div class="eyebrow" style="margin-bottom:6px">题库中心 · 兑换码</div>
+  <div class="opt-row" style="justify-content:flex-start;margin-top:0;margin-bottom:8px">
+    <input id="code-input" placeholder="输入兑换码 · 如 S1E7" maxlength="12"
+      style="background:var(--bg3);border:1px solid var(--line);color:var(--ink);font-family:var(--serif);padding:11px 18px;font-size:15px;letter-spacing:.12em;min-width:210px">
+    <button class="btn dim" id="bt-code">兑换安装</button>
+    <button class="btn dim" id="bt-cat">浏览题库目录</button>
+  </div>
+  <div id="cat-list" class="opt-row" style="justify-content:flex-start;margin-top:0;margin-bottom:10px"></div>
+  <p class="sub" style="font-size:12px;margin-bottom:14px">每期试卷都有自己的兑换码（即卷号）。课堂发卷时把码写在黑板上，学生回家输入就能领到同款题库复习。</p>
+  <details class="adv">
+    <summary>⚙ 高级 · 导入导出（题库 / 学习进度）</summary>
+    <div class="opt-row" style="justify-content:flex-start;margin-top:10px">
+      <button class="btn dim" id="bt-imp-bank">导入扩展题库</button>
+      <button class="btn dim" id="bt-tpl-bank">导出题库模板</button>
+      <button class="btn dim" id="bt-exp-prog">导出学习进度</button>
+      <button class="btn dim" id="bt-imp-prog">导入学习进度</button>
+    </div>
+    <p class="sub" style="font-size:12px;margin-top:8px">扩展题库是一个 JSON 文件——由 MYSKME 题库工坊按统一格式制作发布，导入即玩。进度文件用于换电脑搬家。</p>
+  </details>
+  <input type="file" id="file-bank" accept=".json" style="display:none">
+  <input type="file" id="file-prog" accept=".json" style="display:none">
+</div>
+
+<!-- ============ 配对盘 ============ -->
+<div class="screen" id="scr-pair">
+  <div class="hud">
+    <div class="hud-item">得分<b id="p-score">0</b></div>
+    <div class="hud-item combo">连击<b id="p-combo">×0</b></div>
+    <div class="hud-item">剩余<b id="p-left">8</b></div>
+    <div class="hud-timer" id="p-timer-box"><b id="p-timer">--</b>限时</div>
+    <button class="btn dim" id="p-quit">退出</button>
+  </div>
+  <div class="round-bar"><i id="p-bar" style="width:0%"></i></div>
+  <div class="pair-board">
+    <div class="pair-col" id="col-L"></div>
+    <div class="pair-col" id="col-R"></div>
+  </div>
+</div>
+
+<!-- ============ 答题盘 ============ -->
+<div class="screen" id="scr-quiz">
+  <div class="hud">
+    <div class="hud-item">得分<b id="q-score">0</b></div>
+    <div class="hud-item combo">连击<b id="q-combo">×0</b></div>
+    <div class="hud-item">进度<b id="q-prog">1/10</b></div>
+    <div class="hud-timer" id="q-timer-box"><b id="q-timer">--</b>限时</div>
+    <button class="btn dim" id="q-quit">退出</button>
+  </div>
+  <div class="round-bar"><i id="q-bar" style="width:0%"></i></div>
+  <div class="quiz-box">
+    <div class="q-passage" id="q-passage" hidden></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="q-ops" id="q-ops"></div>
+    <div id="q-why"></div>
+    <div class="q-next" id="q-next"></div>
+  </div>
+</div>
+
+<!-- ============ 结算 ============ -->
+<div class="screen" id="scr-result">
+  <div class="result-box">
+    <div class="eyebrow" id="r-eyebrow">TRIAL COMPLETE</div>
+    <div class="grade" id="r-grade">S</div>
+    <h2 class="h-big" style="font-size:26px" id="r-title"></h2>
+    <div class="result-stats" id="r-stats"></div>
+    <div id="r-wrong"></div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+      <button class="btn" id="r-again">再战一轮</button>
+      <button class="btn dim" data-go="mods">换个试炼</button>
+      <button class="btn dim" data-go="menu">回主城</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 错题本 ============ -->
+<div class="screen" id="scr-note">
+  <div class="back-row">
+    <div>
+      <div class="eyebrow">Revenge List</div>
+      <h2 class="h-big" style="font-size:30px">错题本 · <em>复仇关</em></h2>
+    </div>
+    <button class="btn dim" data-go="menu">返回</button>
+  </div>
+  <div class="note-head">
+    <div class="big" id="note-count">0</div>
+    <p>答错的词条会被关进这里。<b style="color:var(--gold2)">连续答对两次</b>才能斩出名单。攒够 6 条即可开启复仇关——把它们一次清算干净。</p>
+    <button class="btn" id="note-revenge" disabled>开 启 复 仇 关</button>
+    <button class="btn dim" id="note-export">导出错题清单</button>
+  </div>
+  <div id="note-list"></div>
+</div>
+
+<!-- ============ 图鉴 ============ -->
+<div class="screen" id="scr-codex">
+  <div class="back-row">
+    <div>
+      <div class="eyebrow">Word Codex</div>
+      <h2 class="h-big" style="font-size:30px">词条<em>图鉴</em></h2>
+      <p class="sub">点亮一个词 = 累计答对两次。全部点亮的那天，这个学期就稳了。</p>
+    </div>
+    <button class="btn dim" data-go="menu">返回</button>
+  </div>
+  <div id="codex-body"></div>
+</div>
+
+<!-- ============ 两队对抗 · 设置 ============ -->
+<div class="screen" id="scr-vs-setup">
+  <div class="back-row">
+    <div>
+      <div class="eyebrow">Classroom Versus</div>
+      <h2 class="h-big" style="font-size:30px">两队<em>对抗</em></h2>
+    </div>
+    <button class="btn dim" data-go="menu">返回</button>
+  </div>
+  <div class="vs-setup">
+    <div class="vs-row">
+      <div class="team-card t-gold"><div class="lbl">金 队</div><input id="vs-n1" value="金队" maxlength="6"></div>
+      <div class="team-card t-purple"><div class="lbl">紫 队</div><input id="vs-n2" value="紫队" maxlength="6"></div>
+    </div>
+    <div class="eyebrow" style="margin-top:8px">题量</div>
+    <div class="opt-row" id="vs-rounds">
+      <div class="toggle on" data-n="10"><span class="dot"></span>10 题 · 快攻</div>
+      <div class="toggle" data-n="16"><span class="dot"></span>16 题 · 标准</div>
+      <div class="toggle" data-n="20"><span class="dot"></span>20 题 · 鏖战</div>
+    </div>
+    <div class="eyebrow" style="margin-top:18px">题目来源（可多选）</div>
+    <div class="opt-row" id="vs-mods"></div>
+    <div style="margin-top:30px"><button class="btn" id="vs-go">开 战 ！</button></div>
+    <p class="sub" style="margin-top:16px">规则：两队轮流答题，答错对方可抢答（抢对得一半分）。连对有连击加成。</p>
+  </div>
+</div>
+
+<!-- ============ 两队对抗 · 对局 ============ -->
+<div class="screen" id="scr-vs">
+  <div class="vs-scoreboard">
+    <div class="vs-team t1" id="vs-t1"><span class="turn-mark">作答中</span><div class="tn" id="vs-tn1">金队</div><div class="ts" id="vs-ts1">0</div></div>
+    <div class="vs-mid" id="vs-round">第 1 题</div>
+    <div class="vs-team t2" id="vs-t2"><span class="turn-mark">作答中</span><div class="tn" id="vs-tn2">紫队</div><div class="ts" id="vs-ts2">0</div></div>
+  </div>
+  <div class="round-bar"><i id="vs-bar" style="width:0%"></i></div>
+  <div class="quiz-box">
+    <div class="q-text" id="vs-text"></div>
+    <div class="q-ops" id="vs-ops"></div>
+    <div id="vs-why"></div>
+    <div id="vs-steal"></div>
+    <div class="q-next" id="vs-next"></div>
+  </div>
+</div>
+
+<!-- ============ 对抗结算 ============ -->
+<div class="screen" id="scr-vs-result">
+  <div class="result-box">
+    <div class="eyebrow">BATTLE REPORT · 终场战报</div>
+    <div class="grade" id="vr-glyph" style="font-size:clamp(50px,9vw,90px)">⚔</div>
+    <h2 class="h-big" style="font-size:32px" id="vr-title"></h2>
+    <div class="result-stats" id="vr-stats"></div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:10px">
+      <button class="btn" id="vr-again">再 战</button>
+      <button class="btn dim" data-go="menu">回主城</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 帮助 ============ -->
+<div class="screen" id="scr-help">
+  <div class="back-row">
+    <div>
+      <div class="eyebrow">How to Play</div>
+      <h2 class="h-big" style="font-size:30px">玩法<em>说明</em></h2>
+    </div>
+    <button class="btn dim" data-go="menu">返回</button>
+  </div>
+  <div class="help-text" id="help-body"></div>
+</div>
+
+<div id="toast"></div>
+<div id="flash"></div>
+
+<script>
+'use strict';
+/* ================================================================
+   词库 · 第一部分（配对类模块）
+   ▼▼▼ 数据区块：词条按统一格式维护，整段可替换 · MYSKME 题库工坊 ▼▼▼
+   ================================================================ */
+
+// M1 · 经典对决：中考高频进阶词 ↔ 词义（76 条）
+const M1_ITEMS=[
+['achieve','实现；达到'],['admire','钦佩；欣赏'],['afford','负担得起'],['avoid','避免'],
+['attract','吸引'],['behave','表现；举止'],['celebrate','庆祝'],['communicate','交流；沟通'],
+['compare','比较'],['complete','完成'],['consider','考虑'],['continue','继续'],
+['create','创造'],['describe','描述'],['develop','发展；培养'],['discover','发现'],
+['encourage','鼓励'],['expect','期待；预料'],['explain','解释'],['express','表达'],
+['imagine','想象'],['improve','改进；提高'],['include','包括'],['increase','增加'],
+['influence','影响'],['introduce','介绍'],['invent','发明'],['manage','设法做成；管理'],
+['mention','提到'],['notice','注意到'],['offer','主动提供'],['prefer','更喜欢'],
+['prevent','阻止；预防'],['produce','生产；产生'],['promise','承诺'],['protect','保护'],
+['provide','提供'],['realize','意识到'],['receive','收到'],['recommend','推荐'],
+['refuse','拒绝'],['remind','提醒'],['replace','代替；更换'],['require','需要；要求'],
+['respect','尊重'],['satisfy','使满意'],['separate','分开'],['solve','解决'],
+['succeed','成功'],['suggest','建议；暗示'],['support','支持'],['suppose','猜想；假定'],
+['treat','对待；款待'],['trust','信任'],['warn','警告'],['wonder','想知道'],
+['ancient','古代的'],['brave','勇敢的'],['curious','好奇的'],['generous','慷慨的'],
+['honest','诚实的'],['humorous','幽默的'],['patient','耐心的'],['silent','沉默的'],
+['similar','相似的'],['strict','严格的'],['traditional','传统的'],['valuable','宝贵的'],
+['ability','能力'],['advantage','优势；有利条件'],['courage','勇气'],['environment','环境'],
+['experience','经验；经历'],['knowledge','知识'],['opportunity','机会'],['wisdom','智慧']
+];
+
+// M2 · 词形风暴：不规则动词 原形 ↔ 过去式·过去分词（70 条）
+const M2_ITEMS=[
+['begin','began · begun'],['break','broke · broken'],['bring','brought · brought'],
+['build','built · built'],['buy','bought · bought'],['catch','caught · caught'],
+['choose','chose · chosen'],['come','came · come'],['cost','cost · cost'],
+['cut','cut · cut'],['do','did · done'],['draw','drew · drawn'],
+['drink','drank · drunk'],['drive','drove · driven'],['eat','ate · eaten'],
+['fall','fell · fallen'],['feel','felt · felt'],['fight','fought · fought'],
+['find','found · found'],['fly','flew · flown'],['forget','forgot · forgotten'],
+['get','got · got'],['give','gave · given'],['go','went · gone'],
+['grow','grew · grown'],['hang(悬挂)','hung · hung'],['have','had · had'],
+['hear','heard · heard'],['hide','hid · hidden'],['hit','hit · hit'],
+['hold','held · held'],['hurt','hurt · hurt'],['keep','kept · kept'],
+['know','knew · known'],['lay(放置)','laid · laid'],['leave','left · left'],
+['lend','lent · lent'],['lie(躺)','lay · lain'],['lose','lost · lost'],
+['make','made · made'],['mean','meant · meant'],['meet','met · met'],
+['pay','paid · paid'],['put','put · put'],['read','read · read'],
+['ride','rode · ridden'],['ring','rang · rung'],['rise','rose · risen'],
+['run','ran · run'],['say','said · said'],['see','saw · seen'],
+['sell','sold · sold'],['send','sent · sent'],['set','set · set'],
+['shake','shook · shaken'],['sing','sang · sung'],['sit','sat · sat'],
+['sleep','slept · slept'],['speak','spoke · spoken'],['spend','spent · spent'],
+['stand','stood · stood'],['steal','stole · stolen'],['swim','swam · swum'],
+['take','took · taken'],['teach','taught · taught'],['tell','told · told'],
+['think','thought · thought'],['throw','threw · thrown'],['wear','wore · worn'],
+['write','wrote · written']
+];
+
+// M3 · 黄金搭配：中考核心短语 ↔ 含义（60 条）
+const M3_ITEMS=[
+['look after','照顾'],['look forward to','期待；盼望'],['look up','查阅（词典等）'],
+['look through','浏览；翻阅'],['look down upon','看不起'],['take off','起飞；脱下'],
+['take after','（外貌/性格）像'],['take part in','参加'],['take place','发生；举行'],
+['take up','开始从事；占用'],['take pride in','为……自豪'],['put off','推迟'],
+['put on','穿上；上演'],['put up','张贴；搭建'],['put out','扑灭'],
+['give up','放弃'],['give away','赠送；泄露'],['give out','分发'],
+['get along with','与……相处'],['get over','克服；恢复'],['get off','下车'],
+['turn off','关掉'],['turn up','调大；出现'],['turn down','调小；拒绝'],
+['set off','出发；动身'],['set up','建立；设立'],['pick up','捡起；接（人）'],
+['come up with','想出（主意）'],['catch up with','赶上'],['deal with','处理；应对'],
+['depend on','依靠；取决于'],['belong to','属于'],['care about','关心；在乎'],
+['hear from','收到……的来信'],['pay attention to','注意'],['run out of','用完；耗尽'],
+['stay up','熬夜'],['try out','试用；选拔'],['work out','算出；锻炼'],
+['cut down','砍倒；削减'],['fall asleep','入睡'],['hand in','上交'],
+['hand out','分发'],['make up','编造；组成；和好'],['show off','炫耀'],
+['throw away','扔掉'],['break down','出故障；崩溃'],['break out','（战争/火灾）爆发'],
+['carry on','继续'],['cheer up','（使）振作起来'],['calm down','冷静下来'],
+['dress up','装扮；盛装打扮'],['end up','最终成为；以……告终'],['find out','查明；弄清'],
+['fix up','修理；装饰'],['grow up','长大'],['hang out','闲逛'],
+['run after','追赶'],['see off','为……送行'],['used to','过去常常']
+];
+
+/* ================================================================
+   词库 · 第二部分（选择类模块，含解析）
+   ================================================================ */
+
+// M4 · 易混猎人：经典易混词二选一（46 条）
+const M4_ITEMS=[
+{q:"May I ___ your dictionary? I'll return it tomorrow.",ops:['borrow','lend'],ans:0,why:'borrow＝借入（从别人那里借来）；lend＝借出（lend sb sth 借给别人）。'},
+{q:"Tom kindly ___ me his bike last weekend.",ops:['lent','borrowed'],ans:0,why:'借给别人用 lend（lent sb sth）；borrow 是自己借来。'},
+{q:"— Where is Mr. Wang? — He has ___ to Beijing. He'll be back next week.",ops:['gone','been'],ans:0,why:'have gone to＝去了（还没回来）；have been to＝去过（已经回来）。'},
+{q:"I have never ___ to Hong Kong before.",ops:['been','gone'],ans:0,why:'表示"去过"的经历用 have been to。'},
+{q:"It may rain. You'd better ___ an umbrella with you.",ops:['take','bring'],ans:0,why:'take＝带去（带离说话处）；bring＝带来（朝说话人方向）。'},
+{q:"Please ___ your homework to school tomorrow morning.",ops:['bring','take'],ans:0,why:'老师在学校说这句话，作业朝说话人方向"带来"，用 bring。'},
+{q:"Could you ___ me the way to the station?",ops:['tell','say'],ans:0,why:'tell sb sth 告诉某人；say 后面直接跟说的内容，不接"人"作双宾。'},
+{q:"She ___ goodbye to us and left.",ops:['said','told'],ans:0,why:'say goodbye/hello to sb 是固定说法。'},
+{q:"How many languages can you ___?",ops:['speak','talk'],ans:0,why:'speak＋语言（speak English）；talk 强调交谈，不直接接语言。'},
+{q:"___! Someone is knocking at the door.",ops:['Listen','Hear'],ans:0,why:'listen 强调"听"的动作；hear 强调听到的结果。'},
+{q:"I listened carefully but ___ nothing.",ops:['heard','listened'],ans:0,why:'听了（动作）但什么也没听到（结果），结果用 hear。'},
+{q:"Look at the blackboard. Can you ___ the words clearly?",ops:['see','look at'],ans:0,why:'look at 是"看"的动作；see 是"看见"的结果。'},
+{q:"It's cold outside. ___ your coat before you go out.",ops:['Put on','Wear'],ans:0,why:'put on 强调"穿上"的动作；wear 强调"穿着"的状态。'},
+{q:"She often ___ a pair of glasses.",ops:['wears','puts on'],ans:0,why:'经常戴着＝状态，用 wear；put on 是一次性动作。'},
+{q:"It ___ me two hours to finish the report yesterday.",ops:['took','spent'],ans:0,why:'It takes sb 时间 to do；人 spend 时间 on sth / (in) doing。'},
+{q:"He ___ 200 yuan on the jacket.",ops:['spent','cost'],ans:0,why:'人 spend 钱 on 物；cost 的主语是"物"。'},
+{q:"The dictionary ___ me 60 yuan.",ops:['cost','paid'],ans:0,why:'物 cost 人 钱；pay 的主语是"人"（pay 钱 for 物）。'},
+{q:"I ___ 50 yuan for the T-shirt.",ops:['paid','cost'],ans:0,why:'人 pay 钱 for 物；cost 主语必须是物。'},
+{q:"He is new here, so he has ___ friends in town. Let's go and help him.",ops:['few','a few'],ans:0,why:'few＝几乎没有（否定含义）；a few＝有几个（肯定含义）。后文"去帮他"说明朋友少。'},
+{q:"Don't worry. There is still ___ time left.",ops:['a little','little'],ans:0,why:'a little＝还有一些（肯定）；little＝几乎没有。前文 Don\'t worry 提示肯定含义。'},
+{q:"I don't like this shirt. Could you show me ___ one?",ops:['another','other'],ans:0,why:'another＋单数名词＝另一个；other 一般不单独修饰单数可数名词。'},
+{q:"Some students like reading; ___ like doing sports.",ops:['others','another'],ans:0,why:'some... others...＝一些……另一些……（泛指）。'},
+{q:"Grandpa likes living ___ in the quiet village.",ops:['alone','lonely'],ans:0,why:'alone＝独自（客观状态）；lonely＝孤独的（主观感受），且 lonely 不作副词。'},
+{q:"Without friends, she felt ___ in the new school.",ops:['lonely','alone'],ans:0,why:'感到孤独（情感）用 lonely；alone 只说"独自一人"这个事实。'},
+{q:"It was raining ___, so we stayed at home.",ops:['hard','hardly'],ans:0,why:'hard＝猛烈地/努力地；hardly＝几乎不（否定副词），二者意思完全不同。'},
+{q:"I could ___ believe my eyes when I saw the result.",ops:['hardly','hard'],ans:0,why:'hardly＝几乎不能。hard 放这里讲不通。'},
+{q:"The old tree has been ___ for years.",ops:['dead','died'],ans:0,why:'dead 是形容词表状态，可与 for years 连用；die 是瞬间动词，不能延续。'},
+{q:"The story is so ___ that everyone wants to read it.",ops:['interesting','interested'],ans:0,why:'-ing 形容事物"令人……"；-ed 形容人"感到……"。故事令人感兴趣用 interesting。'},
+{q:"I'm ___ in collecting stamps.",ops:['interested','interesting'],ans:0,why:'人感到感兴趣用 interested（be interested in）。'},
+{q:"The fans got ___ when the singer appeared.",ops:['excited','exciting'],ans:0,why:'人感到激动用 excited；exciting 形容令人激动的事物。'},
+{q:"The box is ___ heavy for me to carry.",ops:['much too','too much'],ans:0,why:'much too＋形容词（太……）；too much＋不可数名词（太多……）。'},
+{q:"Drinking ___ coffee is bad for your health.",ops:['too much','much too'],ans:0,why:'coffee 是不可数名词，用 too much 修饰。'},
+{q:"My father ___ smoke, but he gave it up last year.",ops:['used to','was used to'],ans:0,why:'used to do＝过去常常做；be used to doing＝习惯于做。'},
+{q:"She has lived here for years, so she is used to ___ up early.",ops:['getting','get'],ans:0,why:'be used to doing 中 to 是介词，后接动名词。'},
+{q:"The students were tired, so the teacher asked them to stop ___ a rest.",ops:['to have','having'],ans:0,why:'stop to do＝停下（手头的事）去做另一件事；stop doing＝停止正在做的事。'},
+{q:"The baby stopped ___ as soon as he saw his mother.",ops:['crying','to cry'],ans:0,why:'停止哭泣＝停止正在做的事，用 stop doing。'},
+{q:"Don't forget ___ the door when you leave.",ops:['to lock','locking'],ans:0,why:'forget to do＝忘记去做（还没做）；forget doing＝忘记做过（已经做了）。'},
+{q:"I remember ___ the letter last week, so it must have arrived.",ops:['posting','to post'],ans:0,why:'remember doing＝记得做过；后文"信应该到了"说明已经寄了。'},
+{q:"It was ___ a wonderful film that I saw it twice.",ops:['such','so'],ans:0,why:'such＋a＋形容词＋名词；so＋形容词/副词（so wonderful a film 也可，但 such a 更常用）。'},
+{q:"The question is ___ difficult that nobody can answer it.",ops:['so','such'],ans:0,why:'so＋形容词＋that 从句；such 后面要接名词性结构。'},
+{q:"Our team ___ Class Three in the basketball match yesterday.",ops:['beat','won'],ans:0,why:'beat＋对手（打败某人）；win＋比赛/奖品（赢得比赛）。'},
+{q:"I'm sure we will ___ the game this time.",ops:['win','beat'],ans:0,why:'win the game 赢得比赛；beat 后面必须接"对手"。'},
+{q:"My brother ___ the army two years ago.",ops:['joined','took part in'],ans:0,why:'join＝加入组织/团体（参军、入队）；take part in＝参加活动。'},
+{q:"We ___ the top of the mountain at noon.",ops:['reached','arrived'],ans:0,why:'reach 是及物动词直接接地点；arrive 需接 in/at 再接地点。'},
+{q:"The sun ___ in the east and sets in the west.",ops:['rises','raises'],ans:0,why:'rise＝（自身）升起，不及物；raise＝举起/提高（某物），及物。'},
+{q:"Please ___ your hand if you know the answer.",ops:['raise','rise'],ans:0,why:'举手＝举起（手），及物用 raise。'}
+];
+
+// M5 · 句境狙击：语境四选一（48 条）
+const M5_ITEMS=[
+{q:"The Internet makes it possible for us to ___ with friends far away.",ops:['communicate','compare','compete','complain'],ans:0,why:'communicate with sb 与某人交流。其余：compare 比较 / compete 竞争 / complain 抱怨。'},
+{q:"We should take action to ___ the earth from pollution.",ops:['protect','prevent','produce','provide'],ans:0,why:'protect... from... 保护……免受……。prevent...from 是"阻止……做……"。'},
+{q:"Don't ___ the game just because it's hard. Keep trying!",ops:['give up','put up','look up','turn up'],ans:0,why:'give up 放弃。put up 张贴/搭建，look up 查阅，turn up 调大/出现。'},
+{q:"Could you please ___ the music? The baby is sleeping.",ops:['turn down','turn up','take down','put down'],ans:0,why:'turn down 调小（音量）。turn up 调大，正与语境相反。'},
+{q:"She didn't pass the exam, but she didn't lose ___. She tried again.",ops:['heart','face','head','mind'],ans:0,why:'lose heart 灰心丧气（固定搭配）。'},
+{q:"Doing morning exercises can help ___ our health.",ops:['improve','raise','rise','grow'],ans:0,why:'improve one\'s health 改善健康。raise 提高（价格/手），不与 health 搭配。'},
+{q:"He spoke slowly and clearly so that everyone could ___ him.",ops:['follow','feel','find','forget'],ans:0,why:'follow 此处＝听懂、跟上（思路）。'},
+{q:"I can't ___ the difference between the twin brothers.",ops:['tell','say','speak','talk'],ans:0,why:'tell the difference 分辨差别（固定搭配）。'},
+{q:"The new high-speed railway will ___ the two cities.",ops:['connect','collect','correct','protect'],ans:0,why:'connect 连接。collect 收集 / correct 改正，形近易混。'},
+{q:"You should ___ the example of those who work hard.",ops:['follow','make','take','give'],ans:0,why:'follow the example of... 学习……的榜样。'},
+{q:"Music can ___ us happiness when we feel sad.",ops:['bring','take','carry','lift'],ans:0,why:'bring sb sth 给某人带来某物。'},
+{q:"The bridge ___ by the local people about 100 years ago.",ops:['was built','built','is built','builds'],ans:0,why:'桥是"被建造"且发生在过去，用一般过去时被动语态 was built。'},
+{q:"___ he is only ten, he knows a lot about science.",ops:['Although','Because','Unless','If'],ans:0,why:'前后是让步关系："虽然才十岁，却懂很多"。注意 although 不与 but 连用。'},
+{q:"You won't catch the early bus ___ you leave right now.",ops:['unless','if','because','since'],ans:0,why:'unless＝if not，"除非你现在就走"。'},
+{q:"I didn't go to bed ___ I finished my homework last night.",ops:['until','when','since','while'],ans:0,why:'not... until... 直到……才……。'},
+{q:"___ the help of my teacher, I made great progress in English.",ops:['With','Under','By','For'],ans:0,why:'with the help of... 在……的帮助下（固定搭配）。'},
+{q:"The school sports meeting will be held ___ the morning of April 10th.",ops:['on','in','at','by'],ans:0,why:'具体某天的早/中/晚用 on（on the morning of...）。'},
+{q:"Mr. Li has worked in this factory ___ ten years ago.",ops:['since','for','in','before'],ans:0,why:'since＋过去时间点（ten years ago）；for＋时间段（ten years）。'},
+{q:"Trees can stop the wind ___ blowing the sand away.",ops:['from','of','with','by'],ans:0,why:'stop... from doing 阻止……做……。'},
+{q:"Our English teacher is strict ___ us, but we all respect her.",ops:['with','in','at','to'],ans:0,why:'be strict with sb 对某人严格；be strict in sth 对某事严格。'},
+{q:"I'm looking forward to ___ from you soon.",ops:['hearing','hear','heard','hears'],ans:0,why:'look forward to 中 to 是介词，后接动名词。hear from 收到来信。'},
+{q:"The boss made the workers ___ more than ten hours a day.",ops:['work','to work','working','worked'],ans:0,why:'make sb do（不带 to 的不定式）。被动语态中才还原 to：be made to work。'},
+{q:"The classroom needs ___ after the party.",ops:['cleaning','clean','to clean','cleaned'],ans:0,why:'need doing＝need to be done（主动形式表被动）。'},
+{q:"We enjoy ___ football together after school.",ops:['playing','play','to play','played'],ans:0,why:'enjoy doing 喜欢做某事（enjoy 只接动名词）。'},
+{q:"Would you mind ___ the window? It's a bit cold in here.",ops:['closing','close','to close','closed'],ans:0,why:'mind doing 介意做某事（mind 接动名词）。'},
+{q:"The teacher told us ___ in the hallways.",ops:['not to run','don\'t run','to not run','not running'],ans:0,why:'tell sb not to do，否定词 not 放在不定式 to 前。'},
+{q:"It's very kind ___ you to help me carry the heavy box.",ops:['of','for','to','with'],ans:0,why:'形容词描述"人的品质"（kind/nice/clever）用 of；描述事情难易用 for。'},
+{q:"It's important ___ us to learn English well.",ops:['for','of','to','with'],ans:0,why:'important 描述事情而非人的品质，用 for sb to do。'},
+{q:"Neither Tom nor his parents ___ at home now.",ops:['are','is','was','be'],ans:0,why:'neither...nor... 谓语就近一致，靠近的是 his parents，用 are。'},
+{q:"There ___ a pair of shoes under the bed.",ops:['is','are','have','has'],ans:0,why:'a pair of... 作主语，谓语用单数；there be 句型不与 have 混用。'},
+{q:"The number of students in our school ___ about two thousand.",ops:['is','are','have','has'],ans:0,why:'the number of...（……的数量）作主语谓语用单数；a number of＝许多，谓语用复数。'},
+{q:"It took me half ___ hour to work out the maths problem.",ops:['an','a','the','/'],ans:0,why:'hour 发音以元音开头，用 an（half an hour）。'},
+{q:"— Which would you like, tea or coffee? — ___. I'd just like some water.",ops:['Neither','Both','Either','None'],ans:0,why:'两者都不要用 neither；none 用于三者及以上。'},
+{q:"I have two pens. One is red, and ___ is black.",ops:['the other','another','other','others'],ans:0,why:'两者中的"另一个"用 the other（one... the other...）。'},
+{q:"The cake tastes ___. Could I have another piece?",ops:['good','well','nicely','badly'],ans:0,why:'taste 是感官系动词，后接形容词作表语。'},
+{q:"The boy is only four, but he can dress ___ now.",ops:['himself','him','his','he'],ans:0,why:'dress oneself 自己穿衣，主语和宾语是同一人用反身代词。'},
+{q:"Mike runs ___ than any other student in his class.",ops:['faster','fast','fastest','the fastest'],ans:0,why:'比较级＋than；"比班里其他任何学生都快"＝最高级含义的比较级表达。'},
+{q:"This is ___ book I have ever read.",ops:['the most interesting','most interesting','more interesting','interesting'],ans:0,why:'have ever read 提示最高级，最高级前要加 the。'},
+{q:"___ you work, ___ progress you will make.",ops:['The harder; the greater','Harder; greater','The hard; the great','Harder; the greater'],ans:0,why:'"the＋比较级，the＋比较级"＝越……就越……。'},
+{q:"I'll call you as soon as I ___ in Shanghai.",ops:['arrive','arrived','will arrive','am arriving'],ans:0,why:'时间状语从句"主将从现"：主句将来时，从句用一般现在时。'},
+{q:"— I have never seen such a wonderful film. — ___",ops:['Neither have I','So have I','Neither do I','So do I'],ans:0,why:'附和否定句用 Neither＋助动词＋主语；前句用 have，故选 Neither have I。'},
+{q:"Tea ___ widely in the south of China.",ops:['is grown','grows','grew','was grown'],ans:0,why:'茶"被种植"，陈述普遍事实用一般现在时被动语态。'},
+{q:"— Could you tell me ___? — Next Monday.",ops:['when the sports meeting will be held','when will the sports meeting be held','when the sports meeting held','when was the sports meeting held'],ans:0,why:'宾语从句用陈述语序（疑问词＋主语＋谓语）。'},
+{q:"I wonder ___ Tom isn't at school today. — Maybe he is ill.",ops:['why','if','that','what'],ans:0,why:'答句解释原因（生病了），故从句疑问词用 why。'},
+{q:"You ___ be tired after running for two hours. Have a rest.",ops:['must','can\'t','need','mustn\'t'],ans:0,why:'must 表有把握的肯定推测："你一定累了"。'},
+{q:"— Must I hand in the report today? — No, you ___.",ops:['needn\'t','mustn\'t','can\'t','shouldn\'t'],ans:0,why:'Must...? 的否定回答用 needn\'t（不必）；mustn\'t＝禁止。'},
+{q:"Help ___ to some fruit, kids. Don't be shy.",ops:['yourselves','yourself','you','yours'],ans:0,why:'对多个孩子说话，反身代词用复数 yourselves（help oneself to 随便吃）。'},
+{q:"___ people visit the Great Wall during the holiday every year.",ops:['Thousands of','Thousand','Thousands','Thousand of'],ans:0,why:'thousands of＋名词＝成千上万的；前面有具体数字时才用 two thousand（不加 s）。'},
+{q:"I want to buy ___ for my mother on Mother's Day.",ops:['something special','special something','anything special','special anything'],ans:0,why:'形容词修饰不定代词要后置；肯定句用 something。'}
+];
+
+// ▲▲▲ 数据区块结束 ▲▲▲
+
+const MODS={
+  m1:{key:'m1',name:'经典对决',en:'WORD MATCH',icon:'词',type:'pair',items:M1_ITEMS,
+      desc:'中考高频进阶词 ↔ 词义配对。8 组一轮，连击拉满。',hintL:'WORD',hintR:'MEANING'},
+  m2:{key:'m2',name:'词形风暴',en:'VERB STORM',icon:'变',type:'pair',items:M2_ITEMS,
+      desc:'不规则动词：原形 ↔ 过去式·过去分词。中考送分题，一个都不能丢。',hintL:'原形',hintR:'过去式 · 过去分词'},
+  m3:{key:'m3',name:'黄金搭配',en:'GOLD PHRASE',icon:'配',type:'pair',items:M3_ITEMS,
+      desc:'中考核心短语动词 ↔ 含义。完形和选择题的弹药库。',hintL:'PHRASE',hintR:'MEANING'},
+  m4:{key:'m4',name:'易混猎人',en:'TRAP HUNTER',icon:'猎',type:'quiz',items:M4_ITEMS,
+      desc:'borrow/lend、been/gone、so/such……专杀经典陷阱，每题带解析。'},
+  m5:{key:'m5',name:'句境狙击',en:'SENTENCE SNIPER',icon:'狙',type:'quiz',items:M5_ITEMS,
+      desc:'真实句境四选一：语法 + 词汇 + 固定搭配，每题带解析。'}
+};
+
+/* ================================================================
+   难度标签（默认题库）：未列出的词条均为「基础」
+   扩展题库可在词条里自带 lv 字段（1=基础 2=冲刺）
+   ================================================================ */
+const LV2_WORDS={
+  m1:new Set(['achieve','admire','afford','behave','consider','describe','influence','manage','mention','prevent','realize','recommend','require','satisfy','separate','suppose','ancient','curious','generous','humorous','silent','similar','traditional','valuable','ability','advantage','courage','opportunity','wisdom']),
+  m2:new Set(['choose','cost','fight','hang(悬挂)','hide','lay(放置)','lend','lie(躺)','mean','ring','rise','set','shake','steal']),
+  m3:new Set(['take after','take up','take pride in','look through','look down upon','come up with','catch up with','deal with','depend on','run out of','try out','work out','break out','carry on','end up','fix up','turn down','turn up','put out','give away','give out','get over','see off','show off'])
+};
+const LV2_IDX={
+  m4:new Set([24,25,26,30,31,32,33,34,35,36,37,38,39,43,44,45]),
+  m5:new Set([4,9,21,22,25,26,27,28,30,32,38,40,41,42,44,45,47])
+};
+
+/* ================================================================
+   题库系统：默认题库 + 可导入扩展题库
+   词条 ID：默认库 'm1:3'；扩展库 'e0:m1:3'
+   ================================================================ */
+function parseId(id){const p=id.split(':');
+  return p.length===2?{bank:'def',mk:p[0],ix:+p[1]}:{bank:p[0],mk:p[1],ix:+p[2]}}
+function bankList(){return[{id:'def',name:'默认题库'},
+  ...SAVE.banks.map((b,i)=>({id:'e'+i,name:b.name||('扩展库 '+(i+1))}))]}
+function modItemsOf(bankId,mk){
+  if(bankId==='def')return MODS[mk].items;
+  const b=SAVE.banks[+bankId.slice(1)];
+  return(b&&b.mods&&b.mods[mk])||[]}
+function effItems(mk){
+  const act=SAVE.activeBank||'def';
+  const out={items:[],ids:[]};
+  const push=bid=>{modItemsOf(bid,mk).forEach((it,i)=>{
+    out.items.push(it);out.ids.push(bid==='def'?mk+':'+i:bid+':'+mk+':'+i)})};
+  if(act==='merge')bankList().forEach(b=>push(b.id));else push(act);
+  return out}
+function itemLv(mk,it,id){
+  if(Array.isArray(it)){
+    if(it[2])return it[2];
+    return(parseId(id).bank==='def'&&LV2_WORDS[mk]&&LV2_WORDS[mk].has(it[0]))?2:1}
+  if(it.lv)return it.lv;
+  const p=parseId(id);
+  return(p.bank==='def'&&LV2_IDX[mk]&&LV2_IDX[mk].has(p.ix))?2:1}
+function diffFiltered(mk){
+  const eff=effItems(mk);
+  const d=SAVE.diff||'all';
+  if(d==='all')return eff;
+  const out={items:[],ids:[]};
+  eff.items.forEach((it,i)=>{if(itemLv(mk,it,eff.ids[i])===+d){out.items.push(it);out.ids.push(eff.ids[i])}});
+  return out.items.length?out:eff}
+
+/* ================================================================
+   引擎 · 第一部分：工具 / 存档 / 音效 / 路由 / 模块选择 / 双引擎
+   ================================================================ */
+const $=id=>document.getElementById(id);
+const ri=n=>Math.floor(Math.random()*n);
+const pick=a=>a[ri(a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=ri(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+function sample(a,n){return shuffle(a).slice(0,n)}
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function yesterdayStr(){const d=new Date(Date.now()-864e5);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+
+let toastT=null;
+function toast(m,ms=2200){const t=$('toast');t.innerHTML=m;t.classList.add('show');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),ms)}
+function flash(color){const f=$('flash');f.className=color;void f.offsetWidth;f.classList.add('go')}
+function shake(){document.body.classList.remove('shaking');void document.body.offsetWidth;document.body.classList.add('shaking')}
+function floatNum(x,y,txt,color){const f=document.createElement('div');f.className='float-num';
+  f.textContent=txt;f.style.cssText+=`left:${x}px;top:${y}px;color:${color}`;
+  document.body.appendChild(f);setTimeout(()=>f.remove(),1000)}
+function comboBanner(txt){const b=document.createElement('div');b.className='combo-banner';
+  b.textContent=txt;document.body.appendChild(b);setTimeout(()=>b.remove(),950)}
+function burst(x,y,colors,n=22){
+  for(let i=0;i<n;i++){const p=document.createElement('div');
+    p.style.cssText=`position:fixed;left:${x}px;top:${y}px;width:7px;height:7px;pointer-events:none;z-index:90;background:${colors[i%colors.length]};border-radius:${i%2?'50%':'0'}`;
+    document.body.appendChild(p);
+    const a=Math.random()*Math.PI*2,v=3+Math.random()*5;
+    let vx=Math.cos(a)*v,vy=Math.sin(a)*v-3,px=0,py=0,life=55;
+    (function tick(){vy+=.18;px+=vx;py+=vy;life--;
+      p.style.transform=`translate(${px}px,${py}px) rotate(${life*8}deg)`;p.style.opacity=life/55;
+      life>0?requestAnimationFrame(tick):p.remove()})()}}
+const GOLDS=['#c9a64a','#e8c768','#f0e6d2','#7a6320'];
+
+// ---------- 音效（WebAudio 合成，零文件）----------
+let AC=null;
+function sfx(kind){
+  if(!SAVE.sound)return;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const notes={pick:[[660,.06]],right:[[660,.07],[880,.1]],wrong:[[180,.18]],
+      combo:[[523,.07],[659,.07],[784,.07],[1046,.14]],win:[[523,.12],[659,.12],[784,.12],[1046,.3]],
+      lose:[[330,.15],[262,.25]],tick:[[880,.04]]};
+    let t=AC.currentTime;
+    (notes[kind]||[]).forEach(([f,d])=>{
+      const o=AC.createOscillator(),g=AC.createGain();
+      o.type=kind==='wrong'?'sawtooth':'triangle';o.frequency.value=f;
+      g.gain.setValueAtTime(.16,t);g.gain.exponentialRampToValueAtTime(.001,t+d);
+      o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d);t+=d*.85})}catch(e){}}
+
+// ---------- 存档 ----------
+const KEY='ciling_adv_v1';
+let SAVE=null;
+function defaults(){return{mastery:{},book:{},best:{},plays:0,sound:true,timer:false,banks:[],activeBank:'def',diff:'all',
+  srs:{},stats:{answered:0,correct:0,wrong:{},days:{}},ach:[],killed:0,dailyLast:'',dailyStreak:0,dailyBest:0}}
+function load(){try{SAVE=Object.assign(defaults(),
+  JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){SAVE=defaults()}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(SAVE))}catch(e){}}
+
+// 答对/答错 → 掌握度 + 错题本 + 间隔复习(SRS) + 统计
+function statRec(right){
+  SAVE.stats.answered++;if(right)SAVE.stats.correct++;
+  const d=todayStr();SAVE.stats.days[d]=(SAVE.stats.days[d]||0)+1}
+function markRight(id){
+  SAVE.mastery[id]=(SAVE.mastery[id]||0)+1;
+  const r=SAVE.srs[id]||{s:0,t:0};r.s++;r.t=Date.now();SAVE.srs[id]=r;
+  statRec(true);
+  if(SAVE.book[id]){SAVE.book[id].need--;
+    if(SAVE.book[id].need<=0){delete SAVE.book[id];
+      SAVE.killed=(SAVE.killed||0)+1;
+      toast('⚔ <b style="color:var(--gold2)">斩词成功！</b>「'+itemLabel(id)+'」已逐出错题本',2400);
+      if(SAVE.killed>=10)achUnlock('a4')}}
+  save()}
+function markWrong(id){
+  SAVE.srs[id]={s:0,t:Date.now()};
+  SAVE.stats.wrong[id]=(SAVE.stats.wrong[id]||0)+1;
+  statRec(false);
+  if(SAVE.book[id])SAVE.book[id].need=2;
+  else SAVE.book[id]={need:2,t:Date.now()};
+  save()}
+
+// ---------- 间隔复习（SRS）----------
+const SRS_IV=[0,1,3,7,14,30]; // 连对次数 → 间隔天数
+function isDue(id){
+  const r=SAVE.srs[id];if(!r)return false;
+  const days=(Date.now()-r.t)/864e5;
+  return days>=SRS_IV[Math.min(r.s,SRS_IV.length-1)]}
+function allIds(){
+  const out=[];
+  bankList().forEach(b=>Object.keys(MODS).forEach(mk=>{
+    modItemsOf(b.id,mk).forEach((_,i)=>out.push(b.id==='def'?mk+':'+i:b.id+':'+mk+':'+i))}));
+  return out}
+function buildDailyQs(){
+  const ids=allIds();
+  const due=shuffle(ids.filter(isDue)).slice(0,8);
+  const book=shuffle(Object.keys(SAVE.book).filter(id=>!due.includes(id)&&itemOf(id).it)).slice(0,3);
+  const seen=new Set([...due,...book]);
+  const fresh=shuffle(ids.filter(id=>!SAVE.srs[id]&&!seen.has(id)));
+  const picked=[...due,...book,...fresh.slice(0,Math.max(0,12-due.length-book.length))];
+  return picked.map(id=>{const{m,it,bank,mk}=itemOf(id);
+    return quizFromItem(m,it,id,modItemsOf(bank,mk))}).filter(q=>q&&q.ops)}
+function startDaily(){
+  const qs=buildDailyQs();
+  if(qs.length<5){toast('词条还太少，先去试炼里打几轮再来特训！');return}
+  SAVE.plays++;save();
+  G={mod:{name:'每日特训',en:'DAILY TRAINING',key:'daily'},daily:true,revenge:false,
+    score:0,combo:0,maxCombo:0,right:0,wrong:0,wrongIds:[],over:false};
+  startQuizRound(qs)}
+
+// ---------- 成就 ----------
+const ACH=[
+  {id:'a1',ico:'⚔',nm:'初露锋芒',desc:'完成第一轮试炼'},
+  {id:'a2',ico:'✦',nm:'零失误',desc:'任意一轮拿到 S 评价'},
+  {id:'a3',ico:'🔥',nm:'十连斩',desc:'单轮连击达到 ×10'},
+  {id:'a4',ico:'🗡',nm:'斩词人',desc:'累计从错题本斩出 10 条'},
+  {id:'a5',ico:'💀',nm:'完美复仇',desc:'复仇关 100% 准确率通关'},
+  {id:'a6',ico:'⭐',nm:'百词点亮',desc:'图鉴点亮 100 词条'},
+  {id:'a7',ico:'🌙',nm:'二百强',desc:'图鉴点亮 200 词条'},
+  {id:'a8',ico:'👑',nm:'满天星',desc:'图鉴点亮 300 词条'},
+  {id:'a9',ico:'🕯',nm:'三日之火',desc:'连续特训 3 天'},
+  {id:'a10',ico:'🌋',nm:'七日燎原',desc:'连续特训 7 天'},
+  {id:'a11',ico:'⚡',nm:'极速猎手',desc:'限时挑战下拿到 A 或 S'},
+  {id:'a12',ico:'🏟',nm:'班级战场',desc:'完成一场两队对抗'},
+  {id:'a13',ico:'📦',nm:'题库工匠',desc:'导入一个扩展题库'}
+];
+function achUnlock(id){
+  if(SAVE.ach.includes(id))return;
+  const a=ACH.find(x=>x.id===id);if(!a)return;
+  SAVE.ach.push(id);save();sfx('combo');
+  setTimeout(()=>toast('🏅 <b style="color:var(--gold2)">成就解锁 · '+a.nm+'</b><br>'+a.desc,3200),600)}
+function achAfterRound(grade,acc){
+  achUnlock('a1');
+  if(grade==='S')achUnlock('a2');
+  if(G.maxCombo>=10)achUnlock('a3');
+  if(G.revenge&&acc===100)achUnlock('a5');
+  if(SAVE.timer&&(grade==='S'||grade==='A'))achUnlock('a11');
+  const mc=masteredCount();
+  if(mc>=100)achUnlock('a6');if(mc>=200)achUnlock('a7');if(mc>=300)achUnlock('a8');
+  if(SAVE.dailyStreak>=3)achUnlock('a9');if(SAVE.dailyStreak>=7)achUnlock('a10')}
+function itemOf(id){const p=parseId(id);
+  return{...p,m:MODS[p.mk],it:modItemsOf(p.bank,p.mk)[p.ix]}}
+function itemLabel(id){
+  const{m,it}=itemOf(id);if(!it)return'（词条已随题库移除）';
+  return m.type==='pair'?it[0]:it.ops[it.ans]}
+function itemMeaning(id){
+  const{m,it}=itemOf(id);if(!it)return'';
+  return m.type==='pair'?it[1]:it.why}
+
+// ---------- 路由 ----------
+const SCREENS=['menu','mods','pair','quiz','result','note','codex','vs-setup','vs','vs-result','help','stats'];
+function go(n){SCREENS.forEach(s=>$('scr-'+s).classList.toggle('on',s===n));window.scrollTo(0,0);
+  if(n==='menu')renderMenu()}
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+
+// ---------- 主菜单 ----------
+function totalItems(){return Object.keys(MODS).reduce((s,mk)=>s+effItems(mk).items.length,0)}
+function masteredCount(){let c=0;
+  Object.keys(MODS).forEach(mk=>{effItems(mk).ids.forEach(id=>{if(SAVE.mastery[id]>=2)c++})});
+  return c}
+function renderMenu(){
+  const due=allIds().filter(isDue).length;
+  $('menu-stat').innerHTML=
+    '<span><b>'+masteredCount()+'/'+totalItems()+'</b>词条点亮</span>'+
+    '<span><b>'+Object.keys(SAVE.book).length+'</b>错题在押</span>'+
+    '<span><b>'+due+'</b>词条到期待复习</span>'+
+    '<span><b>'+SAVE.plays+'</b>试炼次数</span>'+
+    (SAVE.dailyStreak>0?'<span><b>🔥'+SAVE.dailyStreak+'</b>连续特训</span>':'');
+  $('m-daily').innerHTML=SAVE.dailyLast===todayStr()
+    ?'每日特训 ✓ 今日已练（可加练）'
+    :'每日特训 🔥'+(due?' · '+due+' 条到期':'');
+  renderStreakHero()}
+function renderStreakHero(){
+  const hero=$('streak-hero');if(!hero)return;
+  const days=(SAVE.stats&&SAVE.stats.days)||{};
+  const dstr=o=>{const d=new Date(Date.now()-o*864e5);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
+  const dow=o=>'日一二三四五六'[new Date(Date.now()-o*864e5).getDay()];
+  let dots='';
+  for(let i=6;i>=0;i--){const lit=days[dstr(i)]>0;
+    dots+='<span class="sh-dot'+(lit?' lit':'')+(i===0?' today':'')+'"><i></i>'+dow(i)+'</span>'}
+  const st=SAVE.dailyStreak||0,best=SAVE.dailyBest||0;
+  const flame=st>0?('🔥 连续 <b>'+st+'</b> 天'+(best>st?' <small>· 最佳 '+best+' 天</small>':''))
+    :'🔥 <small>今天开练，点亮你的第一颗火苗</small>';
+  const done=SAVE.dailyLast===todayStr();
+  const task=done?'今日特训 <b>✓ 已完成</b>，可继续加练':'今日特训 <b>待完成</b> · 点上方「每日特训」';
+  hero.innerHTML='<div class="sh-top"><span class="sh-flame">'+flame+'</span></div>'
+    +'<div class="sh-dots">'+dots+'</div><div class="sh-task">'+task+'</div>'}
+$('m-daily').addEventListener('click',startDaily);
+$('m-stats').addEventListener('click',()=>{renderStats();go('stats')});
+$('m-fs').addEventListener('click',()=>{
+  if(document.fullscreenElement)document.exitFullscreen();
+  else document.documentElement.requestFullscreen().catch(()=>toast('浏览器拒绝了全屏请求'))});
+$('m-solo').addEventListener('click',()=>{renderMods();go('mods')});
+$('m-vs').addEventListener('click',()=>{renderVsSetup();go('vs-setup')});
+$('m-note').addEventListener('click',()=>{renderNote();go('note')});
+$('m-codex').addEventListener('click',()=>{renderCodex();go('codex')});
+$('m-help').addEventListener('click',()=>{renderHelp();go('help')});
+
+// ---------- 模块选择 ----------
+function modMastered(mk){let c=0;effItems(mk).ids.forEach(id=>{if(SAVE.mastery[id]>=2)c++});return c}
+function renderMods(){
+  // 难度
+  document.querySelectorAll('#diff-row .toggle').forEach(t=>
+    t.classList.toggle('on',t.dataset.d===(SAVE.diff||'all')));
+  // 题库
+  const br=$('bank-row');br.innerHTML='';
+  const banks=bankList();
+  const mkChip=(id,name)=>{
+    const t=document.createElement('div');t.className='toggle'+((SAVE.activeBank||'def')===id?' on':'');
+    t.innerHTML='<span class="dot"></span>'+name;
+    t.addEventListener('click',()=>{SAVE.activeBank=id;save();renderMods();
+      toast('题库切换：'+name)});
+    br.appendChild(t)};
+  banks.forEach(b=>mkChip(b.id,b.name));
+  if(SAVE.banks.length)mkChip('merge','全部合并');
+  const g=$('mod-grid');g.innerHTML='';
+  Object.values(MODS).forEach(m=>{
+    const eff=effItems(m.key);
+    const got=modMastered(m.key),pc=eff.items.length?Math.round(got/eff.items.length*100):0;
+    const d=document.createElement('div');d.className='mod';
+    d.innerHTML='<div class="mod-badge"><span>'+m.icon+'</span></div>'+
+      '<h3>'+m.name+'</h3><div class="en">'+m.en+' · '+eff.items.length+' 词条</div>'+
+      '<p>'+m.desc+'</p>'+
+      '<div class="mod-prog"><i style="width:'+pc+'%"></i></div>'+
+      '<div class="mod-prog-t">点亮 '+got+' / '+eff.items.length+'　'+(SAVE.best[m.key]?'· 最佳 '+SAVE.best[m.key]+' 分':'')+'</div>';
+    d.addEventListener('click',()=>{
+      if(!effItems(m.key).items.length){toast('当前题库没有这个模块的词条——切回默认题库或换一库。');return}
+      startRound(m.key,false)});
+    g.appendChild(d)});
+  $('tg-timer').classList.toggle('on',SAVE.timer);
+  $('tg-sound').classList.toggle('on',SAVE.sound)}
+document.querySelectorAll('#diff-row .toggle').forEach(t=>t.addEventListener('click',()=>{
+  SAVE.diff=t.dataset.d;save();renderMods();
+  toast(t.dataset.d==='1'?'难度：基础——先把地基打瓷实':t.dataset.d==='2'?'难度：冲刺——专啃硬骨头！':'难度：全部混合')}));
+$('tg-timer').addEventListener('click',()=>{SAVE.timer=!SAVE.timer;save();
+  $('tg-timer').classList.toggle('on',SAVE.timer);
+  toast(SAVE.timer?'⏱ 限时挑战开启——超时即判错，心跳加速！':'限时关闭，从容应战。')});
+$('tg-sound').addEventListener('click',()=>{SAVE.sound=!SAVE.sound;save();
+  $('tg-sound').classList.toggle('on',SAVE.sound)});
+
+/* ================================================================
+   对局状态 · 双引擎
+   ================================================================ */
+let G=null,timerInt=null;
+function stopTimer(){clearInterval(timerInt);timerInt=null}
+
+function startRound(modKey,revenge){
+  const m=MODS[modKey];
+  G={mod:m,revenge:!!revenge,score:0,combo:0,maxCombo:0,right:0,wrong:0,wrongIds:[],over:false};
+  SAVE.plays++;save();
+  if(revenge){startQuizRound(buildRevengeQs());return}
+  if(m.type==='pair')startPairRound();
+  else{const eff=diffFiltered(m.key);
+    const qs=sample(eff.items.map((it,i)=>quizFromItem(m,it,eff.ids[i],eff.items)),Math.min(10,eff.items.length));
+    startQuizRound(qs)}}
+
+// ---- 配对引擎 ----
+function startPairRound(){
+  const m=G.mod;
+  const eff=diffFiltered(m.key);
+  const idxs=sample(eff.items.map((_,i)=>i),Math.min(8,eff.items.length));
+  G.pairs=idxs.map(i=>({id:eff.ids[i],L:eff.items[i][0],R:eff.items[i][1]}));
+  G.leftSel=null;G.matched=0;
+  const L=$('col-L'),R=$('col-R');L.innerHTML='';R.innerHTML='';
+  shuffle(G.pairs).forEach((p,i)=>{
+    const c=document.createElement('button');c.className='pcard';c.dataset.id=p.id;
+    c.style.animationDelay=(i*.06)+'s';
+    c.innerHTML='<span class="hint">'+(m.hintL||'')+'</span>'+p.L;
+    c.addEventListener('click',()=>pairPick(c,'L'));L.appendChild(c)});
+  shuffle(G.pairs).forEach((p,i)=>{
+    const c=document.createElement('button');c.className='pcard';c.dataset.id=p.id;
+    c.style.animationDelay=(i*.06+.03)+'s';
+    c.innerHTML='<span class="hint">'+(m.hintR||'')+'</span>'+p.R;
+    c.addEventListener('click',()=>pairPick(c,'R'));R.appendChild(c)});
+  updPairHud();
+  if(SAVE.timer){startPairTimer(100)}else{$('p-timer').textContent='∞';$('p-timer-box').classList.remove('danger')}
+  go('pair')}
+function startPairTimer(sec){
+  stopTimer();G.time=sec;$('p-timer').textContent=G.time;
+  timerInt=setInterval(()=>{G.time--;$('p-timer').textContent=G.time;
+    $('p-timer-box').classList.toggle('danger',G.time<=15);
+    if(G.time<=10)sfx('tick');
+    if(G.time<=0){stopTimer();toast('⏱ 时间到！','1800');endRound(true)}},1000)}
+function updPairHud(){
+  $('p-score').textContent=G.score;$('p-combo').textContent='×'+G.combo;
+  $('p-left').textContent=G.pairs.length-G.matched;
+  $('p-bar').style.width=(G.matched/G.pairs.length*100)+'%'}
+function pairPick(card,side){
+  if(card.classList.contains('gone'))return;
+  sfx('pick');
+  if(side==='L'){
+    if(G.leftSel===card){card.classList.remove('sel');G.leftSel=null;return}
+    if(G.leftSel)G.leftSel.classList.remove('sel');
+    G.leftSel=card;card.classList.add('sel');return}
+  if(!G.leftSel){toast('先选左边的词，再点它的含义！',1400);return}
+  const L=G.leftSel,id=L.dataset.id;
+  const rect=card.getBoundingClientRect(),cx=rect.left+rect.width/2,cy=rect.top;
+  if(card.dataset.id===id){
+    G.matched++;G.right++;G.combo++;G.maxCombo=Math.max(G.maxCombo,G.combo);
+    const bonus=Math.min(G.combo*2,10),gain=10+bonus;
+    G.score+=gain;markRight(id);
+    L.classList.add('right-flash');card.classList.add('right-flash');
+    setTimeout(()=>{L.classList.add('gone');card.classList.add('gone')},340);
+    floatNum(cx,cy,'+'+gain,'var(--gold2)');sfx('right');
+    if(G.combo===3)comboBanner('三 连 斩 ！');
+    if(G.combo===5){comboBanner('五 连 · 开 刃 ！');flash('gold');sfx('combo')}
+    if(G.combo===8){comboBanner('八 连 · 词 灵 觉 醒 ！！');flash('gold');shake();sfx('combo');burst(cx,cy,GOLDS,30)}
+    G.leftSel=null;updPairHud();
+    if(G.matched>=G.pairs.length){stopTimer();setTimeout(()=>endRound(false),650)}}
+  else{
+    G.wrong++;G.combo=0;G.score=Math.max(0,G.score-5);
+    if(!G.wrongIds.includes(id))G.wrongIds.push(id);
+    markWrong(id);
+    L.classList.add('wrong-flash');card.classList.add('wrong-flash');
+    setTimeout(()=>{L.classList.remove('wrong-flash');card.classList.remove('wrong-flash')},450);
+    floatNum(cx,cy,'-5','var(--red2)');sfx('wrong');flash('red');
+    L.classList.remove('sel');G.leftSel=null;updPairHud()}}
+
+// ---- 选择引擎 ----
+function quizFromItem(m,it,id,pool){
+  if(m.type==='quiz')return{id,q:it.q,ops:it.ops,ans:it.ans,why:it.why,passage:it.passage};
+  // 配对词条 → 四选一（复仇关/对抗用），干扰项取自同一题库同模块
+  pool=(pool&&pool.length>=4)?pool:MODS[m.key].items;
+  const wrongs=sample(pool.filter(x=>x[1]!==it[1]),3).map(x=>x[1]);
+  const ops=shuffle([it[1],...wrongs]);
+  const qText=m.key==='m2'?'「 '+it[0]+' 」的过去式 · 过去分词是？':'「 '+it[0]+' 」的意思是？';
+  return{id,q:qText,ops,ans:ops.indexOf(it[1]),
+    why:'<b>'+it[0]+'</b> ＝ '+it[1]}}
+function buildRevengeQs(){
+  const ids=Object.keys(SAVE.book).filter(id=>itemOf(id).it);
+  return sample(ids,Math.min(ids.length,10)).map(id=>{
+    const{m,it,bank,mk}=itemOf(id);
+    return quizFromItem(m,it,id,modItemsOf(bank,mk))})}
+function startQuizRound(qs){
+  G.qs=qs.map(q=>({...q,sh:null}));G.qi=0;
+  renderQuiz();go('quiz')}
+function renderQuiz(){
+  const q=G.qs[G.qi];
+  // 选项乱序（保持 ans 跟踪）
+  if(!q.sh){const order=shuffle(q.ops.map((_,i)=>i));
+    q.sh={ops:order.map(i=>q.ops[i]),ans:order.indexOf(q.ans)}}
+  $('q-score').textContent=G.score;$('q-combo').textContent='×'+G.combo;
+  $('q-prog').textContent=(G.qi+1)+'/'+G.qs.length;
+  $('q-bar').style.width=(G.qi/G.qs.length*100)+'%';
+  $('q-text').innerHTML='<span class="qno">'+(G.revenge?'复仇 · ':'')+'第 '+(G.qi+1)+' 题</span>'+
+    q.q.replace(/___/g,'<span class="blank">　　</span>');
+  // 阅读/完形：有短文则显示短文面板
+  var pp=$('q-passage');
+  if(pp){if(q.passage){var _e=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')};
+    pp.innerHTML='<div class="pp-label">阅读短文 Passage</div>'+_e(q.passage).replace(/\n/g,'<br>').replace(/___/g,'<span class="blank">　　</span>');pp.hidden=false;}
+    else{pp.hidden=true;pp.innerHTML='';}}
+  const box=$('q-ops');box.innerHTML='';$('q-why').innerHTML='';$('q-next').innerHTML='';
+  const keys=['A','B','C','D'];
+  q.sh.ops.forEach((op,i)=>{
+    const b=document.createElement('button');b.className='q-op';
+    b.innerHTML='<span class="key">'+keys[i]+'</span>'+op;
+    b.addEventListener('click',()=>answerQuiz(i,b));box.appendChild(b)});
+  if(SAVE.timer){startQuizTimer(15)}else{$('q-timer').textContent='∞';$('q-timer-box').classList.remove('danger')}}
+function startQuizTimer(sec){
+  stopTimer();G.time=sec;$('q-timer').textContent=G.time;
+  timerInt=setInterval(()=>{G.time--;$('q-timer').textContent=G.time;
+    $('q-timer-box').classList.toggle('danger',G.time<=5);
+    if(G.time<=5&&G.time>0)sfx('tick');
+    if(G.time<=0){stopTimer();answerQuiz(-1,null)}},1000)}
+function answerQuiz(i,btn){
+  stopTimer();
+  const q=G.qs[G.qi];
+  const ops=[...$('q-ops').children];
+  ops.forEach(o=>o.disabled=true);
+  ops[q.sh.ans].classList.add('correct');
+  const r=ops[q.sh.ans].getBoundingClientRect();
+  if(i===q.sh.ans){
+    G.right++;G.combo++;G.maxCombo=Math.max(G.maxCombo,G.combo);
+    const gain=10+Math.min(G.combo*2,10);G.score+=gain;markRight(q.id);
+    floatNum(r.left+r.width/2,r.top,'+'+gain,'var(--gold2)');sfx('right');
+    if(G.combo===3)comboBanner('三 连 斩 ！');
+    if(G.combo===5){comboBanner('五 连 · 开 刃 ！');flash('gold');sfx('combo')}
+    if(G.combo>=8&&G.combo%4===0){comboBanner('词 灵 觉 醒 ！！');shake();burst(r.left+r.width/2,r.top,GOLDS,28)}}
+  else{
+    G.wrong++;G.combo=0;G.score=Math.max(0,G.score-5);
+    G.wrongIds.push(q.id);markWrong(q.id);
+    if(btn)btn.classList.add('wrong');
+    floatNum(r.left+r.width/2,r.top,i<0?'超时！':'-5','var(--red2)');
+    sfx('wrong');flash('red')}
+  $('q-why').innerHTML='<div class="why-box"><b>解析</b>　'+q.why+'</div>';
+  const nb=document.createElement('button');nb.className='btn';
+  nb.textContent=G.qi+1>=G.qs.length?'查 看 战 报':'下 一 题';
+  nb.addEventListener('click',()=>{
+    G.qi++;
+    if(G.qi>=G.qs.length)endRound(false);
+    else renderQuiz()});
+  $('q-next').appendChild(nb);
+  $('q-score').textContent=G.score;$('q-combo').textContent='×'+G.combo}
+
+$('p-quit').addEventListener('click',()=>{stopTimer();if(confirm('退出本轮？本轮成绩不计。'))go('mods')});
+$('q-quit').addEventListener('click',()=>{stopTimer();if(confirm('退出本轮？本轮成绩不计。'))go('mods')});
+
+/* ================================================================
+   引擎 · 第二部分：结算 / 错题本 / 图鉴 / 两队对抗 / 启动
+   ================================================================ */
+
+// ---------- 结算 ----------
+function endRound(timeout){
+  stopTimer();
+  const total=G.right+G.wrong;
+  const acc=total?Math.round(G.right/total*100):0;
+  let g,gt;
+  if(acc===100&&G.right>0){g='S';gt='完 美 通 关 ！'}
+  else if(acc>=90){g='A';gt='锋 利 ！再磨一点就是满分'}
+  else if(acc>=75){g='B';gt='有 戏 ！错的都进错题本了'}
+  else{g='C';gt='别 慌 ——复仇关等你回来'}
+  if(g==='S'){flash('gold');shake();sfx('win');
+    setTimeout(()=>burst(innerWidth/2,innerHeight*.3,GOLDS,36),200)}
+  else if(g==='A'){flash('gold');sfx('win')}
+  else sfx(g==='B'?'right':'lose');
+  if(!G.revenge&&!G.daily&&G.score>(SAVE.best[G.mod.key]||0)){SAVE.best[G.mod.key]=G.score;save();
+    toast('🏆 新纪录！'+G.mod.name+' 最佳 '+G.score+' 分')}
+  // 每日特训打卡
+  let streakNote='';
+  if(G.daily&&SAVE.dailyLast!==todayStr()){
+    SAVE.dailyStreak=(SAVE.dailyLast===yesterdayStr())?SAVE.dailyStreak+1:1;
+    SAVE.dailyBest=Math.max(SAVE.dailyBest||0,SAVE.dailyStreak);
+    SAVE.dailyLast=todayStr();save();
+    streakNote=' · 🔥 连续 '+SAVE.dailyStreak+' 天'}
+  achAfterRound(g,acc);
+  $('r-eyebrow').textContent=(G.revenge?'REVENGE · 复仇关':G.mod.name+' · '+(G.mod.en||''))+(timeout?' · 超时收卷':'')+streakNote;
+  const ge=$('r-grade');ge.textContent=g;ge.className='grade '+g;
+  $('r-title').textContent=gt;
+  $('r-stats').innerHTML='<span><b>'+G.score+'</b>得分</span><span><b>'+acc+'%</b>准确率</span>'+
+    '<span><b>×'+G.maxCombo+'</b>最高连击</span><span><b>'+G.right+'/'+total+'</b>命中</span>';
+  const w=$('r-wrong');
+  if(G.wrongIds.length){
+    w.innerHTML='<div class="wrong-list"><h4>本轮失手 · 已收入错题本</h4>'+
+      [...new Set(G.wrongIds)].map(id=>'<div class="wrong-item"><b>'+itemLabel(id)+'</b><small>'+itemMeaning(id)+'</small></div>').join('')+'</div>'}
+  else w.innerHTML='<p class="sub" style="margin:18px 0">零失误。错题本今天饿肚子了。</p>';
+  go('result')}
+$('r-again').addEventListener('click',()=>{
+  if(G.daily)startDaily();
+  else if(G.revenge)startRound('m1',true);
+  else startRound(G.mod.key,false)});
+
+// ---------- 错题本 ----------
+function renderNote(){
+  const ids=Object.keys(SAVE.book);
+  $('note-count').textContent=ids.length;
+  $('note-revenge').disabled=ids.length<6;
+  $('note-revenge').textContent=ids.length<6?'开启复仇关（还差 '+(6-ids.length)+' 条）':'开 启 复 仇 关';
+  const l=$('note-list');
+  if(!ids.length){l.innerHTML='<p class="sub">错题本空空如也——要么你太强，要么你还没开打。</p>';return}
+  const byMod={};
+  ids.forEach(id=>{const mk=parseId(id).mk;if(!MODS[mk])return;(byMod[mk]=byMod[mk]||[]).push(id)});
+  l.innerHTML='';
+  Object.keys(byMod).forEach(mk=>{
+    const sec=document.createElement('div');sec.className='cdx-sec';
+    sec.innerHTML='<h3>'+MODS[mk].name+'</h3><div class="meta">'+byMod[mk].length+' 条在押 · 连对两次自动释放</div>'+
+      '<div class="chip-grid">'+byMod[mk].map(id=>{
+        const need=SAVE.book[id].need;
+        return '<span class="chip bad" title="'+itemMeaning(id).replace(/<[^>]+>/g,'')+'">'+itemLabel(id)+(need<2?' ·还差1刀':'')+'</span>'}).join('')+'</div>';
+    l.appendChild(sec)})}
+$('note-revenge').addEventListener('click',()=>{
+  G=null;startRound('m1',true);
+  toast('⚔ 复仇关开启——把名单清空！')});
+
+// ---------- 图鉴 ----------
+function renderCodex(){
+  const b=$('codex-body');b.innerHTML='';
+  Object.values(MODS).forEach(m=>{
+    const eff=effItems(m.key);
+    if(!eff.items.length)return;
+    const got=modMastered(m.key),pc=Math.round(got/eff.items.length*100);
+    const sec=document.createElement('div');sec.className='cdx-sec';
+    sec.innerHTML='<h3>'+m.icon+' '+m.name+'</h3>'+
+      '<div class="meta">点亮 '+got+' / '+eff.items.length+'（'+pc+'%）'+
+      (function(){const a=SAVE.activeBank||'def';if(a==='def')return'';
+        const b=bankList().find(x=>x.id===a);return b?' · '+b.name:(a==='merge'?' · 全部合并':'')})()+'</div>'+
+      '<div class="mod-prog" style="max-width:340px"><i style="width:'+pc+'%"></i></div>'+
+      '<div class="chip-grid">'+eff.items.map((it,i)=>{
+        const id=eff.ids[i];
+        const lit=SAVE.mastery[id]>=2;
+        const lv=itemLv(m.key,it,id);
+        const label=m.type==='pair'?it[0]:it.ops[it.ans];
+        const tip=(m.type==='pair'?it[1]:'')+(lv===2?'（冲刺）':'');
+        return '<span class="chip'+(lit?' lit':'')+'" title="'+tip+'">'+(lv===2?'◆ ':'')+label+'</span>'}).join('')+'</div>';
+    b.appendChild(sec)})}
+
+/* ================================================================
+   导入 / 导出
+   ================================================================ */
+function dl(obj,fn){
+  const b=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000)}
+function validateBank(o){
+  if(!o||typeof o!=='object'||!o.mods)return '缺少 mods 字段';
+  let n=0;
+  for(const mk in o.mods){
+    if(!MODS[mk])return '未知模块 '+mk+'（合法：m1~m5）';
+    const arr=o.mods[mk];
+    if(!Array.isArray(arr))return mk+' 必须是数组';
+    for(const it of arr){
+      if(MODS[mk].type==='pair'){
+        if(!Array.isArray(it)||it.length<2)return mk+' 的词条应为 ["词","义",难度(可选)]'}
+      else{
+        if(!it.q||!Array.isArray(it.ops)||typeof it.ans!=='number'||!it.why)
+          return mk+' 的题目需要 q / ops / ans / why 字段';
+        if(it.ans<0||it.ans>=it.ops.length)return mk+' 有题目的 ans 越界'}
+      n++}}
+  return n?null:'题库是空的'}
+$('bt-imp-bank').addEventListener('click',()=>$('file-bank').click());
+$('file-bank').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{
+    const o=JSON.parse(r.result);
+    const err=validateBank(o);
+    if(err){toast('❌ 题库格式有问题：'+err,3600);return}
+    SAVE.banks.push({name:o.name||f.name.replace(/\.json$/i,''),mods:o.mods});
+    SAVE.activeBank='e'+(SAVE.banks.length-1);save();renderMods();
+    const cnt=Object.values(o.mods).reduce((s,a)=>s+a.length,0);
+    achUnlock('a13');
+    toast('🎉 扩展题库「'+(o.name||'未命名')+'」导入成功——'+cnt+' 条词条已上膛！',3200)}
+  catch(ex){toast('❌ 不是有效的 JSON 文件',3000)}};
+  r.readAsText(f);e.target.value=''});
+$('bt-tpl-bank').addEventListener('click',()=>{
+  dl({
+    README:'MYSKME 题库工坊 · 扩展题库标准格式。name=题库名；mods 里五个模块都可选填：m1 经典对决 / m2 词形风暴 / m3 黄金搭配（格式 [\"词\",\"义\",难度]，难度 1=基础 2=冲刺，可省略）；m4 易混猎人 / m5 句境狙击（格式 {q,ops,ans,why,lv}，q 中空格写 ___，ans 是正确选项下标从 0 起）。按此格式制作新一期题库即可。',
+    name:'我的扩展题库',
+    mods:{
+      m1:[['glance','瞥一眼；扫视',2],['border','边界；边境',1]],
+      m3:[['in addition to','除……之外（还）',2]],
+      m4:[{q:'The teacher asked us to hand ___ our reports.',ops:['in','out'],ans:0,why:'hand in 上交；hand out 分发。',lv:1}],
+      m5:[{q:'He is ___ young to drive a car.',ops:['too','so','very','quite'],ans:0,why:'too...to... 太……而不能……',lv:1}]
+    }
+  },'词灵对决_题库模板.json');
+  toast('📦 模板已导出——按此格式即可制作新一期题库')});
+$('bt-exp-prog').addEventListener('click',()=>{
+  dl({type:'ciling-progress',mastery:SAVE.mastery,book:SAVE.book,best:SAVE.best,plays:SAVE.plays,banks:SAVE.banks},
+    '词灵对决_进度备份.json');
+  toast('💾 进度已导出（含扩展题库）——换电脑导入即可无缝继续')});
+$('bt-imp-prog').addEventListener('click',()=>$('file-prog').click());
+$('file-prog').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{
+    const o=JSON.parse(r.result);
+    if(o.type!=='ciling-progress'){toast('❌ 这不是词灵对决的进度文件',3000);return}
+    if(!confirm('导入将覆盖本机当前进度（点亮/错题本/最佳分），确定？'))return;
+    SAVE.mastery=o.mastery||{};SAVE.book=o.book||{};SAVE.best=o.best||{};
+    SAVE.plays=o.plays||0;if(Array.isArray(o.banks))SAVE.banks=o.banks;
+    save();renderMods();renderMenu();
+    toast('✅ 进度导入完成——欢迎回来，继续点亮！',2800)}
+  catch(ex){toast('❌ 不是有效的 JSON 文件',3000)}};
+  r.readAsText(f);e.target.value=''});
+
+// ---------- 两队对抗 ----------
+let VS=null;
+function renderVsSetup(){
+  const box=$('vs-mods');box.innerHTML='';
+  Object.values(MODS).forEach(m=>{
+    const t=document.createElement('div');t.className='toggle on';t.dataset.mk=m.key;
+    t.innerHTML='<span class="dot"></span>'+m.name;
+    t.addEventListener('click',()=>t.classList.toggle('on'));
+    box.appendChild(t)})}
+document.querySelectorAll('#vs-rounds .toggle').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('#vs-rounds .toggle').forEach(x=>x.classList.toggle('on',x===t))}));
+$('vs-go').addEventListener('click',()=>{
+  const mods=[...document.querySelectorAll('#vs-mods .toggle.on')].map(t=>t.dataset.mk);
+  if(!mods.length){toast('至少选一个题目来源！');return}
+  const n=+document.querySelector('#vs-rounds .toggle.on').dataset.n;
+  const pool=[];
+  mods.forEach(mk=>{const m=MODS[mk];const eff=diffFiltered(mk);
+    eff.items.forEach((it,i)=>pool.push(quizFromItem(m,it,eff.ids[i],eff.items)))});
+  VS={n1:$('vs-n1').value||'金队',n2:$('vs-n2').value||'紫队',
+    qs:sample(pool,n),qi:0,turn:0,s:[0,0],streak:[0,0],hit:[0,0],try:[0,0]};
+  $('vs-tn1').textContent=VS.n1;$('vs-tn2').textContent=VS.n2;
+  renderVsQ();go('vs')});
+function vsHud(){
+  $('vs-ts1').textContent=VS.s[0];$('vs-ts2').textContent=VS.s[1];
+  $('vs-t1').classList.toggle('active',VS.turn===0);
+  $('vs-t2').classList.toggle('active',VS.turn===1);
+  $('vs-round').textContent='第 '+(VS.qi+1)+' 题';
+  $('vs-bar').style.width=(VS.qi/VS.qs.length*100)+'%'}
+function renderVsQ(){
+  const q=VS.qs[VS.qi];
+  if(!q.sh){const order=shuffle(q.ops.map((_,i)=>i));
+    q.sh={ops:order.map(i=>q.ops[i]),ans:order.indexOf(q.ans)}}
+  vsHud();
+  $('vs-text').innerHTML='<span class="qno">'+(VS.turn===0?VS.n1:VS.n2)+' 作答</span>'+
+    q.q.replace(/___/g,'<span class="blank">　　</span>');
+  const box=$('vs-ops');box.innerHTML='';
+  $('vs-why').innerHTML='';$('vs-steal').innerHTML='';$('vs-next').innerHTML='';
+  const keys=['A','B','C','D'];
+  q.sh.ops.forEach((op,i)=>{
+    const b=document.createElement('button');b.className='q-op';
+    b.innerHTML='<span class="key">'+keys[i]+'</span>'+op;
+    b.addEventListener('click',()=>vsAnswer(i,b));box.appendChild(b)})}
+function teamColor(t){return t===0?'var(--gold2)':'var(--purple)'}
+function vsAnswer(i,btn){
+  const q=VS.qs[VS.qi],t=VS.turn,ops=[...$('vs-ops').children];
+  ops.forEach(o=>o.disabled=true);
+  VS.try[t]++;
+  const r=ops[q.sh.ans].getBoundingClientRect();
+  if(i===q.sh.ans){
+    ops[q.sh.ans].classList.add('correct');
+    VS.streak[t]++;VS.hit[t]++;
+    const bonus=VS.streak[t]>=3?5:0;
+    VS.s[t]+=10+bonus;
+    floatNum(r.left+r.width/2,r.top,'+'+(10+bonus),teamColor(t));sfx('right');
+    if(bonus){comboBanner((t===0?VS.n1:VS.n2)+' · 连 对 加 成 ！');flash('gold')}
+    vsDone(q)}
+  else{
+    if(btn)btn.classList.add('wrong');
+    VS.streak[t]=0;sfx('wrong');flash('red');
+    // 抢答阶段
+    const other=1-t;
+    const sb=document.createElement('div');sb.className='steal-box';
+    sb.innerHTML='<p><b>'+(other===0?VS.n1:VS.n2)+'</b> 可以抢答！答对 +5，答错不扣。</p>';
+    const row=document.createElement('div');row.style.cssText='display:flex;gap:10px;justify-content:center;flex-wrap:wrap';
+    const sBtn=document.createElement('button');sBtn.className='btn dim';sBtn.textContent='抢 答 ！';
+    sBtn.addEventListener('click',()=>{
+      sb.remove();
+      ops.forEach((o,oi)=>{if(oi!==i)o.disabled=false});
+      toast((other===0?VS.n1:VS.n2)+' 抢答中——点选项！',1800);
+      ops.forEach((o,oi)=>{if(oi===i)return;
+        o.onclick=()=>{ops.forEach(x=>x.disabled=true);
+          VS.try[other]++;
+          if(oi===q.sh.ans){o.classList.add('correct');VS.hit[other]++;VS.s[other]+=5;
+            floatNum(r.left+r.width/2,r.top,'+5',teamColor(other));sfx('right')}
+          else{o.classList.add('wrong');ops[q.sh.ans].classList.add('correct');sfx('wrong')}
+          vsDone(q)}})});
+    const pBtn=document.createElement('button');pBtn.className='btn dim';pBtn.textContent='放 弃';
+    pBtn.addEventListener('click',()=>{sb.remove();ops[q.sh.ans].classList.add('correct');vsDone(q)});
+    row.appendChild(sBtn);row.appendChild(pBtn);sb.appendChild(row);
+    $('vs-steal').appendChild(sb);
+    vsHud();return}
+  }
+function vsDone(q){
+  vsHud();
+  $('vs-why').innerHTML='<div class="why-box"><b>解析</b>　'+q.why+'</div>';
+  const nb=document.createElement('button');nb.className='btn';
+  nb.textContent=VS.qi+1>=VS.qs.length?'终 场 战 报':'下 一 题';
+  nb.addEventListener('click',()=>{
+    VS.qi++;VS.turn=1-VS.turn;
+    if(VS.qi>=VS.qs.length)vsEnd();else renderVsQ()});
+  $('vs-next').appendChild(nb)}
+function vsEnd(){
+  const w=VS.s[0]===VS.s[1]?-1:(VS.s[0]>VS.s[1]?0:1);
+  $('vr-glyph').textContent=w<0?'⚖':'🏆';
+  $('vr-glyph').style.color=w===1?'var(--purple)':'var(--gold2)';
+  $('vr-title').innerHTML=w<0?'平分秋色！<em>加赛一局？</em>'
+    :'<em>'+(w===0?VS.n1:VS.n2)+'</em> 获 胜 ！！';
+  const acc=t=>VS.try[t]?Math.round(VS.hit[t]/VS.try[t]*100):0;
+  $('vr-stats').innerHTML=
+    '<span><b style="color:var(--gold2)">'+VS.s[0]+'</b>'+VS.n1+'</span>'+
+    '<span><b style="color:var(--purple)">'+VS.s[1]+'</b>'+VS.n2+'</span>'+
+    '<span><b>'+acc(0)+'% / '+acc(1)+'%</b>准确率对比</span>';
+  flash('gold');shake();sfx('win');
+  achUnlock('a12');
+  setTimeout(()=>burst(innerWidth/2,innerHeight*.32,w===1?['#9d72d6','#b69cff','#f0e6d2']:GOLDS,36),250);
+  go('vs-result')}
+$('vr-again').addEventListener('click',()=>{renderVsSetup();go('vs-setup')});
+
+// ---------- 帮助 ----------
+function renderHelp(){
+  $('help-body').innerHTML=`
+<p><em>30 秒上手</em>：选一个试炼 → 配对或答题 → 连击拉分 → 看战报。答错的词条自动进<b>错题本</b>，攒 6 条解锁复仇关，连对两次才能"斩词"出本。</p>
+<p><b>五大试炼</b>：经典对决（词↔义）、词形风暴（不规则动词）、黄金搭配（中考短语）走配对盘——先点左边的词，再点右边的含义；易混猎人、句境狙击走答题盘——每题都有解析，<em>错题的解析才是真金</em>。</p>
+<p><b>计分</b>：答对 +10，连击每层 +2（上限 +10）；答错 -5。连击 3/5/8 有横幅和全屏反馈——S 评价需要 100% 准确率。</p>
+<p><b>限时挑战</b>：在试炼选择页打开开关——配对一轮 100 秒，答题每题 15 秒，超时判错。建议先从容刷熟，再开限时冲分。</p>
+<p><b>两队对抗（课堂投影）</b>：两队轮流答题，答错对方可抢答（+5）。三连对有加成。题源可以勾选任意试炼组合——考前用"易混猎人 + 句境狙击"，20 题鏖战正好一节课的收尾。</p>
+<p><b>词条图鉴</b>：每个词累计答对两次即点亮（◆ 标记＝冲刺级）。300 词条全亮的那天，中考词汇这一关就算过了。</p>
+<p><b>难度</b>：试炼页可切「基础 / 冲刺 / 全部混合」——基础先把地基打瓷实，冲刺专供高阶易错词条。某难度词条不足时自动回退全量。</p>
+<p><b>扩展题库</b>：点「导出题库模板」拿到标准格式样例，由 MYSKME 题库工坊按格式制作（高一词库、单元同步词库均可），再「导入扩展题库」即玩。多个题库可切换或全部合并，进度互不串扰。</p>
+<p><b>兑换码（网站版专属）</b>：王老师每期试卷都有卷号（如 S1E7），在题库中心输入即可在线领取同款题库——课上做的卷子，回家变成游戏继续刷。「浏览题库目录」能看到所有已发布的期数。</p>
+<p><b>进度搬家</b>：「导出学习进度」会连扩展题库一起打包；换电脑导入即可无缝继续。</p>
+<p><b>每日特训（核心推荐）</b>：内置间隔复习算法——答对的词按 1/3/7/14/30 天的间隔到期回炉，答错立刻回炉。每天一轮特训（到期复习 + 错题 + 新词混编 12 题），连续天数会点燃 🔥。<em>先特训，再试炼</em>，是效率最高的用法。</p>
+<p><b>战绩·成就</b>：13 枚成就徽章、近七日火力图、最常失手 TOP10。错题本里还能一键导出错题清单（txt），打印贴墙。</p>
+<p><b>键盘党</b>：答题时按 A/B/C/D 或 1/2/3/4 选答案，回车进下一题；主菜单按 F 或点「投影全屏」直接上大屏。</p>
+<p style="color:var(--ink3)">进度保存在本机浏览器里（localStorage）。换电脑/清缓存会清零——课堂投影机上建议只用对抗模式。</p>`}
+
+// ---------- 题库中心（兑换码 / 在线目录）----------
+// 题库书架：优先取枢纽（题库工坊网页后台发布即生效），回退到本站 banks/
+const SHELF='https://myskme.github.io/myskme-hub/banks/';
+async function shelfFetch(file){
+  for(const base of [SHELF,'banks/']){
+    try{const r=await fetch(base+file,{cache:'no-store'});if(r&&r.ok)return r;}catch(e){}
+  }
+  return null}
+function installBankObj(o,code){
+  const err=validateBank(o);
+  if(err){toast('❌ 题库格式问题：'+err,3200);return false}
+  if(SAVE.banks.some(b=>(code&&b.code===code)||b.name===o.name)){
+    toast('「'+(o.name||code)+'」已经装过了，不重复安装');return false}
+  SAVE.banks.push({name:o.name||code,code:code||o.code||'',mods:o.mods});
+  SAVE.activeBank='e'+(SAVE.banks.length-1);
+  achUnlock('a13');save();renderMods();
+  const cnt=Object.values(o.mods).reduce((s,a)=>s+a.length,0);
+  toast('🎉 「'+(o.name||code)+'」安装完成——'+cnt+' 条词条已上膛！',3000);
+  return true}
+async function redeemCode(code){
+  code=(code||'').trim().toUpperCase();
+  if(!code){toast('先输入兑换码！');return}
+  if(location.protocol==='file:'){
+    toast('本地文件模式无法在线兑换——请打开网站版输码，或用「导入扩展题库」选 JSON 文件',3800);return}
+  try{
+    const r=await shelfFetch(code+'.json');
+    if(!r)throw 0;
+    installBankObj(await r.json(),code)}
+  catch(e){toast('❌ 没找到兑换码 '+code+' 对应的题库——检查一下拼写？',3000)}}
+$('bt-code').addEventListener('click',()=>redeemCode($('code-input').value));
+$('code-input').addEventListener('keydown',e=>{if(e.key==='Enter')redeemCode($('code-input').value)});
+/* 卷尾二维码直达：?code=XXXX 一扫即装当期题库（课上做卷→回家直接刷同款） */
+(function(){try{var c=new URLSearchParams(location.search).get('code');if(c){var ci=$('code-input');if(ci)ci.value=c;redeemCode(c);}}catch(e){}})();
+$('bt-cat').addEventListener('click',async()=>{
+  const box=$('cat-list');
+  if(location.protocol==='file:'){toast('题库目录需要在网站版打开（本地请用文件导入）',3200);return}
+  box.innerHTML='<span class="sub">正在取回目录……</span>';
+  try{
+    const r=await shelfFetch('index.json');
+    const o=r?await r.json():{};
+    box.innerHTML='';
+    (o.catalog||[]).forEach(c=>{
+      const got=SAVE.banks.some(b=>b.code===c.code||b.name===c.name);
+      const t=document.createElement('div');t.className='toggle'+(got?' on':'');
+      t.innerHTML='<span class="dot"></span>'+c.code+' · '+c.name+'（'+c.count+' 题）'+(got?' ✓':'');
+      if(!got)t.addEventListener('click',()=>redeemCode(c.code));
+      box.appendChild(t)});
+    if(!(o.catalog||[]).length)box.innerHTML='<span class="sub">目录还是空的——等王老师的下一期。</span>'}
+  catch(e){box.innerHTML='';toast('❌ 取目录失败，稍后再试')}});
+
+// ---------- 战绩 · 成就 ----------
+function renderStats(){
+  const st=SAVE.stats;
+  const acc=st.answered?Math.round(st.correct/st.answered*100):0;
+  $('stats-top').innerHTML=
+    '<span><b>'+st.answered+'</b>累计作答</span>'+
+    '<span><b>'+acc+'%</b>总准确率</span>'+
+    '<span><b>'+(SAVE.killed||0)+'</b>累计斩词</span>'+
+    '<span><b>🔥'+(SAVE.dailyStreak||0)+'</b>当前连续</span>'+
+    '<span><b>'+(SAVE.dailyBest||0)+'</b>最长连续</span>'+
+    '<span><b>'+SAVE.ach.length+'/'+ACH.length+'</b>成就</span>';
+  const _lbl=$('lb-line');
+  if(_lbl){_lbl.innerHTML=(SAVE.lbPower!=null)
+    ?'名人天梯 · <b style="color:var(--gold2)">'+(SAVE.lbRankName||lbRankFor(SAVE.lbPower))+'</b> · 赛季灵力 <b>'+SAVE.lbPower+'</b>'+(SAVE.lbLife?' · 终身 <b>'+SAVE.lbLife+'</b>':'')+' · 上次世界第 <b>'+SAVE.lbRank+'</b> 名 — 点上方 🏆 上榜刷新'
+    :'名人天梯 · 还没上榜 — 点上方 🏆 上榜，化名登世界天梯';}
+  // 近七日
+  const bars=$('stats-bars');bars.innerHTML='';
+  const days=[];let mx=1;
+  for(let i=6;i>=0;i--){
+    const d=new Date(Date.now()-i*864e5);
+    const k=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    const n=st.days[k]||0;mx=Math.max(mx,n);
+    days.push({lbl:i===0?'今天':(d.getMonth()+1)+'/'+d.getDate(),n})}
+  days.forEach(d=>{
+    const b=document.createElement('div');b.className='bar7';
+    b.style.height=Math.max(3,Math.round(d.n/mx*100))+'%';
+    b.innerHTML=(d.n?'<b>'+d.n+'</b>':'')+'<i>'+d.lbl+'</i>';
+    bars.appendChild(b)});
+  // 最常失手 TOP10
+  const tw=$('stats-wrong');
+  const top=Object.entries(st.wrong).filter(([id])=>itemOf(id).it)
+    .sort((a,b)=>b[1]-a[1]).slice(0,10);
+  tw.innerHTML=top.length
+    ?top.map(([id,n])=>'<span class="chip bad" title="'+itemMeaning(id).replace(/<[^>]+>/g,'')+'">'+itemLabel(id)+' ×'+n+'</span>').join('')
+    :'<span class="sub">还没有失手记录——保持！</span>';
+  // 成就墙
+  const ag=$('ach-grid');ag.innerHTML='';
+  ACH.forEach(a=>{
+    const got=SAVE.ach.includes(a.id);
+    const d=document.createElement('div');d.className='ach'+(got?'':' locked');
+    d.innerHTML='<div class="ico">'+a.ico+'</div><div><h4>'+a.nm+'</h4><p>'+a.desc+'</p></div>';
+    ag.appendChild(d)})}
+
+// ---------- ⑤ 家长周报卡 ----------
+function reportData(){
+  const st=SAVE.stats||{days:{},answered:0,correct:0};
+  let weekAns=0,activeDays=0;const last7=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(Date.now()-i*864e5);
+    const k=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    const n=(st.days&&st.days[k])||0;weekAns+=n;if(n>0)activeDays++;
+    last7.push({lbl:'日一二三四五六'[d.getDay()],n});
+  }
+  return {weekAns,activeDays,last7,
+    acc:st.answered?Math.round(st.correct/st.answered*100):0,
+    streak:SAVE.dailyStreak||0,best:SAVE.dailyBest||0,
+    mastered:masteredCount(),total:totalItems(),
+    killed:SAVE.killed||0,ach:SAVE.ach.length,achTotal:ACH.length};
+}
+function reportRemark(d){
+  if(d.streak>=7)return '连续打卡一周以上，这份坚持最难得——请给孩子一个大大的赞！';
+  if(d.activeDays>=5)return '本周非常用功，词汇量在稳步上涨，继续保持～';
+  if(d.weekAns>=80)return '本周练得扎实，错题也在一点点被攻克。';
+  if(d.activeDays>=2)return '已经动起来了，回家每天一轮特训，下周会更稳。';
+  return '新的一周，陪孩子一起点亮第一颗火苗吧。';
+}
+function wrapLines(ctx,text,maxw){
+  const out=[];let line='';
+  for(const ch of text){const t=line+ch;if(ctx.measureText(t).width>maxw&&line){out.push(line);line=ch;}else line=t;}
+  if(line)out.push(line);return out;
+}
+function buildReportCard(){
+  let name=prompt('孩子的名字（可留空，会印在周报上）：',SAVE.kidName||'');
+  if(name===null)return;name=name.trim();SAVE.kidName=name;save();
+  const d=reportData();
+  const W=1080,H=1350,cv=document.createElement('canvas');cv.width=W;cv.height=H;
+  const x=cv.getContext('2d');x.textBaseline='alphabetic';
+  x.fillStyle='#0a0a0c';x.fillRect(0,0,W,H);
+  const g=x.createRadialGradient(W/2,-40,80,W/2,320,1020);g.addColorStop(0,'rgba(201,166,74,.18)');g.addColorStop(1,'rgba(201,166,74,0)');x.fillStyle=g;x.fillRect(0,0,W,820);
+  x.strokeStyle='rgba(201,166,74,.5)';x.lineWidth=2;x.strokeRect(34,34,W-68,H-68);
+  x.textAlign='center';
+  x.fillStyle='#c9a64a';x.font='600 27px "Songti SC","Noto Serif SC",serif';x.fillText('MYSKME · 词灵对决',W/2,120);
+  x.fillStyle='#f0e6d2';x.font='300 62px "Songti SC","Noto Serif SC",serif';x.fillText('英语词汇 · 学习周报',W/2,200);
+  const td=new Date(),wk=new Date(Date.now()-6*864e5),fmt=t=>(t.getMonth()+1)+'月'+t.getDate()+'日';
+  x.fillStyle='#a8a090';x.font='400 27px "Songti SC",serif';x.fillText(fmt(wk)+' — '+fmt(td)+(name?'　·　'+name:''),W/2,250);
+  function metric(cx,cy,big,small){x.textAlign='center';x.fillStyle='#e8c768';x.font='600 76px "Songti SC",serif';x.fillText(big,cx,cy);x.fillStyle='#a8a090';x.font='400 25px "Songti SC",serif';x.fillText(small,cx,cy+42);}
+  x.fillStyle='#7a6320';x.font='600 22px "Songti SC",serif';x.fillText('— 本 周 —',W/2,330);
+  metric(W*0.25,420,String(d.weekAns),'作答题数');
+  metric(W*0.5,420,d.activeDays+'/7','打卡天数');
+  metric(W*0.75,420,'🔥'+d.streak,'连续天数');
+  const bx=140,bw=W-280,base=640,bh=130,gap=bw/7;let mx=1;d.last7.forEach(v=>mx=Math.max(mx,v.n));
+  d.last7.forEach((v,i)=>{
+    const cx=bx+gap*i+gap/2,h=Math.max(4,Math.round(v.n/mx*bh));
+    x.fillStyle=v.n?'#c9a64a':'rgba(201,166,74,.18)';x.fillRect(cx-26,base-h,52,h);
+    if(v.n){x.fillStyle='#e8c768';x.font='400 20px "Songti SC",serif';x.fillText(v.n,cx,base-h-10);}
+    x.fillStyle='#6a6458';x.font='400 22px "Songti SC",serif';x.fillText(v.lbl,cx,base+34);
+  });
+  x.fillStyle='#7a6320';x.font='600 22px "Songti SC",serif';x.fillText('— 累 计 成 果 —',W/2,748);
+  metric(W*0.25,838,d.mastered+'','点亮词条');
+  metric(W*0.5,838,d.acc+'%','总准确率');
+  metric(W*0.75,838,d.killed+'','攻克错题');
+  x.fillStyle='rgba(201,166,74,.06)';x.fillRect(80,930,W-160,150);
+  x.strokeStyle='rgba(201,166,74,.3)';x.lineWidth=1;x.strokeRect(80,930,W-160,150);
+  x.fillStyle='#f0e6d2';x.font='400 30px "Songti SC",serif';
+  wrapLines(x,'王老师寄语：'+reportRemark(d),W-220).forEach((ln,i)=>x.fillText(ln,W/2,985+i*42));
+  x.fillStyle='#a8a090';x.font='400 25px "Songti SC",serif';x.fillText('成就 '+d.ach+'/'+d.achTotal+'　·　最长连续 '+d.best+' 天',W/2,1160);
+  x.fillStyle='#c9a64a';x.font='600 26px "Songti SC",serif';x.fillText('MYSKME — Make Yourself Special & Kind',W/2,1240);
+  x.fillStyle='#6a6458';x.font='400 22px "Songti SC",serif';x.fillText('狼先生与他的学生们 · 王老师 · '+todayStr(),W/2,1284);
+  cv.toBlob(function(b){if(!b){toast('生成失败');return}
+    const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='MYSKME-词灵对决-周报-'+todayStr()+'.png';
+    document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);
+    toast('🎉 家长周报已生成，发家长群即可',3000);},'image/png');
+}
+$('m-report').addEventListener('click',buildReportCard);
+
+// ---------- 名人天梯 · 词灵榜 上榜 ----------
+const LB_API='https://myskme-leaderboard.wzc1020.workers.dev';
+const LB_RANKS=[[0,'学徒'],[300,'习字者'],[800,'御词生'],[1800,'词灵使'],[3600,'驭灵师'],[6500,'黑域行者'],[11000,'噬词者'],[18000,'词灵宗师'],[30000,'☠狼徒·封号弟子']];
+function lbRankFor(p){let n=LB_RANKS[0][1];for(const r of LB_RANKS)if(p>=r[0])n=r[1];return n;}
+const LB_ALIAS_RE=/^[一-龥A-Za-z0-9·\-_ ]{2,12}$/;
+const LB_BLOCK=['管理员','admin','老师','王老师','狼先生','mrwolf','myskme','客服','官方','系统'];
+function lbNorm(s){return String(s).normalize('NFKC').toLowerCase().replace(/[\s·\-_]+/g,'')}
+function lbBadAlias(a){return !LB_ALIAS_RE.test(a)||LB_BLOCK.some(w=>lbNorm(a).includes(lbNorm(w)))}
+function lbDevice(){if(!SAVE.deviceUUID){SAVE.deviceUUID='d'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);save();}return SAVE.deviceUUID;}
+async function lbSrc(){
+  const st=SAVE.stats||{};
+  const acc=st.answered?Math.round(st.correct/st.answered*100):0;
+  const days=Object.keys(st.days||{}).length;
+  let free=0,svip=0;
+  try{const r=await fetch('https://myskme.github.io/myskme-hub/banks/index.json',{cache:'no-store'});const o=await r.json();const tc={};
+    (o.catalog||[]).forEach(c=>{tc[c.code]=(c.tier||'free').toLowerCase()});
+    (SAVE.banks||[]).forEach(b=>{const t=tc[b.code];if(t==='svip')svip++;else if(t==='free')free++});
+  }catch(e){free=0;svip=0}
+  return {lit:masteredCount(),killed:SAVE.killed||0,acc:acc,days:days,best:SAVE.dailyBest||0,freeBanks:free,svipBanks:svip};
+}
+async function lbSubmit(){
+  if(location.protocol==='file:'){toast('上榜需要在网站版打开（本地文件不行）',3200);return}
+  let alias=prompt('给自己起个上榜化名（2-12 位中英文/数字，别用真名）：',SAVE.kidAlias||'');
+  if(alias===null)return;alias=alias.trim().slice(0,12);
+  if(lbBadAlias(alias)){toast('化名需 2-12 位中英文/数字，且不含保留词',3200);return}
+  SAVE.kidAlias=alias;
+  let fac=prompt('选个门派（可留空）— 如 噬词门 / 御风堂 / 鹿鸣谷：',SAVE.faction||'');
+  if(fac===null)fac='';SAVE.faction=fac.trim().slice(0,8);
+  let pw=prompt('班级口令（想上「班级榜」才填，留空只上世界榜）：',SAVE.classPw||'');
+  if(pw===null)pw='';SAVE.classPw=pw.trim();save();
+  toast('正在登天梯……');
+  const src=await lbSrc();
+  const body={deviceUUID:lbDevice(),alias:SAVE.kidAlias,faction:SAVE.faction,src:src};
+  if(SAVE.classPw)body.pw=SAVE.classPw;
+  try{
+    const r=await fetch(LB_API+'/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const o=await r.json();
+    if(o&&o.ok){SAVE.lbRank=o.rank;SAVE.lbPower=o.power;SAVE.lbLife=o.lifetime;SAVE.lbRankName=o.rankName;SAVE.lbBadges=(o.badges||[]).length;save();
+      var msg='🏆 已登天梯！'+o.rankName+' · 赛季灵力 '+o.power+' · 世界第 '+o.rank+' 名';
+      if(o.classJoined===false)msg+='（班级口令不符，仅上世界榜）';
+      toast(msg,4200);
+      if($('scr-stats').classList.contains('on'))renderStats();}
+    else{toast('❌ '+((o&&o.err)||'上榜失败'),3200)}
+  }catch(e){toast('❌ 连不上词灵榜，稍后再试',3200)}
+}
+$('m-rank').addEventListener('click',lbSubmit);
+
+// ---------- 错题清单导出 ----------
+function buildWrongText(){
+  const ids=Object.keys(SAVE.book).filter(id=>itemOf(id).it);
+  const lines=['词灵对决 · 错题清单　'+todayStr()+'　共 '+ids.length+' 条','='.repeat(40)];
+  const byMod={};
+  ids.forEach(id=>{const mk=parseId(id).mk;(byMod[mk]=byMod[mk]||[]).push(id)});
+  Object.keys(byMod).forEach(mk=>{
+    lines.push('','【'+MODS[mk].name+'】');
+    byMod[mk].forEach((id,i)=>{
+      lines.push((i+1)+'. '+itemLabel(id)+' —— '+itemMeaning(id).replace(/<[^>]+>/g,''))});});
+  return lines.join('\n')}
+$('note-export').addEventListener('click',()=>{
+  if(!Object.keys(SAVE.book).length){toast('错题本是空的，没什么可导的');return}
+  const b=new Blob(['﻿'+buildWrongText()],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download='词灵对决_错题清单_'+todayStr()+'.txt';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+  toast('📄 错题清单已导出——打印出来贴墙上，每天瞪它三遍')});
+
+// ---------- 键盘快捷键（投影/快手党）----------
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;
+  const key=e.key.toLowerCase();
+  const active=SCREENS.find(s=>$('scr-'+s).classList.contains('on'));
+  if(active==='quiz'||active==='vs'){
+    const opsBox=active==='quiz'?$('q-ops'):$('vs-ops');
+    const nextBox=active==='quiz'?$('q-next'):$('vs-next');
+    const idx='abcd'.indexOf(key)>=0?'abcd'.indexOf(key):('1234'.indexOf(key)>=0?'1234'.indexOf(key):-1);
+    if(idx>=0){const b=opsBox.children[idx];if(b&&!b.disabled){b.click();e.preventDefault()}}
+    if(key==='enter'||key===' '){const nb=nextBox.querySelector('button');
+      if(nb){nb.click();e.preventDefault()}}}
+  if(key==='f'&&active==='menu')$('m-fs').click()});
+
+// ---------- 启动 ----------
+load();renderMenu();
+
+</script>
+
+<!-- MYSKME 印章水印 -->
+<style>@keyframes mskSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.myskme-watermark{position:fixed;bottom:20px;right:20px;width:72px;height:72px;opacity:.32;pointer-events:none;z-index:40;animation:mskSpin 150s linear infinite}
+@media(max-width:760px){.myskme-watermark{width:46px;height:46px;opacity:.22}}</style>
+<div class="myskme-watermark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+<defs><path id="mskA" d="M 58,200 A 142,142 0 0 1 342,200"/><path id="mskB" d="M 50,200 A 150,150 0 0 0 350,200"/></defs>
+<g fill="none" stroke="#c9a64a"><circle cx="200" cy="200" r="193" stroke-width="9"/>
+<path d="M 95,138 A 125,125 0 0 1 305,138" stroke-width="9"/><path d="M 95,262 A 125,125 0 0 0 305,262" stroke-width="9"/></g>
+<g fill="#c9a64a" font-family="Helvetica, Arial, sans-serif" font-weight="700">
+<text font-size="40" letter-spacing="6"><textPath href="#mskA" startOffset="50%" text-anchor="middle">MAKE YOURSELF</textPath></text>
+<text font-size="40" letter-spacing="5"><textPath href="#mskB" startOffset="50%" text-anchor="middle">SPECIAL &amp; KIND</textPath></text>
+<text x="200" y="238" font-size="104" font-weight="900" text-anchor="middle" textLength="318" lengthAdjust="spacingAndGlyphs">MYSKME</text>
+</g></svg></div>
+
+</body>
+</html>
