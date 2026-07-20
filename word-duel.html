@@ -1385,13 +1385,19 @@ function renderVsQ(){
     q.q.replace(/___/g,'<span class="blank">　　</span>');
   const box=$('vs-ops');box.innerHTML='';
   $('vs-why').innerHTML='';$('vs-steal').innerHTML='';$('vs-next').innerHTML='';
+  VS.answered=false;                       // 本题是否已判过分(抢答重新启用按钮时防重复判)
   const keys=['A','B','C','D'];
   q.sh.ops.forEach((op,i)=>{
     const b=document.createElement('button');b.className='q-op';
     b.innerHTML='<span class="key">'+keys[i]+'</span>'+op;
-    b.addEventListener('click',()=>vsAnswer(i,b));box.appendChild(b)})}
+    // ⚠ 必须用 onclick 而不是 addEventListener：抢答分支会重新给按钮赋 o.onclick,
+    //   赋值会覆盖同名属性处理器,但覆盖不掉 addEventListener 注册的那个 —— 两个都会触发,
+    //   于是「答错→抢答→答对」会先按原队记一次分再按抢答队记一次(实测 10/5,应为 0/5)。
+    b.onclick=()=>vsAnswer(i,b);box.appendChild(b)})}
 function teamColor(t){return t===0?'var(--gold2)':'var(--purple)'}
 function vsAnswer(i,btn){
+  if(VS.answered)return;                   // 双保险:同一题只判一次分
+  VS.answered=true;
   const q=VS.qs[VS.qi],t=VS.turn,ops=[...$('vs-ops').children];
   ops.forEach(o=>o.disabled=true);
   VS.try[t]++;
@@ -1416,9 +1422,12 @@ function vsAnswer(i,btn){
     sBtn.addEventListener('click',()=>{
       sb.remove();
       ops.forEach((o,oi)=>{if(oi!==i)o.disabled=false});
+      VS.answered=false;                   // 进入抢答:允许再判一次(判给抢答队)
       toast((other===0?VS.n1:VS.n2)+' 抢答中——点选项！',1800);
       ops.forEach((o,oi)=>{if(oi===i)return;
-        o.onclick=()=>{ops.forEach(x=>x.disabled=true);
+        o.onclick=()=>{
+          if(VS.answered)return; VS.answered=true;
+          ops.forEach(x=>x.disabled=true);
           VS.try[other]++;
           if(oi===q.sh.ans){o.classList.add('correct');VS.hit[other]++;VS.s[other]+=5;
             floatNum(r.left+r.width/2,r.top,'+5',teamColor(other));sfx('right')}
@@ -1477,11 +1486,19 @@ function renderHelp(){
 // ---------- 题库中心（兑换码 / 在线目录）----------
 // 题库书架：优先取枢纽（题库工坊网页后台发布即生效），回退到本站 banks/
 const SHELF='https://myskme.github.io/myskme-hub/banks/';
+// 返回 {r} 成功 / {notFound:true} 服务器答了但没这个码 / {net:true} 压根没连上。
+// 必须区分后两者：以前一律压成 null,调用方只会说「检查一下拼写？」——
+// 大陆访 github.io 本来就不稳,学生拿着完全正确的码被告知自己拼错了,会反复重试。
 async function shelfFetch(file){
+  let sawServer=false;
   for(const base of [SHELF,'banks/']){
-    try{const r=await fetch(base+file,{cache:'no-store'});if(r&&r.ok)return r;}catch(e){}
+    try{
+      const r=await fetch(base+file,{cache:'no-store'});
+      if(r&&r.ok)return {r};
+      if(r)sawServer=true;                    // 连上了,只是这个文件不存在
+    }catch(e){}                               // 网络层失败:不算「服务器说没有」
   }
-  return null}
+  return sawServer?{notFound:true}:{net:true}}
 function installBankObj(o,code){
   const err=validateBank(o);
   if(err){toast('❌ 题库格式问题：'+err,3200);return false}
@@ -1499,10 +1516,11 @@ async function redeemCode(code){
   if(location.protocol==='file:'){
     toast('本地文件模式无法在线兑换——请打开网站版输码，或用「导入扩展题库」选 JSON 文件',3800);return}
   try{
-    const r=await shelfFetch(code+'.json');
-    if(!r)throw 0;
-    installBankObj(await r.json(),code)}
-  catch(e){toast('❌ 没找到兑换码 '+code+' 对应的题库——检查一下拼写？',3000)}}
+    const res=await shelfFetch(code+'.json');
+    if(res.net){toast('📡 连不上题库服务器——换个网络或稍后再试。码没问题，不用改',3800);return}
+    if(res.notFound){toast('❌ 没找到兑换码 '+code+'——检查一下拼写？',3000);return}
+    installBankObj(await res.r.json(),code)}
+  catch(e){toast('❌ 题库读取失败：'+(e&&e.message||'数据异常'),3200)}}
 $('bt-code').addEventListener('click',()=>redeemCode($('code-input').value));
 $('code-input').addEventListener('keydown',e=>{if(e.key==='Enter')redeemCode($('code-input').value)});
 /* 卷尾二维码直达：?code=XXXX 一扫即装当期题库（课上做卷→回家直接刷同款） */
@@ -1512,8 +1530,10 @@ $('bt-cat').addEventListener('click',async()=>{
   if(location.protocol==='file:'){toast('题库目录需要在网站版打开（本地请用文件导入）',3200);return}
   box.innerHTML='<span class="sub">正在取回目录……</span>';
   try{
-    const r=await shelfFetch('index.json');
-    const o=r?await r.json():{};
+    const res=await shelfFetch('index.json');
+    if(res.net){box.innerHTML='<span class="sub">📡 连不上题库服务器——换个网络或稍后再试。</span>';return}
+    if(res.notFound){box.innerHTML='<span class="sub">目录暂时取不到，稍后再试。</span>';return}
+    const o=await res.r.json();
     box.innerHTML='';
     (o.catalog||[]).forEach(c=>{
       const got=SAVE.banks.some(b=>b.code===c.code||b.name===c.name);
