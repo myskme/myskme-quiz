@@ -1672,12 +1672,18 @@ async function lbSrc(){
   const st=SAVE.stats||{};
   const acc=st.answered?Math.round(st.correct/st.answered*100):0;
   const days=Object.keys(st.days||{}).length;
-  let free=0,svip=0;
+  let free=0,svip=0,catalogOk=true;
+  const countBy=tc=>{free=0;svip=0;(SAVE.banks||[]).forEach(b=>{const t=tc[b.code];if(t==='svip')svip++;else if(t==='free')free++});};
   try{const r=await fetch('https://myskme.github.io/myskme-hub/banks/index.json',{cache:'no-store'});const o=await r.json();const tc={};
     (o.catalog||[]).forEach(c=>{tc[c.code]=(c.tier||'free').toLowerCase()});
-    (SAVE.banks||[]).forEach(b=>{const t=tc[b.code];if(t==='svip')svip++;else if(t==='free')free++});
-  }catch(e){free=0;svip=0}
-  return {lit:masteredCount(),killed:SAVE.killed||0,acc:acc,days:days,best:SAVE.dailyBest||0,freeBanks:free,svipBanks:svip};
+    SAVE.bankTiers=tc;save();                        // 缓存目录,供下次取失败时兜底
+    countBy(tc);
+  }catch(e){
+    // ⚠ 目录取失败时绝不谎报 0——那会把学生的题库数算少、赛季灵力被压低,若服务器非单调还会把终身灵力覆盖成更低值。
+    //   有缓存就用缓存重算;没缓存就标记 catalogOk=false,让 lbSubmit 中止本次上榜(而不是拿脏数据顶上去)。
+    if(SAVE.bankTiers){countBy(SAVE.bankTiers);}else{catalogOk=false;free=0;svip=0}
+  }
+  return {lit:masteredCount(),killed:SAVE.killed||0,acc:acc,days:days,best:SAVE.dailyBest||0,freeBanks:free,svipBanks:svip,catalogOk:catalogOk};
 }
 async function lbSubmit(){
   if(location.protocol==='file:'){toast('上榜需要在网站版打开（本地文件不行）',3200);return}
@@ -1691,6 +1697,9 @@ async function lbSubmit(){
   if(pw===null)pw='';SAVE.classPw=pw.trim();save();
   toast('正在登天梯……');
   const src=await lbSrc();
+  if(src.catalogOk===false&&(SAVE.banks||[]).length){ // 目录取不到且没缓存:宁可不上,也别拿"0 题库"把灵力算少
+    toast('题库目录暂时取不到——为免灵力被算少，先别上榜，换个网络再点 🏆',3800);return;}
+  delete src.catalogOk; // 内部标记,不往服务器发
   const body={deviceUUID:lbDevice(),alias:SAVE.kidAlias,faction:SAVE.faction,src:src};
   if(SAVE.classPw)body.pw=SAVE.classPw;
   try{
