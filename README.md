@@ -20,4 +20,5 @@
 - 2026-07-12 前托管于 Netlify `myskme-games.netlify.app`（源码私库 `myskme/myskme-games`，现归档）。旧站保持在线，已印发的试卷二维码不断链；新内容只更新本仓库。
 - **plain.html 从 2026-07 起不再是单文件自包含**：拷贝分发时要连 `assets/` 目录整体拷；只拷 HTML 也能玩（立绘会静默回退成字形），但会少了立绘。
 - **换立绘必改 `plain.html` 里的 `ART_V`**（cache-buster），否则玩家端长缓存看不到新图。
-- 词灵对决排行榜走 Cloudflare Worker（与本站托管无关，CORS 已放行 myskme.github.io）。
+- 词灵对决排行榜统一走 `https://play.myskme.com/api/quiz` 品牌网关，再固定转发到
+  原 Cloudflare Worker；原榜单不迁移、不双写，客户端不再直连 `workers.dev`。
