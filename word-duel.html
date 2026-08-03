@@ -1660,7 +1660,7 @@ function buildReportCard(){
 $('m-report').addEventListener('click',buildReportCard);
 
 // ---------- 名人天梯 · 词灵榜 上榜 ----------
-const LB_API='https://play.myskme.com/api/quiz';
+const LB_API='https://myskme.com/api/quiz';
 const LB_RANKS=[[0,'学徒'],[300,'习字者'],[800,'御词生'],[1800,'词灵使'],[3600,'驭灵师'],[6500,'黑域行者'],[11000,'噬词者'],[18000,'词灵宗师'],[30000,'☠狼徒·封号弟子']];
 function lbRankFor(p){let n=LB_RANKS[0][1];for(const r of LB_RANKS)if(p>=r[0])n=r[1];return n;}
 const LB_ALIAS_RE=/^[一-龥A-Za-z0-9·\-_ ]{2,12}$/;
