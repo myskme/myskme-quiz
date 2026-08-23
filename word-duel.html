@@ -286,9 +286,9 @@ body.shaking{animation:shakeKf .4s cubic-bezier(.36,.07,.19,.97)}
 </style>
 </head>
 <body>
-<div class="ctrl"><button id="themeBtn" title="切换主题">◐</button></div>
+<div class="ctrl"><button id="themeBtn" title="切换主题">自</button></div>
 <script>
-(function(){var TLS='myskme-theme',order=['auto','light','dark'],name={auto:'跟随系统',light:'浅色',dark:'深色'},icon={auto:'◐',light:'☀',dark:'☾'},mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
+(function(){var TLS='myskme-theme',order=['auto','light','dark'],name={auto:'跟随系统',light:'浅色',dark:'深色'},icon={auto:'自',light:'浅',dark:'深'},mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
 function pref(){try{return localStorage.getItem(TLS)||'auto'}catch(e){return 'auto'}}
 function resolve(p){return p==='auto'?((mq&&mq.matches)?'dark':'light'):p}
 function apply(p){var e=document.documentElement;e.setAttribute('data-theme',resolve(p));e.setAttribute('data-themepref',p);var b=document.getElementById('themeBtn');if(b){b.textContent=icon[p];b.title='主题：'+name[p]}}
@@ -307,7 +307,7 @@ apply(pref());
   <p class="sub">中考进阶词场 · 五大试炼 · 错题必诛</p>
   <div class="streak-hero" id="streak-hero"></div>
   <div class="menu-btns">
-    <button class="btn" id="m-daily">每日特训 🔥</button>
+    <button class="btn" id="m-daily">每日特训 </button>
     <button class="btn" id="m-solo">单人试炼</button>
     <button class="btn" id="m-vs">两队对抗 · 课堂模式</button>
     <div class="menu-sub">
@@ -315,7 +315,7 @@ apply(pref());
       <button class="btn dim sm" id="m-note">错题本 · 复仇</button>
       <button class="btn dim sm" id="m-codex">词条图鉴</button>
       <button class="btn dim sm" id="m-help">玩法说明</button>
-      <button class="btn dim sm" id="m-fs">⛶ 全屏</button>
+      <button class="btn dim sm" id="m-fs">全屏</button>
     </div>
   </div>
   <div class="menu-stat" id="menu-stat"></div>
@@ -329,8 +329,8 @@ apply(pref());
       <h2 class="h-big" style="font-size:30px">战绩 · <em>成就</em></h2>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn" id="m-rank">🏆 上榜</button>
-      <button class="btn" id="m-report">📋 家长周报</button>
+      <button class="btn" id="m-rank">上榜</button>
+      <button class="btn" id="m-report">家长周报</button>
       <button class="btn dim" data-go="menu">返回</button>
     </div>
   </div>
@@ -377,7 +377,7 @@ apply(pref());
   <div id="cat-list" class="opt-row" style="justify-content:flex-start;margin-top:0;margin-bottom:10px"></div>
   <p class="sub" style="font-size:12px;margin-bottom:14px">每期试卷都有自己的兑换码（即卷号）。课堂发卷时把码写在黑板上，学生回家输入就能领到同款题库复习。</p>
   <details class="adv">
-    <summary>⚙ 高级 · 导入导出（题库 / 学习进度）</summary>
+    <summary>高级 · 导入导出（题库 / 学习进度）</summary>
     <div class="opt-row" style="justify-content:flex-start;margin-top:10px">
       <button class="btn dim" id="bt-imp-bank">导入扩展题库</button>
       <button class="btn dim" id="bt-tpl-bank">导出题库模板</button>
@@ -520,7 +520,7 @@ apply(pref());
 <div class="screen" id="scr-vs-result">
   <div class="result-box">
     <div class="eyebrow">BATTLE REPORT · 终场战报</div>
-    <div class="grade" id="vr-glyph" style="font-size:clamp(50px,9vw,90px)">⚔</div>
+    <div class="grade" id="vr-glyph" style="font-size:clamp(50px,9vw,90px)"></div>
     <h2 class="h-big" style="font-size:32px" id="vr-title"></h2>
     <div class="result-stats" id="vr-stats"></div>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:10px">
@@ -552,7 +552,7 @@ apply(pref());
    ▼▼▼ 数据区块：词条按统一格式维护，整段可替换 · MYSKME 题库工坊 ▼▼▼
    ================================================================ */
 
-// M1 · 经典对决：中考高频进阶词 ↔ 词义（76 条）
+// M1 · 经典对决：中考高频进阶词  对  词义（76 条）
 const M1_ITEMS=[
 ['achieve','实现；达到'],['admire','钦佩；欣赏'],['afford','负担得起'],['avoid','避免'],
 ['attract','吸引'],['behave','表现；举止'],['celebrate','庆祝'],['communicate','交流；沟通'],
@@ -575,7 +575,7 @@ const M1_ITEMS=[
 ['experience','经验；经历'],['knowledge','知识'],['opportunity','机会'],['wisdom','智慧']
 ];
 
-// M2 · 词形风暴：不规则动词 原形 ↔ 过去式·过去分词（70 条）
+// M2 · 词形风暴：不规则动词 原形  对  过去式·过去分词（70 条）
 const M2_ITEMS=[
 ['begin','began · begun'],['break','broke · broken'],['bring','brought · brought'],
 ['build','built · built'],['buy','bought · bought'],['catch','caught · caught'],
@@ -603,7 +603,7 @@ const M2_ITEMS=[
 ['write','wrote · written']
 ];
 
-// M3 · 黄金搭配：中考核心短语 ↔ 含义（60 条）
+// M3 · 黄金搭配：中考核心短语  对  含义（60 条）
 const M3_ITEMS=[
 ['look after','照顾'],['look forward to','期待；盼望'],['look up','查阅（词典等）'],
 ['look through','浏览；翻阅'],['look down upon','看不起'],['take off','起飞；脱下'],
@@ -738,11 +738,11 @@ const M5_ITEMS=[
 
 const MODS={
   m1:{key:'m1',name:'经典对决',en:'WORD MATCH',icon:'词',type:'pair',items:M1_ITEMS,
-      desc:'中考高频进阶词 ↔ 词义配对。8 组一轮，连击拉满。',hintL:'WORD',hintR:'MEANING'},
+      desc:'中考高频进阶词  对  词义配对。8 组一轮，连击拉满。',hintL:'WORD',hintR:'MEANING'},
   m2:{key:'m2',name:'词形风暴',en:'VERB STORM',icon:'变',type:'pair',items:M2_ITEMS,
-      desc:'不规则动词：原形 ↔ 过去式·过去分词。中考送分题，一个都不能丢。',hintL:'原形',hintR:'过去式 · 过去分词'},
+      desc:'不规则动词：原形  对  过去式·过去分词。中考送分题，一个都不能丢。',hintL:'原形',hintR:'过去式 · 过去分词'},
   m3:{key:'m3',name:'黄金搭配',en:'GOLD PHRASE',icon:'配',type:'pair',items:M3_ITEMS,
-      desc:'中考核心短语动词 ↔ 含义。完形和选择题的弹药库。',hintL:'PHRASE',hintR:'MEANING'},
+      desc:'中考核心短语动词  对  含义。完形和选择题的弹药库。',hintL:'PHRASE',hintR:'MEANING'},
   m4:{key:'m4',name:'易混猎人',en:'TRAP HUNTER',icon:'猎',type:'quiz',items:M4_ITEMS,
       desc:'borrow/lend、been/gone、so/such……专杀经典陷阱，每题带解析。'},
   m5:{key:'m5',name:'句境狙击',en:'SENTENCE SNIPER',icon:'狙',type:'quiz',items:M5_ITEMS,
@@ -853,7 +853,7 @@ function load(){try{SAVE=Object.assign(defaults(),
   JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){SAVE=defaults()}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(SAVE))}catch(e){}}
 
-// 答对/答错 → 掌握度 + 错题本 + 间隔复习(SRS) + 统计
+// 答对/答错 -> 掌握度 + 错题本 + 间隔复习(SRS) + 统计
 function statRec(right){
   SAVE.stats.answered++;if(right)SAVE.stats.correct++;
   const d=todayStr();SAVE.stats.days[d]=(SAVE.stats.days[d]||0)+1}
@@ -864,7 +864,7 @@ function markRight(id){
   if(SAVE.book[id]){SAVE.book[id].need--;
     if(SAVE.book[id].need<=0){delete SAVE.book[id];
       SAVE.killed=(SAVE.killed||0)+1;
-      toast('⚔ <b style="color:var(--gold2)">斩词成功！</b>「'+itemLabel(id)+'」已逐出错题本',2400);
+      toast('<b style="color:var(--gold2)">斩词成功！</b>「'+itemLabel(id)+'」已逐出错题本',2400);
       if(SAVE.killed>=10)achUnlock('a4')}}
   save()}
 function markWrong(id){
@@ -876,7 +876,7 @@ function markWrong(id){
   save()}
 
 // ---------- 间隔复习（SRS）----------
-const SRS_IV=[0,1,3,7,14,30]; // 连对次数 → 间隔天数
+const SRS_IV=[0,1,3,7,14,30]; // 连对次数 -> 间隔天数
 function isDue(id){
   const r=SAVE.srs[id];if(!r)return false;
   const days=(Date.now()-r.t)/864e5;
@@ -905,25 +905,25 @@ function startDaily(){
 
 // ---------- 成就 ----------
 const ACH=[
-  {id:'a1',ico:'⚔',nm:'初露锋芒',desc:'完成第一轮试炼'},
-  {id:'a2',ico:'✦',nm:'零失误',desc:'任意一轮拿到 S 评价'},
-  {id:'a3',ico:'🔥',nm:'十连斩',desc:'单轮连击达到 ×10'},
-  {id:'a4',ico:'🗡',nm:'斩词人',desc:'累计从错题本斩出 10 条'},
-  {id:'a5',ico:'💀',nm:'完美复仇',desc:'复仇关 100% 准确率通关'},
-  {id:'a6',ico:'⭐',nm:'百词点亮',desc:'图鉴点亮 100 词条'},
-  {id:'a7',ico:'🌙',nm:'二百强',desc:'图鉴点亮 200 词条'},
-  {id:'a8',ico:'👑',nm:'满天星',desc:'图鉴点亮 300 词条'},
-  {id:'a9',ico:'🕯',nm:'三日之火',desc:'连续特训 3 天'},
-  {id:'a10',ico:'🌋',nm:'七日燎原',desc:'连续特训 7 天'},
-  {id:'a11',ico:'⚡',nm:'极速猎手',desc:'限时挑战下拿到 A 或 S'},
-  {id:'a12',ico:'🏟',nm:'班级战场',desc:'完成一场两队对抗'},
-  {id:'a13',ico:'📦',nm:'题库工匠',desc:'导入一个扩展题库'}
+  {id:'a1',ico:'刃',nm:'初露锋芒',desc:'完成第一轮试炼'},
+  {id:'a2',ico:'芒',nm:'零失误',desc:'任意一轮拿到 S 评价'},
+  {id:'a3',ico:'焰',nm:'十连斩',desc:'单轮连击达到 ×10'},
+  {id:'a4',ico:'斩',nm:'斩词人',desc:'累计从错题本斩出 10 条'},
+  {id:'a5',ico:'仇',nm:'完美复仇',desc:'复仇关 100% 准确率通关'},
+  {id:'a6',ico:'星',nm:'百词点亮',desc:'图鉴点亮 100 词条'},
+  {id:'a7',ico:'贰',nm:'二百强',desc:'图鉴点亮 200 词条'},
+  {id:'a8',ico:'满',nm:'满天星',desc:'图鉴点亮 300 词条'},
+  {id:'a9',ico:'叁',nm:'三日之火',desc:'连续特训 3 天'},
+  {id:'a10',ico:'柒',nm:'七日燎原',desc:'连续特训 7 天'},
+  {id:'a11',ico:'电',nm:'极速猎手',desc:'限时挑战下拿到 A 或 S'},
+  {id:'a12',ico:'战',nm:'班级战场',desc:'完成一场两队对抗'},
+  {id:'a13',ico:'匠',nm:'题库工匠',desc:'导入一个扩展题库'}
 ];
 function achUnlock(id){
   if(SAVE.ach.includes(id))return;
   const a=ACH.find(x=>x.id===id);if(!a)return;
   SAVE.ach.push(id);save();sfx('combo');
-  setTimeout(()=>toast('🏅 <b style="color:var(--gold2)">成就解锁 · '+a.nm+'</b><br>'+a.desc,3200),600)}
+  setTimeout(()=>toast('<b style="color:var(--gold2)">成就解锁 · '+a.nm+'</b><br>'+a.desc,3200),600)}
 function achAfterRound(grade,acc){
   achUnlock('a1');
   if(grade==='S')achUnlock('a2');
@@ -960,10 +960,10 @@ function renderMenu(){
     '<span><b>'+Object.keys(SAVE.book).length+'</b>错题在押</span>'+
     '<span><b>'+due+'</b>词条到期待复习</span>'+
     '<span><b>'+SAVE.plays+'</b>试炼次数</span>'+
-    (SAVE.dailyStreak>0?'<span><b>🔥'+SAVE.dailyStreak+'</b>连续特训</span>':'');
+    (SAVE.dailyStreak>0?'<span><b>'+SAVE.dailyStreak+'</b>连续特训</span>':'');
   $('m-daily').innerHTML=SAVE.dailyLast===todayStr()
-    ?'每日特训 ✓ 今日已练（可加练）'
-    :'每日特训 🔥'+(due?' · '+due+' 条到期':'');
+    ?'每日特训 今日已练（可加练）'
+    :'每日特训 '+(due?' · '+due+' 条到期':'');
   renderStreakHero()}
 function renderStreakHero(){
   const hero=$('streak-hero');if(!hero)return;
@@ -974,10 +974,10 @@ function renderStreakHero(){
   for(let i=6;i>=0;i--){const lit=days[dstr(i)]>0;
     dots+='<span class="sh-dot'+(lit?' lit':'')+(i===0?' today':'')+'"><i></i>'+dow(i)+'</span>'}
   const st=SAVE.dailyStreak||0,best=SAVE.dailyBest||0;
-  const flame=st>0?('🔥 连续 <b>'+st+'</b> 天'+(best>st?' <small>· 最佳 '+best+' 天</small>':''))
-    :'🔥 <small>今天开练，点亮你的第一颗火苗</small>';
+  const flame=st>0?('连续 <b>'+st+'</b> 天'+(best>st?' <small>· 最佳 '+best+' 天</small>':''))
+    :'<small>今天开练，点亮你的第一颗火苗</small>';
   const done=SAVE.dailyLast===todayStr();
-  const task=done?'今日特训 <b>✓ 已完成</b>，可继续加练':'今日特训 <b>待完成</b> · 点上方「每日特训」';
+  const task=done?'今日特训 <b>已完成</b>，可继续加练':'今日特训 <b>待完成</b> · 点上方「每日特训」';
   hero.innerHTML='<div class="sh-top"><span class="sh-flame">'+flame+'</span></div>'
     +'<div class="sh-dots">'+dots+'</div><div class="sh-task">'+task+'</div>'}
 $('m-daily').addEventListener('click',startDaily);
@@ -1114,7 +1114,7 @@ function pairPick(card,side){
 // ---- 选择引擎 ----
 function quizFromItem(m,it,id,pool){
   if(m.type==='quiz')return{id,q:it.q,ops:it.ops,ans:it.ans,why:it.why,passage:it.passage};
-  // 配对词条 → 四选一（复仇关/对抗用），干扰项取自同一题库同模块
+  // 配对词条 -> 四选一（复仇关/对抗用），干扰项取自同一题库同模块
   pool=(pool&&pool.length>=4)?pool:MODS[m.key].items;
   const wrongs=sample(pool.filter(x=>x[1]!==it[1]),3).map(x=>x[1]);
   const ops=shuffle([it[1],...wrongs]);
@@ -1209,14 +1209,14 @@ function endRound(timeout){
   else if(g==='A'){flash('gold');sfx('win')}
   else sfx(g==='B'?'right':'lose');
   if(!G.revenge&&!G.daily&&G.score>(SAVE.best[G.mod.key]||0)){SAVE.best[G.mod.key]=G.score;save();
-    toast('🏆 新纪录！'+G.mod.name+' 最佳 '+G.score+' 分')}
+    toast('新纪录！'+G.mod.name+' 最佳 '+G.score+' 分')}
   // 每日特训打卡
   let streakNote='';
   if(G.daily&&SAVE.dailyLast!==todayStr()){
     SAVE.dailyStreak=(SAVE.dailyLast===yesterdayStr())?SAVE.dailyStreak+1:1;
     SAVE.dailyBest=Math.max(SAVE.dailyBest||0,SAVE.dailyStreak);
     SAVE.dailyLast=todayStr();save();
-    streakNote=' · 🔥 连续 '+SAVE.dailyStreak+' 天'}
+    streakNote=' · 连续 '+SAVE.dailyStreak+' 天'}
   achAfterRound(g,acc);
   $('r-eyebrow').textContent=(G.revenge?'REVENGE · 复仇关':G.mod.name+' · '+(G.mod.en||''))+(timeout?' · 超时收卷':'')+streakNote;
   const ge=$('r-grade');ge.textContent=g;ge.className='grade '+g;
@@ -1254,7 +1254,7 @@ function renderNote(){
     l.appendChild(sec)})}
 $('note-revenge').addEventListener('click',()=>{
   G=null;startRound('m1',true);
-  toast('⚔ 复仇关开启——把名单清空！')});
+  toast('复仇关开启——把名单清空！')});
 
 // ---------- 图鉴 ----------
 function renderCodex(){
@@ -1275,7 +1275,7 @@ function renderCodex(){
         const lv=itemLv(m.key,it,id);
         const label=m.type==='pair'?it[0]:it.ops[it.ans];
         const tip=(m.type==='pair'?it[1]:'')+(lv===2?'（冲刺）':'');
-        return '<span class="chip'+(lit?' lit':'')+'" title="'+tip+'">'+(lv===2?'◆ ':'')+label+'</span>'}).join('')+'</div>';
+        return '<span class="chip'+(lit?' lit':'')+'" title="'+tip+'">'+(lv===2?'冲 ':'')+label+'</span>'}).join('')+'</div>';
     b.appendChild(sec)})}
 
 /* ================================================================
@@ -1309,13 +1309,13 @@ $('file-bank').addEventListener('change',e=>{
   r.onload=()=>{try{
     const o=JSON.parse(r.result);
     const err=validateBank(o);
-    if(err){toast('❌ 题库格式有问题：'+err,3600);return}
+    if(err){toast('题库格式有问题：'+err,3600);return}
     SAVE.banks.push({name:o.name||f.name.replace(/\.json$/i,''),mods:o.mods});
     SAVE.activeBank='e'+(SAVE.banks.length-1);save();renderMods();
     const cnt=Object.values(o.mods).reduce((s,a)=>s+a.length,0);
     achUnlock('a13');
-    toast('🎉 扩展题库「'+(o.name||'未命名')+'」导入成功——'+cnt+' 条词条已上膛！',3200)}
-  catch(ex){toast('❌ 不是有效的 JSON 文件',3000)}};
+    toast('扩展题库「'+(o.name||'未命名')+'」导入成功——'+cnt+' 条词条已上膛！',3200)}
+  catch(ex){toast('不是有效的 JSON 文件',3000)}};
   r.readAsText(f);e.target.value=''});
 $('bt-tpl-bank').addEventListener('click',()=>{
   dl({
@@ -1328,24 +1328,24 @@ $('bt-tpl-bank').addEventListener('click',()=>{
       m5:[{q:'He is ___ young to drive a car.',ops:['too','so','very','quite'],ans:0,why:'too...to... 太……而不能……',lv:1}]
     }
   },'词灵对决_题库模板.json');
-  toast('📦 模板已导出——按此格式即可制作新一期题库')});
+  toast('模板已导出——按此格式即可制作新一期题库')});
 $('bt-exp-prog').addEventListener('click',()=>{
   dl({type:'ciling-progress',mastery:SAVE.mastery,book:SAVE.book,best:SAVE.best,plays:SAVE.plays,banks:SAVE.banks},
     '词灵对决_进度备份.json');
-  toast('💾 进度已导出（含扩展题库）——换电脑导入即可无缝继续')});
+  toast('进度已导出（含扩展题库）——换电脑导入即可无缝继续')});
 $('bt-imp-prog').addEventListener('click',()=>$('file-prog').click());
 $('file-prog').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;
   const r=new FileReader();
   r.onload=()=>{try{
     const o=JSON.parse(r.result);
-    if(o.type!=='ciling-progress'){toast('❌ 这不是词灵对决的进度文件',3000);return}
+    if(o.type!=='ciling-progress'){toast('这不是词灵对决的进度文件',3000);return}
     if(!confirm('导入将覆盖本机当前进度（点亮/错题本/最佳分），确定？'))return;
     SAVE.mastery=o.mastery||{};SAVE.book=o.book||{};SAVE.best=o.best||{};
     SAVE.plays=o.plays||0;if(Array.isArray(o.banks))SAVE.banks=o.banks;
     save();renderMods();renderMenu();
-    toast('✅ 进度导入完成——欢迎回来，继续点亮！',2800)}
-  catch(ex){toast('❌ 不是有效的 JSON 文件',3000)}};
+    toast('进度导入完成——欢迎回来，继续点亮！',2800)}
+  catch(ex){toast('不是有效的 JSON 文件',3000)}};
   r.readAsText(f);e.target.value=''});
 
 // ---------- 两队对抗 ----------
@@ -1390,9 +1390,9 @@ function renderVsQ(){
   q.sh.ops.forEach((op,i)=>{
     const b=document.createElement('button');b.className='q-op';
     b.innerHTML='<span class="key">'+keys[i]+'</span>'+op;
-    // ⚠ 必须用 onclick 而不是 addEventListener：抢答分支会重新给按钮赋 o.onclick,
+    // 必须用 onclick 而不是 addEventListener：抢答分支会重新给按钮赋 o.onclick,
     //   赋值会覆盖同名属性处理器,但覆盖不掉 addEventListener 注册的那个 —— 两个都会触发,
-    //   于是「答错→抢答→答对」会先按原队记一次分再按抢答队记一次(实测 10/5,应为 0/5)。
+    //   于是「答错 -> 抢答 -> 答对」会先按原队记一次分再按抢答队记一次(实测 10/5,应为 0/5)。
     b.onclick=()=>vsAnswer(i,b);box.appendChild(b)})}
 function teamColor(t){return t===0?'var(--gold2)':'var(--purple)'}
 function vsAnswer(i,btn){
@@ -1450,7 +1450,7 @@ function vsDone(q){
   $('vs-next').appendChild(nb)}
 function vsEnd(){
   const w=VS.s[0]===VS.s[1]?-1:(VS.s[0]>VS.s[1]?0:1);
-  $('vr-glyph').textContent=w<0?'⚖':'🏆';
+  $('vr-glyph').textContent=w<0?'':'';
   $('vr-glyph').style.color=w===1?'var(--purple)':'var(--gold2)';
   $('vr-title').innerHTML=w<0?'平分秋色！<em>加赛一局？</em>'
     :'<em>'+(w===0?VS.n1:VS.n2)+'</em> 获 胜 ！！';
@@ -1468,17 +1468,17 @@ $('vr-again').addEventListener('click',()=>{renderVsSetup();go('vs-setup')});
 // ---------- 帮助 ----------
 function renderHelp(){
   $('help-body').innerHTML=`
-<p><em>30 秒上手</em>：选一个试炼 → 配对或答题 → 连击拉分 → 看战报。答错的词条自动进<b>错题本</b>，攒 6 条解锁复仇关，连对两次才能"斩词"出本。</p>
-<p><b>五大试炼</b>：经典对决（词↔义）、词形风暴（不规则动词）、黄金搭配（中考短语）走配对盘——先点左边的词，再点右边的含义；易混猎人、句境狙击走答题盘——每题都有解析，<em>错题的解析才是真金</em>。</p>
+<p><em>30 秒上手</em>：选一个试炼 -> 配对或答题 -> 连击拉分 -> 看战报。答错的词条自动进<b>错题本</b>，攒 6 条解锁复仇关，连对两次才能"斩词"出本。</p>
+<p><b>五大试炼</b>：经典对决（词 对 义）、词形风暴（不规则动词）、黄金搭配（中考短语）走配对盘——先点左边的词，再点右边的含义；易混猎人、句境狙击走答题盘——每题都有解析，<em>错题的解析才是真金</em>。</p>
 <p><b>计分</b>：答对 +10，连击每层 +2（上限 +10）；答错 -5。连击 3/5/8 有横幅和全屏反馈——S 评价需要 100% 准确率。</p>
 <p><b>限时挑战</b>：在试炼选择页打开开关——配对一轮 100 秒，答题每题 15 秒，超时判错。建议先从容刷熟，再开限时冲分。</p>
 <p><b>两队对抗（课堂投影）</b>：两队轮流答题，答错对方可抢答（+5）。三连对有加成。题源可以勾选任意试炼组合——考前用"易混猎人 + 句境狙击"，20 题鏖战正好一节课的收尾。</p>
-<p><b>词条图鉴</b>：每个词累计答对两次即点亮（◆ 标记＝冲刺级）。300 词条全亮的那天，中考词汇这一关就算过了。</p>
+<p><b>词条图鉴</b>：每个词累计答对两次即点亮（「冲」标记＝冲刺级）。300 词条全亮的那天，中考词汇这一关就算过了。</p>
 <p><b>难度</b>：试炼页可切「基础 / 冲刺 / 全部混合」——基础先把地基打瓷实，冲刺专供高阶易错词条。某难度词条不足时自动回退全量。</p>
 <p><b>扩展题库</b>：点「导出题库模板」拿到标准格式样例，由 MYSKME 题库工坊按格式制作（高一词库、单元同步词库均可），再「导入扩展题库」即玩。多个题库可切换或全部合并，进度互不串扰。</p>
 <p><b>兑换码（网站版专属）</b>：王老师每期试卷都有卷号（如 S1E7），在题库中心输入即可在线领取同款题库——课上做的卷子，回家变成游戏继续刷。「浏览题库目录」能看到所有已发布的期数。</p>
 <p><b>进度搬家</b>：「导出学习进度」会连扩展题库一起打包；换电脑导入即可无缝继续。</p>
-<p><b>每日特训（核心推荐）</b>：内置间隔复习算法——答对的词按 1/3/7/14/30 天的间隔到期回炉，答错立刻回炉。每天一轮特训（到期复习 + 错题 + 新词混编 12 题），连续天数会点燃 🔥。<em>先特训，再试炼</em>，是效率最高的用法。</p>
+<p><b>每日特训（核心推荐）</b>：内置间隔复习算法——答对的词按 1/3/7/14/30 天的间隔到期回炉，答错立刻回炉。每天一轮特训（到期复习 + 错题 + 新词混编 12 题），连续天数会点燃 。<em>先特训，再试炼</em>，是效率最高的用法。</p>
 <p><b>战绩·成就</b>：13 枚成就徽章、近七日火力图、最常失手 TOP10。错题本里还能一键导出错题清单（txt），打印贴墙。</p>
 <p><b>键盘党</b>：答题时按 A/B/C/D 或 1/2/3/4 选答案，回车进下一题；主菜单按 F 或点「投影全屏」直接上大屏。</p>
 <p style="color:var(--ink3)">进度保存在本机浏览器里（localStorage）。换电脑/清缓存会清零——课堂投影机上建议只用对抗模式。</p>`}
@@ -1501,14 +1501,14 @@ async function shelfFetch(file){
   return sawServer?{notFound:true}:{net:true}}
 function installBankObj(o,code){
   const err=validateBank(o);
-  if(err){toast('❌ 题库格式问题：'+err,3200);return false}
+  if(err){toast('题库格式问题：'+err,3200);return false}
   if(SAVE.banks.some(b=>(code&&b.code===code)||b.name===o.name)){
     toast('「'+(o.name||code)+'」已经装过了，不重复安装');return false}
   SAVE.banks.push({name:o.name||code,code:code||o.code||'',mods:o.mods});
   SAVE.activeBank='e'+(SAVE.banks.length-1);
   achUnlock('a13');save();renderMods();
   const cnt=Object.values(o.mods).reduce((s,a)=>s+a.length,0);
-  toast('🎉 「'+(o.name||code)+'」安装完成——'+cnt+' 条词条已上膛！',3000);
+  toast('「'+(o.name||code)+'」安装完成——'+cnt+' 条词条已上膛！',3000);
   return true}
 async function redeemCode(code){
   code=(code||'').trim().toUpperCase();
@@ -1517,13 +1517,13 @@ async function redeemCode(code){
     toast('本地文件模式无法在线兑换——请打开网站版输码，或用「导入扩展题库」选 JSON 文件',3800);return}
   try{
     const res=await shelfFetch(code+'.json');
-    if(res.net){toast('📡 连不上题库服务器——换个网络或稍后再试。码没问题，不用改',3800);return}
-    if(res.notFound){toast('❌ 没找到兑换码 '+code+'——检查一下拼写？',3000);return}
+    if(res.net){toast('连不上题库服务器——换个网络或稍后再试。码没问题，不用改',3800);return}
+    if(res.notFound){toast('没找到兑换码 '+code+'——检查一下拼写？',3000);return}
     installBankObj(await res.r.json(),code)}
-  catch(e){toast('❌ 题库读取失败：'+(e&&e.message||'数据异常'),3200)}}
+  catch(e){toast('题库读取失败：'+(e&&e.message||'数据异常'),3200)}}
 $('bt-code').addEventListener('click',()=>redeemCode($('code-input').value));
 $('code-input').addEventListener('keydown',e=>{if(e.key==='Enter')redeemCode($('code-input').value)});
-/* 卷尾二维码直达：?code=XXXX 一扫即装当期题库（课上做卷→回家直接刷同款） */
+/* 卷尾二维码直达：?code=XXXX 一扫即装当期题库（课上做卷 -> 回家直接刷同款） */
 (function(){try{var c=new URLSearchParams(location.search).get('code');if(c){var ci=$('code-input');if(ci)ci.value=c;redeemCode(c);}}catch(e){}})();
 $('bt-cat').addEventListener('click',async()=>{
   const box=$('cat-list');
@@ -1531,18 +1531,18 @@ $('bt-cat').addEventListener('click',async()=>{
   box.innerHTML='<span class="sub">正在取回目录……</span>';
   try{
     const res=await shelfFetch('index.json');
-    if(res.net){box.innerHTML='<span class="sub">📡 连不上题库服务器——换个网络或稍后再试。</span>';return}
+    if(res.net){box.innerHTML='<span class="sub">连不上题库服务器——换个网络或稍后再试。</span>';return}
     if(res.notFound){box.innerHTML='<span class="sub">目录暂时取不到，稍后再试。</span>';return}
     const o=await res.r.json();
     box.innerHTML='';
     (o.catalog||[]).forEach(c=>{
       const got=SAVE.banks.some(b=>b.code===c.code||b.name===c.name);
       const t=document.createElement('div');t.className='toggle'+(got?' on':'');
-      t.innerHTML='<span class="dot"></span>'+c.code+' · '+c.name+'（'+c.count+' 题）'+(got?' ✓':'');
+      t.innerHTML='<span class="dot"></span>'+c.code+' · '+c.name+'（'+c.count+' 题）'+(got?' ':'');
       if(!got)t.addEventListener('click',()=>redeemCode(c.code));
       box.appendChild(t)});
     if(!(o.catalog||[]).length)box.innerHTML='<span class="sub">目录还是空的——等王老师的下一期。</span>'}
-  catch(e){box.innerHTML='';toast('❌ 取目录失败，稍后再试')}});
+  catch(e){box.innerHTML='';toast('取目录失败，稍后再试')}});
 
 // ---------- 战绩 · 成就 ----------
 function renderStats(){
@@ -1552,13 +1552,13 @@ function renderStats(){
     '<span><b>'+st.answered+'</b>累计作答</span>'+
     '<span><b>'+acc+'%</b>总准确率</span>'+
     '<span><b>'+(SAVE.killed||0)+'</b>累计斩词</span>'+
-    '<span><b>🔥'+(SAVE.dailyStreak||0)+'</b>当前连续</span>'+
+    '<span><b>'+(SAVE.dailyStreak||0)+'</b>当前连续</span>'+
     '<span><b>'+(SAVE.dailyBest||0)+'</b>最长连续</span>'+
     '<span><b>'+SAVE.ach.length+'/'+ACH.length+'</b>成就</span>';
   const _lbl=$('lb-line');
   if(_lbl){_lbl.innerHTML=(SAVE.lbPower!=null)
-    ?'名人天梯 · <b style="color:var(--gold2)">'+(SAVE.lbRankName||lbRankFor(SAVE.lbPower))+'</b> · 赛季灵力 <b>'+SAVE.lbPower+'</b>'+(SAVE.lbLife?' · 终身 <b>'+SAVE.lbLife+'</b>':'')+' · 上次世界第 <b>'+SAVE.lbRank+'</b> 名 — 点上方 🏆 上榜刷新'
-    :'名人天梯 · 还没上榜 — 点上方 🏆 上榜，化名登世界天梯';}
+    ?'名人天梯 · <b style="color:var(--gold2)">'+(SAVE.lbRankName||lbRankFor(SAVE.lbPower))+'</b> · 赛季灵力 <b>'+SAVE.lbPower+'</b>'+(SAVE.lbLife?' · 终身 <b>'+SAVE.lbLife+'</b>':'')+' · 上次世界第 <b>'+SAVE.lbRank+'</b> 名 — 点上方 上榜刷新'
+    :'名人天梯 · 还没上榜 — 点上方 上榜，化名登世界天梯';}
   // 近七日
   const bars=$('stats-bars');bars.innerHTML='';
   const days=[];let mx=1;
@@ -1587,7 +1587,7 @@ function renderStats(){
     d.innerHTML='<div class="ico">'+a.ico+'</div><div><h4>'+a.nm+'</h4><p>'+a.desc+'</p></div>';
     ag.appendChild(d)})}
 
-// ---------- ⑤ 家长周报卡 ----------
+// ---------- 5. 家长周报卡 ----------
 function reportData(){
   const st=SAVE.stats||{days:{},answered:0,correct:0};
   let weekAns=0,activeDays=0;const last7=[];
@@ -1633,7 +1633,7 @@ function buildReportCard(){
   x.fillStyle='#7a6320';x.font='600 22px "Songti SC",serif';x.fillText('— 本 周 —',W/2,330);
   metric(W*0.25,420,String(d.weekAns),'作答题数');
   metric(W*0.5,420,d.activeDays+'/7','打卡天数');
-  metric(W*0.75,420,'🔥'+d.streak,'连续天数');
+  metric(W*0.75,420,''+d.streak,'连续天数');
   const bx=140,bw=W-280,base=640,bh=130,gap=bw/7;let mx=1;d.last7.forEach(v=>mx=Math.max(mx,v.n));
   d.last7.forEach((v,i)=>{
     const cx=bx+gap*i+gap/2,h=Math.max(4,Math.round(v.n/mx*bh));
@@ -1655,13 +1655,13 @@ function buildReportCard(){
   cv.toBlob(function(b){if(!b){toast('生成失败');return}
     const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='MYSKME-词灵对决-周报-'+todayStr()+'.png';
     document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);
-    toast('🎉 家长周报已生成，发家长群即可',3000);},'image/png');
+    toast('家长周报已生成，发家长群即可',3000);},'image/png');
 }
 $('m-report').addEventListener('click',buildReportCard);
 
 // ---------- 名人天梯 · 词灵榜 上榜 ----------
 const LB_API='https://myskme.com/api/quiz';
-const LB_RANKS=[[0,'学徒'],[300,'习字者'],[800,'御词生'],[1800,'词灵使'],[3600,'驭灵师'],[6500,'黑域行者'],[11000,'噬词者'],[18000,'词灵宗师'],[30000,'☠狼徒·封号弟子']];
+const LB_RANKS=[[0,'学徒'],[300,'习字者'],[800,'御词生'],[1800,'词灵使'],[3600,'驭灵师'],[6500,'黑域行者'],[11000,'噬词者'],[18000,'词灵宗师'],[30000,'狼徒·封号弟子']];
 function lbRankFor(p){let n=LB_RANKS[0][1];for(const r of LB_RANKS)if(p>=r[0])n=r[1];return n;}
 const LB_ALIAS_RE=/^[一-龥A-Za-z0-9·\-_ ]{2,12}$/;
 const LB_BLOCK=['管理员','admin','老师','王老师','狼先生','mrwolf','myskme','客服','官方','系统'];
@@ -1679,7 +1679,7 @@ async function lbSrc(){
     SAVE.bankTiers=tc;save();                        // 缓存目录,供下次取失败时兜底
     countBy(tc);
   }catch(e){
-    // ⚠ 目录取失败时绝不谎报 0——那会把学生的题库数算少、赛季灵力被压低,若服务器非单调还会把终身灵力覆盖成更低值。
+    // 目录取失败时绝不谎报 0——那会把学生的题库数算少、赛季灵力被压低,若服务器非单调还会把终身灵力覆盖成更低值。
     //   有缓存就用缓存重算;没缓存就标记 catalogOk=false,让 lbSubmit 中止本次上榜(而不是拿脏数据顶上去)。
     if(SAVE.bankTiers){countBy(SAVE.bankTiers);}else{catalogOk=false;free=0;svip=0}
   }
@@ -1698,7 +1698,7 @@ async function lbSubmit(){
   toast('正在登天梯……');
   const src=await lbSrc();
   if(src.catalogOk===false&&(SAVE.banks||[]).length){ // 目录取不到且没缓存:宁可不上,也别拿"0 题库"把灵力算少
-    toast('题库目录暂时取不到——为免灵力被算少，先别上榜，换个网络再点 🏆',3800);return;}
+    toast('题库目录暂时取不到——为免灵力被算少，先别上榜，换个网络再点 ',3800);return;}
   delete src.catalogOk; // 内部标记,不往服务器发
   const body={deviceUUID:lbDevice(),alias:SAVE.kidAlias,faction:SAVE.faction,src:src};
   if(SAVE.classPw)body.pw=SAVE.classPw;
@@ -1706,12 +1706,12 @@ async function lbSubmit(){
     const r=await fetch(LB_API+'/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const o=await r.json();
     if(o&&o.ok){SAVE.lbRank=o.rank;SAVE.lbPower=o.power;SAVE.lbLife=o.lifetime;SAVE.lbRankName=o.rankName;SAVE.lbBadges=(o.badges||[]).length;save();
-      var msg='🏆 已登天梯！'+o.rankName+' · 赛季灵力 '+o.power+' · 世界第 '+o.rank+' 名';
+      var msg='已登天梯！'+o.rankName+' · 赛季灵力 '+o.power+' · 世界第 '+o.rank+' 名';
       if(o.classJoined===false)msg+='（班级口令不符，仅上世界榜）';
       toast(msg,4200);
       if($('scr-stats').classList.contains('on'))renderStats();}
-    else{toast('❌ '+((o&&o.err)||'上榜失败'),3200)}
-  }catch(e){toast('❌ 连不上词灵榜，稍后再试',3200)}
+    else{toast(''+((o&&o.err)||'上榜失败'),3200)}
+  }catch(e){toast('连不上词灵榜，稍后再试',3200)}
 }
 $('m-rank').addEventListener('click',lbSubmit);
 
@@ -1733,7 +1733,7 @@ $('note-export').addEventListener('click',()=>{
   a.download='词灵对决_错题清单_'+todayStr()+'.txt';
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href),5000);
-  toast('📄 错题清单已导出——打印出来贴墙上，每天瞪它三遍')});
+  toast('错题清单已导出——打印出来贴墙上，每天瞪它三遍')});
 
 // ---------- 键盘快捷键（投影/快手党）----------
 document.addEventListener('keydown',e=>{

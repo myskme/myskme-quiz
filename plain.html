@@ -537,16 +537,16 @@ const HEROES = [
 
 // ---- 羁绊（编队齐聚触发）----
 const BONDS = [
-  {ids:['lin','rui','han'], nm:'队① · 老队', desc:'十年同窗：全队最大生命 +4'},
-  {ids:['hai','hao','qi'],  nm:'队② · 强队', desc:'互帮互助：每回合开始全队回复 2'},
-  {ids:['jin','xi','yu'],   nm:'队③ · 殊途同归', desc:'各走各路：全队伤害 +1'},
+  {ids:['lin','rui','han'], nm:'队1. · 老队', desc:'十年同窗：全队最大生命 +4'},
+  {ids:['hai','hao','qi'],  nm:'队2. · 强队', desc:'互帮互助：每回合开始全队回复 2'},
+  {ids:['jin','xi','yu'],   nm:'队3. · 殊途同归', desc:'各走各路：全队伤害 +1'},
   {ids:['xi','yu'],         nm:'最佳搭档', desc:'由针锋相对到佳话：晰与屿伤害 +2'},
   {ids:['qi','yu'],         nm:'好兄弟', desc:'海上来的兄弟：麒与屿最大生命 +3'}
 ];
 
 // ---- 即将登场（占位 · 更新钩子）----
 const COMING = [
-  {id:'yue', name:'月', role:'调和系 · 白狐', hint:'队⑤已下战书'},
+  {id:'yue', name:'月', role:'调和系 · 白狐', hint:'队5.已下战书'},
   {id:'duo', name:'铎', role:'棋局系 · 蝮蛇', hint:'还没想好怎么说才有意思'},
   {id:'wen', name:'文', role:'觉醒系 · 雪狼', hint:'潜力待发'},
   {id:'xiao', name:'晓', role:'静默系 · 飞鼠', hint:'文静温柔'},
@@ -560,7 +560,7 @@ const CHAR_ART=['lin','rui','han','hai','hao','qi','jin','xi','yu','jia','yue','
 const ART_ALIAS={horse:'majun',yinq:'yin',huiq:'hui',xuanq:'xuan',parrotq:'parrot',hangq:'hang',yewangq:'yewang'};
 const ART_FAIL={}; // 加载失败过的 id：后续重渲染直接走字形分支，不再反复请求/闪动
 function artURL(id){id=ART_ALIAS[id]||id;return (CHAR_ART.includes(id)&&!ART_FAIL[id])?'assets/chars/'+id+'.webp?v='+ART_V:null}
-// 有图→立绘容器；无图/加载失败→原地退回字形 div（与旧渲染完全一致，含字形配色）
+// 有图 -> 立绘容器；无图/加载失败 -> 原地退回字形 div（与旧渲染完全一致，含字形配色）
 function artOr(id,glyph,artCls,glyphCls,gCss){
   const u=artURL(id),aid=ART_ALIAS[id]||id;
   if(!u)return '<div class="'+glyphCls+'"'+(gCss?' style="'+gCss+'"':'')+'>'+glyph+'</div>';
@@ -751,13 +751,13 @@ const TEA_UPS = [
 
 // ---- 帮助文案 ----
 const HELP_HTML = `
-<p><em>30 秒上手</em>：挑 3 个学员 → 一路砍穿三幕地图 → 仲夏夜决战叶王！输了？没关系——解锁的角色、攒下的星尘、收集的图鉴<b style="color:var(--gold)">全部保留</b>，下一局更强。</p>
-<p><b style="color:var(--gold)">⚡ 行动点就是火力</b>，放技能全靠它。怎么赚？二选一——<br>
+<p><em>30 秒上手</em>：挑 3 个学员 -> 一路砍穿三幕地图 -> 仲夏夜决战叶王！输了？没关系——解锁的角色、攒下的星尘、收集的图鉴<b style="color:var(--gold)">全部保留</b>，下一局更强。</p>
+<p><b style="color:var(--gold)">行动点就是火力</b>，放技能全靠它。怎么赚？二选一——<br>
 · <em>课堂模式</em>：老师出题（每课约 20 道四选一）。答对！老师拍「+1」；啃下难题？「+2」直接到账！答错？敌方暴走槽 +1，全队心跳加速。题在老师手里，每节课都是新的。<br>
-· <em>自由模式</em>：每回合甩 3 颗命运骰，看不顺眼的锁住重掷一次！骰面：⚡+1 / ✦+2 / 盾（全队 +3 护盾）/ 星（绝技打折）/ 蛇眼（敌方暴走槽 +1）。赌不赌，你说了算。</p>
-<p><b style="color:var(--red2)">⚠ 暴走槽</b>：答错和蛇眼都会喂它。一旦涨满——<b style="color:var(--red2)">敌方全体暴走，立刻多打你一轮！</b>不罚个人，但全队都得绷紧。</p>
-<p><b style="color:var(--gold)">🔥 课堂怎么玩最燃</b>：全班共用一队轮流答题，或分组开局比进度。20 题 ≈ 4-6 场战斗。Boss 战留到下课前十分钟——铃声就是最好的倒计时！</p>
-<p><b style="color:var(--gold)">🏆 越玩越强</b>：干掉鹦鹉教授 → 解锁队②！干掉航 → 解锁队③！星尘进茶屋换永久强化；悬案碎片集齐 3 片，失踪的佳重返战场。每日修行全班同一张图、同一套随机——谁走得远，谁是今天的王。</p>`;
+· <em>自由模式</em>：每回合甩 3 颗命运骰，看不顺眼的锁住重掷一次！骰面：+1 / +2 / 盾（全队 +3 护盾）/ 星（绝技打折）/ 蛇眼（敌方暴走槽 +1）。赌不赌，你说了算。</p>
+<p><b style="color:var(--red2)">暴走槽</b>：答错和蛇眼都会喂它。一旦涨满——<b style="color:var(--red2)">敌方全体暴走，立刻多打你一轮！</b>不罚个人，但全队都得绷紧。</p>
+<p><b style="color:var(--gold)">课堂怎么玩最燃</b>：全班共用一队轮流答题，或分组开局比进度。20 题 ≈ 4-6 场战斗。Boss 战留到下课前十分钟——铃声就是最好的倒计时！</p>
+<p><b style="color:var(--gold)">越玩越强</b>：干掉鹦鹉教授 -> 解锁队2.！干掉航 -> 解锁队3.！星尘进茶屋换永久强化；悬案碎片集齐 3 片，失踪的佳重返战场。每日修行全班同一张图、同一套随机——谁走得远，谁是今天的王。</p>`;
 
 /* ================================================================
    第二部分 · 引擎：状态 / 存档 / 路由 / 编队 / 地图 / 奇遇
@@ -814,9 +814,9 @@ $('qm-close').addEventListener('click',()=>$('quote-modal').classList.remove('sh
 function gainFrag(fid){if(SAVE.frags.includes(fid))return;
   SAVE.frags.push(fid);
   const f=MYSTERY.frags.find(x=>x.id===fid);
-  toast('🧩 悬案碎片到手：<b style="color:var(--gold)">'+f.nm+'</b>（'+SAVE.frags.length+'/3）',3200);
+  toast('悬案碎片到手：<b style="color:var(--gold)">'+f.nm+'</b>（'+SAVE.frags.length+'/3）',3200);
   if(SAVE.frags.length>=3&&!SAVE.jia){SAVE.jia=true;
-    setTimeout(()=>{toast('✨ 悬案告破！<b style="color:var(--gold)">佳 回来了</b>——法师 · 探问者，已加入可用学员！',4200);unlockQuote('jia')},1600)}
+    setTimeout(()=>{toast('悬案告破！<b style="color:var(--gold)">佳 回来了</b>——法师 · 探问者，已加入可用学员！',4200);unlockQuote('jia')},1600)}
   save()}
 
 // ---------- 主菜单 ----------
@@ -827,7 +827,7 @@ function renderMenu(){
     '<span><b>'+SAVE.relics.length+'/'+RELICS.length+'</b>遗物</span>'+
     '<span><b>'+SAVE.frags.length+'/3</b>悬案</span>'+
     (SAVE.daily.streak>1?'<span><b>'+SAVE.daily.streak+'</b>连续修行</span>':'');
-  $('m-daily').textContent=SAVE.daily.doneToday?'每日修行 ✓ 已完成':'每日修行';
+  $('m-daily').textContent=SAVE.daily.doneToday?'每日修行 已完成':'每日修行';
 }
 $('m-start').addEventListener('click',()=>openParty(false));
 $('m-daily').addEventListener('click',()=>{
@@ -847,7 +847,7 @@ function heroPool(){const p=HEROES.filter(h=>{
 function openParty(daily){
   pickDaily=daily;pickSel=[];pickMode='dice';
   $('mode-dice').classList.add('sel');$('mode-class').classList.remove('sel');
-  if(daily){$('mode-class').style.display='none';toast('⚔ 每日修行：全员同图同随机——比的就是真本事！')}
+  if(daily){$('mode-class').style.display='none';toast('每日修行：全员同图同随机——比的就是真本事！')}
   else $('mode-class').style.display='';
   renderParty();go('party')}
 function renderParty(){
@@ -864,8 +864,8 @@ function renderParty(){
       '<div class="pc-name">'+h.name+'</div>'+
       '<div class="pc-role">'+h.role+' · '+h.animal+' · HP '+h.hp+'</div>'+
       '<div class="pc-skills">'+h.skills.map(s=>'<b>'+s.nm+'('+s.cost+')</b> '+s.desc).join('<br>')+
-      '<br><span style="color:var(--ink3)">◈ '+esc(h.passive)+'</span></div>'+
-      (locked?'<div class="pc-lock">🔒 '+lockTxt+'</div>':'');
+      '<br><span style="color:var(--ink3)">'+esc(h.passive)+'</span></div>'+
+      (locked?'<div class="pc-lock">'+lockTxt+'</div>':'');
     if(!locked)d.addEventListener('click',()=>{
       if(pickSel.includes(h.id))pickSel=pickSel.filter(x=>x!==h.id);
       else{if(pickSel.length>=3){toast('队伍满了！三人小队，多一个都挤不下');return}pickSel.push(h.id)}
@@ -880,7 +880,7 @@ function renderParty(){
   // 羁绊
   const bb=$('bond-bar');bb.innerHTML='';
   BONDS.forEach(b=>{if(b.ids.every(id=>pickSel.includes(id))){
-    const s=document.createElement('span');s.className='bond';s.textContent='🔗 '+b.nm+' — '+b.desc;bb.appendChild(s)}});
+    const s=document.createElement('span');s.className='bond';s.textContent=''+b.nm+' — '+b.desc;bb.appendChild(s)}});
   $('party-go').disabled=pickSel.length!==3;
   $('party-go').textContent=pickSel.length===3?'开 战 ！':'选 '+pickSel.length+' / 3';
 }
@@ -902,7 +902,7 @@ function startRun(){
     let mx=def.hp+bodyLv*3;
     RUN.party.push({id,def,maxhp:mx,hp:mx,shield:0,atkB:0,content:0,alive:true,disabled:0,usedOnce:{}})});
   activeBonds().forEach(b=>{
-    if(b.nm.includes('队①'))RUN.party.forEach(h=>{h.maxhp+=4;h.hp+=4});
+    if(b.nm.includes('队1.'))RUN.party.forEach(h=>{h.maxhp+=4;h.hp+=4});
     if(b.nm==='好兄弟')RUN.party.forEach(h=>{if(h.id==='qi'||h.id==='yu'){h.maxhp+=3;h.hp+=3}})});
   if(teaLv('bag')>0){const r=pick(RELICS.filter(x=>x.rar!=='cursed'));gainRelic(r.id,true)}
   SAVE.runs++;save();
@@ -912,7 +912,7 @@ function gainRelic(rid,silent){
   RUN.relics.push(rid);
   if(!SAVE.relics.includes(rid)){SAVE.relics.push(rid);save()}
   const r=RELICS.find(x=>x.id===rid);
-  if(!silent)toast('🎁 遗物到手：<b style="color:var(--gold)">'+r.nm+'</b> — '+r.desc,3000);
+  if(!silent)toast('遗物到手：<b style="color:var(--gold)">'+r.nm+'</b> — '+r.desc,3000);
   else toast('行囊里摸出一件遗物：<b style="color:var(--gold)">'+r.nm+'</b>',2600)}
 function hasRelic(id){return RUN&&RUN.relics.includes(id)}
 
@@ -920,7 +920,7 @@ function hasRelic(id){return RUN&&RUN.relics.includes(id)}
 function enterAct(i){
   RUN.act=i;RUN.step=0;RUN.actAtk=0;
   const act=ACTS[i];
-  if(i>0&&hasRelic('plume')){RUN.party.forEach(h=>{if(h.alive)heal(h,15)});toast('🪶 白鹤羽微光一闪——全队回复 15！')}
+  if(i>0&&hasRelic('plume')){RUN.party.forEach(h=>{if(h.alive)heal(h,15)});toast('白鹤羽微光一闪——全队回复 15！')}
   toast('<b style="color:var(--gold)">'+act.label+' · '+act.title+'</b><br>'+act.intro,3600);
   renderMap();go('map')}
 function renderMap(){
@@ -930,7 +930,7 @@ function renderMap(){
   // HUD
   const hud=$('run-hud');
   hud.innerHTML='<span>模式 <b>'+(RUN.mode==='class'?'课堂':'命运骰')+'</b></span>'+
-    '<div class="hud-hp">'+RUN.party.map(h=>'<span>'+h.def.name+' <b>'+(h.alive?h.hp:'✕')+'</b>/'+h.maxhp+'</span>').join('')+'</div>'+
+    '<div class="hud-hp">'+RUN.party.map(h=>'<span>'+h.def.name+' <b>'+(h.alive?h.hp:'')+'</b>/'+h.maxhp+'</span>').join('')+'</div>'+
     '<span>星尘 <b>+'+RUN.dustGain+'</b></span>';
   // 进度点
   const pg=$('map-prog');pg.innerHTML='';
@@ -946,7 +946,7 @@ function renderMap(){
   if(RUN.step>=act.steps){
     $('map-hint').textContent='路走完了。前面只剩一件事——';
     const boss=ENEMIES[act.boss];
-    ch.appendChild(nodeCard('boss','☠',boss.name,boss.desc,()=>startBattle([act.boss],'boss')));
+    ch.appendChild(nodeCard('boss','',boss.name,boss.desc,()=>startBattle([act.boss],'boss')));
   }else{
     $('map-hint').textContent='岔路口！选一条，往前冲——';
     genChoices(act).forEach(c=>ch.appendChild(nodeCard(c.type,c.ico,c.nm,c.desc,c.fn)));
@@ -970,15 +970,15 @@ function genChoices(act){
   types.forEach(t=>{
     if(t==='fight'){
       const grp=makeFightGroup(act);
-      out.push({type:t,ico:'⚔',nm:'遭遇战',desc:grp.map(e=>ENEMIES[e].name).join(' + '),
-        fn:()=>{if(RUN.escort){RUN.escort=false;RUN.step++;RUN.nodes++;toast('🐎 马将军一马当先，替你们清了场！白捡一程！');afterNodeNoBattle();}else startBattle(grp,'fight')}})}
+      out.push({type:t,ico:'刃',nm:'遭遇战',desc:grp.map(e=>ENEMIES[e].name).join(' + '),
+        fn:()=>{if(RUN.escort){RUN.escort=false;RUN.step++;RUN.nodes++;toast('马将军一马当先，替你们清了场！白捡一程！');afterNodeNoBattle();}else startBattle(grp,'fight')}})}
     else if(t==='elite'){
       const e=pick(act.elites);
-      out.push({type:t,ico:'🔥',nm:'精英 · '+ENEMIES[e].name,desc:ENEMIES[e].desc,fn:()=>startBattle([e],'elite')})}
+      out.push({type:t,ico:'焰',nm:'精英 · '+ENEMIES[e].name,desc:ENEMIES[e].desc,fn:()=>startBattle([e],'elite')})}
     else if(t==='event'){
-      out.push({type:t,ico:'❖',nm:'奇遇',desc:'谁在前面？走近才知道。',fn:()=>openEvent()})}
+      out.push({type:t,ico:'珍',nm:'奇遇',desc:'谁在前面？走近才知道。',fn:()=>openEvent()})}
     else{
-      out.push({type:t,ico:'🍵',nm:'茶歇',desc:'喘口气。回血、修炼，或听一句话。',fn:()=>openRest()})}});
+      out.push({type:t,ico:'茶',nm:'茶歇',desc:'喘口气。回血、修炼，或听一句话。',fn:()=>openRest()})}});
   return out}
 function makeFightGroup(act){
   const c=1+ri(2)+(RUN.act>0?1:0);
@@ -1009,14 +1009,14 @@ function resolveEvent(ch){
   else if(fx==='getLetter'){gainRelic('letter');hurtAll(3)}
   else if(fx==='getRuler'){gainRelic('rule2');RUN.nextTide=1}
   else if(fx==='getPhones')gainRelic('phones');
-  else if(fx==='dust10'){RUN.dustGain+=10;toast('✨ 星尘 +10！')}
-  else if(fx==='dust12'){RUN.dustGain+=12;toast('✨ 星尘 +12！')}
-  else if(fx==='actAtk2'){RUN.actAtk=2;toast('🎵 节奏上头！本幕全队攻击 +2！')}
-  else if(fx==='escort'){RUN.escort=true;toast('🐎 马将军与你们同行——下一场遭遇战直接放行！')}
+  else if(fx==='dust10'){RUN.dustGain+=10;toast('星尘 +10！')}
+  else if(fx==='dust12'){RUN.dustGain+=12;toast('星尘 +12！')}
+  else if(fx==='actAtk2'){RUN.actAtk=2;toast('节奏上头！本幕全队攻击 +2！')}
+  else if(fx==='escort'){RUN.escort=true;toast('马将军与你们同行——下一场遭遇战直接放行！')}
   else if(fx==='gamble'){
     const d=1+ri(6);
-    if(d>=4){RUN.dustGain+=15;toast('🎲 掷出 '+d+' 点！手气爆棚——星尘 +15！');if(!hasRelic('dice'))gainRelic('dice')}
-    else{hurtAll(4);toast('🎲 掷出 '+d+' 点……笼子里的东西笑了一声。全队 -4 生命！')}}
+    if(d>=4){RUN.dustGain+=15;toast('掷出 '+d+' 点！手气爆棚——星尘 +15！');if(!hasRelic('dice'))gainRelic('dice')}
+    else{hurtAll(4);toast('掷出 '+d+' 点……笼子里的东西笑了一声。全队 -4 生命！')}}
   else if(fx==='jiaFight'){startBattle(['mist','mist'],'special',{onWin:'f1'});stay=true}
   else if(fx==='yinTea'){RUN.party.forEach(h=>heal(h,6))}
   else if(fx==='yinFight'){startBattle(['yin'],'special',{onWin:'f2x'});stay=true}
@@ -1030,9 +1030,9 @@ function openRest(){
   const c=$('ev-choices');c.innerHTML='';
   let healV=12+teaLv('tea')*4;if(hasRelic('teapot'))healV*=2;
   const ops=[
-    {nm:'喝茶 🍵',desc:'全队回复 '+healV,fn:()=>{RUN.party.forEach(h=>heal(h,healV));toast('🍵 一杯下肚，满血复活的感觉回来了！')}},
-    {nm:'加练一场 💪',desc:'随机一名同伴最大生命 +3',fn:()=>{const h=pick(RUN.party.filter(x=>x.alive));h.maxhp+=3;h.hp+=3;toast('💪 '+h.def.name+' 加练完毕！最大生命 +3！')}},
-    {nm:'听狼先生留下的一句话 📜',desc:'收录一条台词，星尘 +5',fn:()=>{
+    {nm:'喝茶 ',desc:'全队回复 '+healV,fn:()=>{RUN.party.forEach(h=>heal(h,healV));toast('一杯下肚，满血复活的感觉回来了！')}},
+    {nm:'加练一场 ',desc:'随机一名同伴最大生命 +3',fn:()=>{const h=pick(RUN.party.filter(x=>x.alive));h.maxhp+=3;h.hp+=3;toast(''+h.def.name+' 加练完毕！最大生命 +3！')}},
+    {nm:'听狼先生留下的一句话 ',desc:'收录一条台词，星尘 +5',fn:()=>{
       RUN.dustGain+=5;
       const left=Object.keys(QUOTES).filter(q=>!SAVE.quotes.includes(q));
       if(left.length)unlockQuote(pick(left));else toast('台词已经全部收齐——狼先生只是笑了笑。')}}];
@@ -1067,12 +1067,12 @@ function startBattle(keys,kind,special){
   if(RUN.party.some(h=>h.id==='lin'&&h.alive))RUN.party.forEach(h=>{if(h.alive)h.shield+=3});
   if(hasRelic('lolly')){const t=pick(RUN.party.filter(h=>h.alive));heal(t,4)}
   if(hasRelic('shard')&&kind==='boss'){BT.enemies.forEach(e=>{e.hp=Math.max(1,e.hp-8)});
-    logMsg('💥 <b>爆炸残片</b>先声夺人——全体敌人 8 伤害！','dmg')}
+    logMsg('<b>爆炸残片</b>先声夺人——全体敌人 8 伤害！','dmg')}
   $('log').innerHTML='';
   const names=keys.map(k=>ENEMIES[k].name).join(' + ');
-  logMsg((kind==='boss'?'☠ <b>BOSS 战</b>！':'⚔ 遭遇战！')+names+' 挡在面前！');
+  logMsg((kind==='boss'?'<b>BOSS 战</b>！':'遭遇战！')+names+' 挡在面前！');
   if(keys.includes('hang'))logMsg('⏳ 献祭仪式开始倒数——<b>'+BT.countdown+' 回合内必须分出胜负！</b>','sys');
-  if(keys.includes('yewang')&&!RUN.party.some(h=>h.id==='jia'))logMsg('👁 叶王从不宣布任何主张——<b>她的意图不可见。</b>','sys');
+  if(keys.includes('yewang')&&!RUN.party.some(h=>h.id==='jia'))logMsg('叶王从不宣布任何主张——<b>她的意图不可见。</b>','sys');
   go('battle');startPlayerTurn()}
 
 // ---------- 玩家回合 ----------
@@ -1081,23 +1081,23 @@ function startPlayerTurn(){
   BT.rerolls=1+(hasRelic('rule2')?1:0)+teaLv('reroll');
   BT.ap+=BT.nextBonus;BT.nextBonus=0;
   RUN.party.forEach(h=>{if(h.disabled>0)h.disabled--;if(h.lockUlt>0)h.lockUlt--});
-  if(activeBonds().some(b=>b.nm.includes('队②')))RUN.party.forEach(h=>heal(h,2));
+  if(activeBonds().some(b=>b.nm.includes('队2.')))RUN.party.forEach(h=>heal(h,2));
   if(hasRelic('cat')){const t=pick(RUN.party.filter(h=>h.alive));if(t)heal(t,2)}
   if(BT.turn>=3){
-    if(RUN.party.some(h=>h.id==='hai'&&h.alive)){BT.ap+=1;logMsg('🥁 海的鼓点踩满全场——行动点 +1！')}
-    if(hasRelic('shoes')){BT.ap+=1;logMsg('👟 街舞鞋自己动了起来——行动点 +1！')}}
-  if(RUN.party.some(h=>h.id==='han'&&h.alive)&&BT.ap===0){BT.ap=1;logMsg('📒 涵翻开新一页——保底行动点 +1！')}
+    if(RUN.party.some(h=>h.id==='hai'&&h.alive)){BT.ap+=1;logMsg('海的鼓点踩满全场——行动点 +1！')}
+    if(hasRelic('shoes')){BT.ap+=1;logMsg('街舞鞋自己动了起来——行动点 +1！')}}
+  if(RUN.party.some(h=>h.id==='han'&&h.alive)&&BT.ap===0){BT.ap=1;logMsg('涵翻开新一页——保底行动点 +1！')}
   BT.dice=null;
   renderBattle()}
 
 function tideUp(n){
   for(let i=0;i<n;i++){
-    if(hasRelic('candy3')&&rng()<.5){logMsg('🍬 三色糖纸拦下了一次暴走值！','sys');continue}
+    if(hasRelic('candy3')&&rng()<.5){logMsg('三色糖纸拦下了一次暴走值！','sys');continue}
     BT.tide++;
     if(BT.tide>=BT.tideMax){BT.tide=0;renderBattle();tideBurst();return}}
   renderBattle()}
 function tideBurst(){
-  logMsg('🚨 <b>敌方暴走！！</b>全体敌人立刻多打一轮！','dmg');
+  logMsg('<b>敌方暴走！！</b>全体敌人立刻多打一轮！','dmg');
   setTimeout(()=>{enemyActions(true);renderBattle();checkWipe()},420)}
 
 // ---------- 渲染 ----------
@@ -1131,9 +1131,9 @@ function renderBattle(){
     d.className='hc'+(h.alive?'':' dead')+(h.disabled>0||h.caged?' disabled-hero':'')+
       ((BT.target&&BT.target.side==='ally'&&h.alive)?' targetable':'');
     let st='';
-    if(h.caged)st='<span class="buff down">🔒 困于召唤笼</span>';
-    else if(h.disabled>0)st='<span class="buff down">💫 被引诱 '+h.disabled+'</span>';
-    if(h.lockUlt>0)st+='<span class="buff down">🔇 绝技被锁</span>';
+    if(h.caged)st='<span class="buff down">困于召唤笼</span>';
+    else if(h.disabled>0)st='<span class="buff down">被引诱 '+h.disabled+'</span>';
+    if(h.lockUlt>0)st+='<span class="buff down">绝技被锁</span>';
     if(h.atkB>0)st+='<span class="buff up">攻+'+h.atkB+'</span>';
     if(h.content>0)st+='<span class="buff up">内容×'+h.content+'</span>';
     d.innerHTML=(h.shield>0?'<div class="shield-chip">'+h.shield+'</div>':'')+
@@ -1147,9 +1147,9 @@ function renderBattle(){
     const box=d.querySelector('#hsk-'+i);
     if(h.alive&&h.caged){
       const b=document.createElement('button');b.className='sk ult';
-      b.innerHTML='<span class="nm">🔓 破笼而出<span class="d">花 2 行动点，砸开召唤笼！</span></span><span class="cost">2⚡</span>';
+      b.innerHTML='<span class="nm">破笼而出<span class="d">花 2 行动点，砸开召唤笼！</span></span><span class="cost">2</span>';
       b.disabled=BT.ap<2;
-      b.addEventListener('click',()=>{BT.ap-=2;h.caged=false;logMsg('🔓 <b>'+h.def.name+'</b> 破笼而出！谁也关不住！');renderBattle()});
+      b.addEventListener('click',()=>{BT.ap-=2;h.caged=false;logMsg('<b>'+h.def.name+'</b> 破笼而出！谁也关不住！');renderBattle()});
       box.appendChild(b)}
     else if(h.alive){
       h.def.skills.forEach((s,si)=>{
@@ -1158,7 +1158,7 @@ function renderBattle(){
         const usedUp=s.once&&h.usedOnce[si];
         const blocked=h.disabled>0||(isUlt&&h.lockUlt>0);
         const b=document.createElement('button');b.className='sk'+(isUlt?' ult':'')+(usedUp?' used-up':'');
-        b.innerHTML='<span class="nm">'+(isUlt?'✦ ':'')+s.nm+'<span class="d">'+s.desc+'</span></span><span class="cost">'+cost+'⚡</span>';
+        b.innerHTML='<span class="nm">'+(isUlt?'':'')+s.nm+'<span class="d">'+s.desc+'</span></span><span class="cost">'+cost+'</span>';
         b.disabled=BT.ap<cost||usedUp||blocked||!!BT.target;
         b.addEventListener('click',()=>trySkill(i,si));
         box.appendChild(b)})}
@@ -1181,7 +1181,7 @@ function intentText(e){
 function renderPanel(){
   const p=$('ap-panel');p.innerHTML='';
   if(BT.target){
-    p.innerHTML='<div class="panel-hint" style="font-size:14px;color:var(--gold)">🎯 选择目标——点'+
+    p.innerHTML='<div class="panel-hint" style="font-size:14px;color:var(--gold)">选择目标——点'+
       (BT.target.side==='enemy'?'一个敌人！':'一名同伴！')+
       ' <button class="btn dim" style="margin-left:14px;padding:6px 16px" onclick="cancelTarget()">取消</button></div>';
     return}
@@ -1189,25 +1189,25 @@ function renderPanel(){
     const d=document.createElement('div');d.className='class-btns';
     const mk=(cls,txt,sub,fn)=>{const b=document.createElement('button');b.className='cb '+cls;
       b.innerHTML=txt+'<small>'+sub+'</small>';b.addEventListener('click',fn);return b};
-    d.appendChild(mk('ok','答对 ⚡+1','ANSWER RIGHT',()=>{BT.ap+=1;toast('⚡ +1！漂亮！',900);renderBattle()}));
+    d.appendChild(mk('ok','答对 +1','ANSWER RIGHT',()=>{BT.ap+=1;toast('+1！漂亮！',900);renderBattle()}));
     const ruiIn=RUN.party.some(h=>h.id==='rui'&&h.alive);
-    d.appendChild(mk('hard','难题 ⚡+'+(ruiIn?3:2),ruiIn?'睿在场 · 难题手加成！':'HARD MODE',()=>{
-      BT.ap+=ruiIn?3:2;toast('🔥 难题拿下！⚡+'+(ruiIn?3:2)+'！',1100);renderBattle()}));
-    d.appendChild(mk('bad','答错','敌方暴走 +1',()=>{toast('💢 敌方暴走值上涨……稳住，下一题扳回来！',1300);tideUp(1)}));
+    d.appendChild(mk('hard','难题 +'+(ruiIn?3:2),ruiIn?'睿在场 · 难题手加成！':'HARD MODE',()=>{
+      BT.ap+=ruiIn?3:2;toast('难题拿下！+'+(ruiIn?3:2)+'！',1100);renderBattle()}));
+    d.appendChild(mk('bad','答错','敌方暴走 +1',()=>{toast('敌方暴走值上涨……稳住，下一题扳回来！',1300);tideUp(1)}));
     p.appendChild(d);
     const h=document.createElement('div');h.className='panel-hint';
     h.textContent='老师出题 · 学生作答 · 按结果点按钮，行动点立刻到账';p.appendChild(h)}
   else{
     renderDicePanel(p)}}
 const DIE_FACES=[
-  {k:'p1',ico:'⚡',tip:'+1 行动点'},{k:'p1',ico:'⚡',tip:'+1 行动点'},
-  {k:'p2',ico:'✦',tip:'+2 行动点'},{k:'shield',ico:'🛡',tip:'全队 +3 护盾'},
-  {k:'star',ico:'⭐',tip:'本回合绝技 -1 费'},{k:'snake',ico:'🐍',tip:'敌方暴走 +1'}];
+  {k:'p1',ico:'电',tip:'+1 行动点'},{k:'p1',ico:'电',tip:'+1 行动点'},
+  {k:'p2',ico:'芒',tip:'+2 行动点'},{k:'shield',ico:'盾',tip:'全队 +3 护盾'},
+  {k:'star',ico:'星',tip:'本回合绝技 -1 费'},{k:'snake',ico:'蛇',tip:'敌方暴走 +1'}];
 function renderDicePanel(p){
   if(BT.rolled&&!BT.dice){p.innerHTML='<div class="panel-hint">本回合的骰子已经收账。把行动点花出去——别浪费！</div>';return}
   if(!BT.dice){
     const b=document.createElement('button');b.className='cb hard';b.style.maxWidth='260px';b.style.margin='0 auto';
-    b.innerHTML='🎲 掷命运骰！<small>'+(3+(hasRelic('dice')?1:0))+' 颗 · 骰子比星座更诚实</small>';
+    b.innerHTML='掷命运骰！<small>'+(3+(hasRelic('dice')?1:0))+' 颗 · 骰子比星座更诚实</small>';
     b.addEventListener('click',rollDice);p.appendChild(b);
     return}
   const row=document.createElement('div');row.className='dice-row';
@@ -1240,13 +1240,13 @@ function collectDice(){
   BT.dice.forEach(d=>{const k=d.face.k;
     if(k==='p1')pts+=1;else if(k==='p2'){pts+=2;p2++}
     else if(k==='shield')shields++;else if(k==='star')stars++;else if(k==='snake')snakes++});
-  if(RUN.party.some(h=>h.id==='rui'&&h.alive)&&p2>0){pts+=p2;logMsg('🐆 难题手本能——睿从 ✦ 里多抠出 '+p2+' 点！')}
+  if(RUN.party.some(h=>h.id==='rui'&&h.alive)&&p2>0){pts+=p2;logMsg('难题手本能——睿从 里多抠出 '+p2+' 点！')}
   BT.ap+=pts;
-  if(shields>0){RUN.party.forEach(h=>{if(h.alive)h.shield+=3*shields});logMsg('🛡 护盾面 ×'+shields+'——全队 +'+(3*shields)+' 护盾！')}
-  if(stars>0){BT.ultDisc=1;logMsg('⭐ 星耀加持——本回合绝技 -1 费！')}
+  if(shields>0){RUN.party.forEach(h=>{if(h.alive)h.shield+=3*shields});logMsg('护盾面 ×'+shields+'——全队 +'+(3*shields)+' 护盾！')}
+  if(stars>0){BT.ultDisc=1;logMsg('星耀加持——本回合绝技 -1 费！')}
   BT.dice=null;BT.rolled=true;
-  if(pts>0)logMsg('🎲 收账：行动点 +'+pts+'！');
-  if(snakes>0){logMsg('🐍 蛇眼 ×'+snakes+'……敌方在暗处笑了。','dmg');tideUp(snakes)}else renderBattle()}
+  if(pts>0)logMsg('收账：行动点 +'+pts+'！');
+  if(snakes>0){logMsg('蛇眼 ×'+snakes+'……敌方在暗处笑了。','dmg');tideUp(snakes)}else renderBattle()}
 function cancelTarget(){BT.target=null;renderBattle()}
 window.cancelTarget=cancelTarget;
 
@@ -1262,7 +1262,7 @@ function dmgOf(h,base,target){
   let d=base+h.atkB+(h.runAtk||0)+RUN.actAtk;
   if(hasRelic('ruler'))d+=1;
   if(hasRelic('mask'))d+=3;
-  if(activeBonds().some(b=>b.nm.includes('队③')))d+=1;
+  if(activeBonds().some(b=>b.nm.includes('队3.')))d+=1;
   if(activeBonds().some(b=>b.nm==='最佳搭档')&&(h.id==='xi'||h.id==='yu'))d+=2;
   if(h.id==='xi')d+=h.content;
   if(h.id==='jin'&&target){const mx=Math.max(...BT.enemies.filter(e=>e.alive).map(e=>e.hp));if(target.hp===mx)d+=3}
@@ -1275,7 +1275,7 @@ function hitEnemy(e,dmg,opts){
   const idx=BT.enemies.indexOf(e);
   floatNum('en-'+idx,'-'+dmg,'var(--red2)');
   if(e.hp<=0&&e.alive){e.alive=false;
-    logMsg('💥 <b>'+e.def.name+'</b> 倒下了！','dmg');
+    logMsg('<b>'+e.def.name+'</b> 倒下了！','dmg');
     const qmap={hui:'huiq',xuan:'xuanq',yin:'yinq',parrot:'parrotq',hang:'hangq',yewang:'yewangq'};
     if(qmap[e.key])setTimeout(()=>unlockQuote(qmap[e.key]),500);
     return true}
@@ -1292,32 +1292,32 @@ function execSkill(hi,si,ti){
   const aliveE=BT.enemies.filter(e=>e.alive);
   const t=ti>=0?BT.enemies[ti]:null;
   switch(s.fx){
-    case 'dmg':{const d=dmgOf(h,s.v,t);logMsg('⚔ <b>'+h.def.name+'</b> 的「'+s.nm+'」命中 '+t.def.name+'——<b>'+d+'</b> 伤害！');hitEnemy(t,d);break}
-    case 'aoe':{logMsg('🌪 <b>'+h.def.name+'</b> 的「'+s.nm+'」横扫全场！');
+    case 'dmg':{const d=dmgOf(h,s.v,t);logMsg('<b>'+h.def.name+'</b> 的「'+s.nm+'」命中 '+t.def.name+'——<b>'+d+'</b> 伤害！');hitEnemy(t,d);break}
+    case 'aoe':{logMsg('<b>'+h.def.name+'</b> 的「'+s.nm+'」横扫全场！');
       aliveE.forEach(e=>hitEnemy(e,dmgOf(h,s.v,e)));break}
-    case 'healAll':{RUN.party.forEach(x=>heal(x,s.v));logMsg('📒 <b>涵</b> 换页重写——全队回复 '+s.v+'！');break}
-    case 'buffAtk':{const a=RUN.party[ti];a.atkB+=s.v;logMsg('🥁 <b>海</b> 为 '+a.def.name+' 打出节奏——攻击 +'+s.v+'！');break}
+    case 'healAll':{RUN.party.forEach(x=>heal(x,s.v));logMsg('<b>涵</b> 换页重写——全队回复 '+s.v+'！');break}
+    case 'buffAtk':{const a=RUN.party[ti];a.atkB+=s.v;logMsg('<b>海</b> 为 '+a.def.name+' 打出节奏——攻击 +'+s.v+'！');break}
     case 'darkhorse':{RUN.party.forEach(x=>heal(x,s.v));BT.nextBonus+=2;
-      logMsg('🦌 <b>黑马时刻！</b>全队回复 '+s.v+'，下回合行动点 +2！');break}
-    case 'taunt':{h.shield+=s.v;BT.tauntIdx=hi;logMsg('🛡 <b>浩</b> 站到了最前面——+'+s.v+' 护盾，本回合敌人只打他！');break}
-    case 'shieldAll':{RUN.party.forEach(x=>{if(x.alive)x.shield+=s.v});logMsg('🛡 <b>'+h.def.name+'</b>——全队 +'+s.v+' 护盾！');break}
+      logMsg('<b>黑马时刻！</b>全队回复 '+s.v+'，下回合行动点 +2！');break}
+    case 'taunt':{h.shield+=s.v;BT.tauntIdx=hi;logMsg('<b>浩</b> 站到了最前面——+'+s.v+' 护盾，本回合敌人只打他！');break}
+    case 'shieldAll':{RUN.party.forEach(x=>{if(x.alive)x.shield+=s.v});logMsg('<b>'+h.def.name+'</b>——全队 +'+s.v+' 护盾！');break}
     case 'duel':{const mx=aliveE.reduce((a,b)=>a.hp>b.hp?a:b);const d=dmgOf(h,s.v,mx);
-      logMsg('🦈 <b>麒</b> 发起决斗——全场安静。对 '+mx.def.name+' <b>'+d+'</b> 伤害！');
-      if(hitEnemy(mx,d)){BT.ap+=1;logMsg('⚡ 决斗完胜！返还 1 行动点！')}break}
+      logMsg('<b>麒</b> 发起决斗——全场安静。对 '+mx.def.name+' <b>'+d+'</b> 伤害！');
+      if(hitEnemy(mx,d)){BT.ap+=1;logMsg('决斗完胜！返还 1 行动点！')}break}
     case 'sunward':{const d=dmgOf(h,s.v,t);hitEnemy(t,d);h.atkB+=2;
-      logMsg('🦊 <b>瑾</b> 的向阳一击——<b>'+d+'</b> 伤害，且本场攻击永久 +2！');break}
+      logMsg('<b>瑾</b> 的向阳一击——<b>'+d+'</b> 伤害，且本场攻击永久 +2！');break}
     case 'lolly':{const a=RUN.party[ti];heal(a,s.v);a.shield+=2;
-      logMsg('🍭 <b>晰</b> 递出草莓棒棒糖——'+a.def.name+' 回复 '+s.v+'，+2 护盾！');break}
+      logMsg('<b>晰</b> 递出草莓棒棒糖——'+a.def.name+' 回复 '+s.v+'，+2 护盾！');break}
     case 'helm':{const d=dmgOf(h,s.v,t);hitEnemy(t,d);h.content+=2;
-      logMsg('🐰 <b>晰</b> 驾驭风暴——<b>'+d+'</b> 伤害，内容 +2 层！');break}
+      logMsg('<b>晰</b> 驾驭风暴——<b>'+d+'</b> 伤害，内容 +2 层！');break}
     case 'bomb':{h.usedOnce[si]=true;
-      logMsg('💣 <b>屿</b> 解开了角落里的锁——<b>爆炸炮弹！！</b>');
+      logMsg('<b>屿</b> 解开了角落里的锁——<b>爆炸炮弹！！</b>');
       aliveE.forEach(e=>hitEnemy(e,dmgOf(h,s.v,e)));
       h.hp=Math.max(1,h.hp-4);floatNum('hc-'+hi,'-4','var(--red2)');break}
     case 'probe':{const d=dmgOf(h,s.v,t);hitEnemy(t,d);t.dbf=2;
-      logMsg('🩶 <b>佳</b> 的探问——<b>'+d+'</b> 伤害，'+t.def.name+' 下次攻击 -2！');break}
+      logMsg('<b>佳</b> 的探问——<b>'+d+'</b> 伤害，'+t.def.name+' 下次攻击 -2！');break}
     case 'pierce':{const d=dmgOf(h,s.v,t);hitEnemy(t,d,{pierce:true});
-      logMsg('🎯 <b>佳</b> 问出了最准的问题——无视护盾，<b>'+d+'</b> 伤害！');break}}
+      logMsg('<b>佳</b> 问出了最准的问题——无视护盾，<b>'+d+'</b> 伤害！');break}}
   if(!BT.enemies.some(e=>e.alive)){winBattle();return}
   renderBattle()}
 
@@ -1329,7 +1329,7 @@ $('end-turn').addEventListener('click',()=>{
     if(checkWipe())return;
     if(BT.countdown>0){BT.countdown--;
       if(BT.countdown===0){
-        logMsg('🕯 <b>献祭仪式完成——「最黑暗的时刻，也不过六十分钟。」</b>','dmg');
+        logMsg('<b>献祭仪式完成——「最黑暗的时刻，也不过六十分钟。」</b>','dmg');
         RUN.party.forEach(h=>{if(h.alive)hurtHero(h,30)});
         if(checkWipe())return}
       else if(BT.countdown<=2)logMsg('⏳ 紫光越来越亮……倒计时 <b>'+BT.countdown+'</b>！','dmg')}
@@ -1342,12 +1342,12 @@ function hurtHero(h,dmg,attacker){
   floatNum('hc-'+idx,'-'+dmg,'var(--red2)');
   if(h.id==='xi'&&h.alive)h.content+=1;
   if(h.id==='hao'&&attacker&&attacker.alive){attacker.hp-=2;
-    if(attacker.hp<=0){attacker.alive=false;logMsg('💥 <b>'+attacker.def.name+'</b> 撞在浩的反弹上，自己碎了！','dmg')}}
+    if(attacker.hp<=0){attacker.alive=false;logMsg('<b>'+attacker.def.name+'</b> 撞在浩的反弹上，自己碎了！','dmg')}}
   if(h.hp<=0){
     if(hasRelic('letter')&&!RUN.letterUsed){RUN.letterUsed=true;h.hp=10;
-      logMsg('🔥 <b>未寄的信</b>燃起来了——'+h.def.name+' 以 10 生命站了回来！第十二封，烧给了现在。');return}
+      logMsg('<b>未寄的信</b>燃起来了——'+h.def.name+' 以 10 生命站了回来！第十二封，烧给了现在。');return}
     h.alive=false;h.hp=0;
-    logMsg('☠ <b>'+h.def.name+'</b> 倒下了……','dmg')}}
+    logMsg('<b>'+h.def.name+'</b> 倒下了……','dmg')}}
 function enemyActions(burst){
   const aliveH=()=>RUN.party.filter(h=>h.alive&&!h.caged);
   BT.enemies.forEach(e=>{
@@ -1358,38 +1358,38 @@ function enemyActions(burst){
     const tgt=BT.tauntIdx>=0&&RUN.party[BT.tauntIdx].alive?RUN.party[BT.tauntIdx]:pick(targets);
     switch(m.t){
       case 'atk':{let v=m.v+e.ramp;if(e.dbf>0){v=Math.max(0,v-e.dbf);e.dbf=0}
-        logMsg('🗡 '+e.def.name+' 的「'+m.nm+'」打向 <b>'+tgt.def.name+'</b>——'+v+' 伤害！');
+        logMsg(''+e.def.name+' 的「'+m.nm+'」打向 <b>'+tgt.def.name+'</b>——'+v+' 伤害！');
         hurtHero(tgt,v,e);if(m.ramp)e.ramp+=m.ramp;break}
       case 'aoe':{let v=m.v+e.ramp;
-        logMsg('🌑 '+e.def.name+' 的「'+m.nm+'」席卷全队——'+v+' 伤害！');
+        logMsg(''+e.def.name+' 的「'+m.nm+'」席卷全队——'+v+' 伤害！');
         RUN.party.forEach(h=>{if(h.alive)hurtHero(h,v,e)});if(m.ramp)e.ramp+=m.ramp;break}
-      case 'shield':e.shield+=m.v;logMsg('🛡 '+e.def.name+' '+m.nm+'，+'+m.v+' 护盾。');break;
+      case 'shield':e.shield+=m.v;logMsg(''+e.def.name+' '+m.nm+'，+'+m.v+' 护盾。');break;
       case 'charm':{
-        if(hasRelic('phones')&&!BT.phonesUsed){BT.phonesUsed=true;logMsg('🎧 空耳机隔出一道边界——魅惑无效！');break}
+        if(hasRelic('phones')&&!BT.phonesUsed){BT.phonesUsed=true;logMsg('空耳机隔出一道边界——魅惑无效！');break}
         const v=pick(targets);v.disabled=2;
-        logMsg('💜 '+e.def.name+' 的引诱缠上了 <b>'+v.def.name+'</b>——下回合无法行动！','dmg');break}
+        logMsg(''+e.def.name+' 的引诱缠上了 <b>'+v.def.name+'</b>——下回合无法行动！','dmg');break}
       case 'lock':{
-        if(hasRelic('phones')&&!BT.phonesUsed){BT.phonesUsed=true;logMsg('🎧 空耳机隔出一道边界——封锁无效！');break}
+        if(hasRelic('phones')&&!BT.phonesUsed){BT.phonesUsed=true;logMsg('空耳机隔出一道边界——封锁无效！');break}
         const v=pick(targets);v.lockUlt=2;
-        logMsg('📢 「标准答案只有一个！」<b>'+v.def.name+'</b> 的绝技被锁了一回合！','dmg');break}
+        logMsg('「标准答案只有一个！」<b>'+v.def.name+'</b> 的绝技被锁了一回合！','dmg');break}
       case 'ramp':{e.ramp+=m.v;e.hp=Math.max(1,e.hp-3);
-        logMsg('🟣 '+e.def.name+' 走火入魔——自损 3，攻击 +'+m.v+'！','dmg');break}
+        logMsg(''+e.def.name+' 走火入魔——自损 3，攻击 +'+m.v+'！','dmg');break}
       case 'summon':{
         if(BT.enemies.filter(x=>x.alive).length<3){
           const d=ENEMIES.snake;BT.enemies.push({key:'snake',def:d,hp:d.hp,maxhp:d.hp,shield:0,mi:0,ramp:0,dbf:0,alive:true});
-          logMsg('🐍 叶王抬了抬下巴——一条紫鳞蛇兵钻出地面！')}
-        else logMsg('🐍 叶王环视全场，蛇群已满。');break}
+          logMsg('叶王抬了抬下巴——一条紫鳞蛇兵钻出地面！')}
+        else logMsg('叶王环视全场，蛇群已满。');break}
       case 'cage':{
         const free=targets.filter(h=>!h.caged);
         if(free.length&&!RUN.party.some(h=>h.caged&&h.alive)){
           const v=pick(free);v.caged=true;
-          logMsg('🪤 <b>召唤笼落下！</b>'+v.def.name+' 被困住了——花 2 行动点砸开它！','dmg')}
-        else{logMsg('🗡 叶王的蟒尾横扫——'+tgt.def.name+' 受到 10 伤害！');hurtHero(tgt,10,e)}break}
-      case 'charge':logMsg('⚠ '+e.def.name+' 伏低了身子——<b>大招要来了！</b>','dmg');break;
-      case 'tide':logMsg('🐍 '+e.def.name+' 在阵后煽动——敌方暴走 +1！','dmg');
+          logMsg('<b>召唤笼落下！</b>'+v.def.name+' 被困住了——花 2 行动点砸开它！','dmg')}
+        else{logMsg('叶王的蟒尾横扫——'+tgt.def.name+' 受到 10 伤害！');hurtHero(tgt,10,e)}break}
+      case 'charge':logMsg(''+e.def.name+' 伏低了身子——<b>大招要来了！</b>','dmg');break;
+      case 'tide':logMsg(''+e.def.name+' 在阵后煽动——敌方暴走 +1！','dmg');
         BT.tide=Math.min(BT.tideMax-1,BT.tide+1);break}});
   // 困笼伤害
-  RUN.party.forEach(h=>{if(h.alive&&h.caged){hurtHero(h,4);logMsg('🪤 笼中的 '+h.def.name+' 受到 4 点挤压！','dmg')}});
+  RUN.party.forEach(h=>{if(h.alive&&h.caged){hurtHero(h,4);logMsg('笼中的 '+h.def.name+' 受到 4 点挤压！','dmg')}});
   renderBattle()}
 function checkWipe(){
   if(!RUN.party.some(h=>h.alive)){
@@ -1399,10 +1399,10 @@ function checkWipe(){
 // ---------- 胜利 ----------
 function winBattle(){
   const kind=BT.kind;const keys=BT.enemies.map(e=>e.key);
-  logMsg('🏆 <b>战斗胜利！！</b>');
+  logMsg('<b>战斗胜利！！</b>');
   if(hasRelic('brace'))RUN.party.forEach(h=>{if(h.alive)heal(h,3)});
   if(hasRelic('mask')){const t=pick(RUN.party.filter(h=>h.alive));if(t){t.hp=Math.max(1,t.hp-3);
-    toast('😈 紫光面具索取了代价——'+t.def.name+' -3 生命',2200)}}
+    toast('紫光面具索取了代价——'+t.def.name+' -3 生命',2200)}}
   let dust=kind==='boss'?20:kind==='elite'?12:6+ri(4);
   RUN.dustGain+=dust;
   // 悬案碎片
@@ -1413,8 +1413,8 @@ function winBattle(){
   if(kind==='boss'){
     const bossKey=ACTS[RUN.act].boss;
     SAVE.bossKills[bossKey]=(SAVE.bossKills[bossKey]||0)+1;
-    if(bossKey==='parrot'&&!SAVE.unlock2){SAVE.unlock2=true;toast('🎉 <b>队② 解锁！</b>海、浩、麒 加入可用学员！',4000)}
-    if(bossKey==='hang'&&!SAVE.unlock3){SAVE.unlock3=true;toast('🎉 <b>队③ 解锁！</b>瑾、晰、屿 加入可用学员！',4000)}
+    if(bossKey==='parrot'&&!SAVE.unlock2){SAVE.unlock2=true;toast('<b>队2. 解锁！</b>海、浩、麒 加入可用学员！',4000)}
+    if(bossKey==='hang'&&!SAVE.unlock3){SAVE.unlock3=true;toast('<b>队3. 解锁！</b>瑾、晰、屿 加入可用学员！',4000)}
     save();
     if(RUN.act>=2){setTimeout(()=>endRun(true,''),900);return}
     setTimeout(()=>{openReward(kind,()=>{enterAct(RUN.act+1);go('map')})},800);return}
@@ -1459,19 +1459,19 @@ function openReward(kind,next){
         '<div class="rw-name">'+r.nm+'</div><div class="rw-desc">'+r.desc+'<br><em style="color:var(--ink3)">'+r.flav+'</em></div>';
       d.addEventListener('click',()=>{gainRelic(r.id);closeReward()})}
     else if(o.type==='heal'){
-      d.innerHTML='<div class="rw-ico">❤</div><div class="rw-name">疗伤</div><div class="rw-desc">全队回复 8 生命</div>';
-      d.addEventListener('click',()=>{RUN.party.forEach(h=>heal(h,8));toast('❤ 全队回复 8！满状态再战！');closeReward()})}
+      d.innerHTML='<div class="rw-ico"></div><div class="rw-name">疗伤</div><div class="rw-desc">全队回复 8 生命</div>';
+      d.addEventListener('click',()=>{RUN.party.forEach(h=>heal(h,8));toast('全队回复 8！满状态再战！');closeReward()})}
     else if(o.type==='tonic'){
-      d.innerHTML='<div class="rw-ico">🔋</div><div class="rw-name">壮骨茶</div><div class="rw-desc">随机一名同伴最大生命 +3</div>';
+      d.innerHTML='<div class="rw-ico"></div><div class="rw-name">壮骨茶</div><div class="rw-desc">随机一名同伴最大生命 +3</div>';
       d.addEventListener('click',()=>{const h=pick(RUN.party.filter(x=>x.alive));h.maxhp+=3;h.hp+=3;
-        toast('🔋 '+h.def.name+' 最大生命 +3！');closeReward()})}
+        toast(''+h.def.name+' 最大生命 +3！');closeReward()})}
     else if(o.type==='forge'){
-      d.innerHTML='<div class="rw-ico">⚔</div><div class="rw-name">磨刀石</div><div class="rw-desc">随机一名同伴本局攻击永久 +1</div>';
+      d.innerHTML='<div class="rw-ico"></div><div class="rw-name">磨刀石</div><div class="rw-desc">随机一名同伴本局攻击永久 +1</div>';
       d.addEventListener('click',()=>{const h=pick(RUN.party.filter(x=>x.alive));h.runAtk=(h.runAtk||0)+1;
-        toast('⚔ '+h.def.name+' 的刀刃更亮了——本局攻击 +1！');closeReward()})}
+        toast(''+h.def.name+' 的刀刃更亮了——本局攻击 +1！');closeReward()})}
     else{
-      d.innerHTML='<div class="rw-ico">✨</div><div class="rw-name">星尘袋</div><div class="rw-desc">星尘 +10（局外货币，茶屋可用）</div>';
-      d.addEventListener('click',()=>{RUN.dustGain+=10;toast('✨ 星尘 +10！');closeReward()})}
+      d.innerHTML='<div class="rw-ico"></div><div class="rw-name">星尘袋</div><div class="rw-desc">星尘 +10（局外货币，茶屋可用）</div>';
+      d.addEventListener('click',()=>{RUN.dustGain+=10;toast('星尘 +10！');closeReward()})}
     g.appendChild(d)});
   go('reward')}
 function closeReward(){const n=rewardNext;rewardNext=null;n&&n()}
@@ -1492,7 +1492,7 @@ function endRun(win,reason){
     D.last=todayStr();D.doneToday=true;
     extra+='<span class="tag gold">每日修行完成 · 连续 '+D.streak+' 天</span> ';}
   save();
-  $('result-glyph').textContent=win?'🏆':'☠';
+  $('result-glyph').textContent=win?'':'';
   $('result-glyph').style.color=win?'var(--gold)':'var(--red2)';
   $('result-eyebrow').textContent=win?'VICTORY · 仲夏夜':'DEFEATED · 但星尘不骗人';
   $('result-title').innerHTML=win?'无名之原，<em>赢了！！</em>':'倒下了——<em>但没白来！</em>';
@@ -1538,7 +1538,7 @@ function renderCodex(tab){
     MYSTERY.frags.forEach(f=>{
       const got=SAVE.frags.includes(f.id);
       const d=document.createElement('div');d.className='cdx'+(got?'':' unknown');
-      d.innerHTML='<div class="cdx-ico">'+(got?'🧩':'？')+'</div><div class="cdx-name">'+(got?f.nm:'？？？')+'</div>'+
+      d.innerHTML='<div class="cdx-ico">'+(got?'':'？')+'</div><div class="cdx-name">'+(got?f.nm:'？？？')+'</div>'+
         '<div class="cdx-desc">'+(got?f.desc:'线索：'+f.src)+'</div>';
       g.appendChild(d)})}}
 function heroCdx(){
@@ -1548,7 +1548,7 @@ function heroCdx(){
     const d=document.createElement('div');d.className='cdx'+(unlocked?'':' unknown');
     d.innerHTML=artOr(h.id,h.name,'cdx-art','cdx-ico')+
       '<div class="cdx-name">'+h.name+' <span class="tag '+(unlocked?'gold':'')+'" style="font-size:9px">'+h.rar+'</span></div>'+
-      '<div class="cdx-desc">'+h.role+' · '+h.animal+(unlocked?'':'　<b>🔒 未解锁</b>')+'</div>'+
+      '<div class="cdx-desc">'+h.role+' · '+h.animal+(unlocked?'':'　<b>未解锁</b>')+'</div>'+
       (unlocked?'<div class="cdx-quote">'+h.quote+'</div>':'');
     g.appendChild(d)});
   [['hui','慧 · 虎女','黑域 · 精英'],['xuan','璇 · 引诱者','黑域 · 精英'],['yin','音 · 两面之声','边缘 · 亮黑各半'],
@@ -1570,7 +1570,7 @@ function heroCdx(){
 
 // ---------- 茶屋 ----------
 function renderTea(){
-  $('tea-dust').textContent=SAVE.dust+' ✨';
+  $('tea-dust').textContent=SAVE.dust+' ';
   const g=$('tea-grid');g.innerHTML='';
   TEA_UPS.forEach(u=>{
     const lv=teaLv(u.id);
@@ -1579,11 +1579,11 @@ function renderTea(){
     const d=document.createElement('div');d.className='tea';
     d.innerHTML='<h4>'+u.nm+'</h4><div class="lv">等级 '+lv+' / '+u.max+'</div><p>'+u.desc+'</p>';
     const b=document.createElement('button');b.className='btn dim';
-    b.textContent=maxed?'已满级 ✓':'升级 · '+cost+' ✨';
+    b.textContent=maxed?'已满级 ':'升级 · '+cost+' ';
     b.disabled=maxed||SAVE.dust<cost;
     b.addEventListener('click',()=>{
       SAVE.dust-=cost;SAVE.teaUps[u.id]=lv+1;save();
-      toast('🍵 「'+u.nm+'」升到 '+(lv+1)+' 级！下一局见真章！');renderTea()});
+      toast('「'+u.nm+'」升到 '+(lv+1)+' 级！下一局见真章！');renderTea()});
     d.appendChild(b);g.appendChild(d)})}
 
 // ---------- 启动 ----------
@@ -1599,9 +1599,9 @@ renderMenu();
 <style>@keyframes mskSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 .myskme-watermark{position:fixed;bottom:20px;right:20px;width:72px;height:72px;opacity:.32;pointer-events:none;z-index:40;animation:mskSpin 150s linear infinite}
 @media(max-width:760px){.myskme-watermark{width:46px;height:46px;opacity:.22}}</style>
-<div class="ctrl"><button id="themeBtn" title="切换主题">◐</button></div>
+<div class="ctrl"><button id="themeBtn" title="切换主题">自</button></div>
 <script>
-(function(){var TLS='myskme-theme',order=['auto','light','dark'],name={auto:'跟随系统',light:'浅色',dark:'深色'},icon={auto:'◐',light:'☀',dark:'☾'},mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
+(function(){var TLS='myskme-theme',order=['auto','light','dark'],name={auto:'跟随系统',light:'浅色',dark:'深色'},icon={auto:'自',light:'浅',dark:'深'},mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
 function pref(){try{return localStorage.getItem(TLS)||'auto'}catch(e){return 'auto'}}
 function resolve(p){return p==='auto'?((mq&&mq.matches)?'dark':'light'):p}
 function apply(p){var e=document.documentElement;e.setAttribute('data-theme',resolve(p));e.setAttribute('data-themepref',p);var b=document.getElementById('themeBtn');if(b){b.textContent=icon[p];b.title='主题：'+name[p]}}
