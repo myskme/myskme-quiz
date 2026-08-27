@@ -1485,7 +1485,7 @@ function renderHelp(){
 
 // ---------- 题库中心（兑换码 / 在线目录）----------
 // 题库书架：优先取枢纽（题库工坊网页后台发布即生效），回退到本站 banks/
-const SHELF='https://myskme.github.io/myskme-hub/banks/';
+const SHELF='https://myskme.com/banks/';
 // 返回 {r} 成功 / {notFound:true} 服务器答了但没这个码 / {net:true} 压根没连上。
 // 必须区分后两者：以前一律压成 null,调用方只会说「检查一下拼写？」——
 // 大陆访 github.io 本来就不稳,学生拿着完全正确的码被告知自己拼错了,会反复重试。
@@ -1674,7 +1674,7 @@ async function lbSrc(){
   const days=Object.keys(st.days||{}).length;
   let free=0,svip=0,catalogOk=true;
   const countBy=tc=>{free=0;svip=0;(SAVE.banks||[]).forEach(b=>{const t=tc[b.code];if(t==='svip')svip++;else if(t==='free')free++});};
-  try{const r=await fetch('https://myskme.github.io/myskme-hub/banks/index.json',{cache:'no-store'});const o=await r.json();const tc={};
+  try{const r=await fetch('https://myskme.com/banks/index.json',{cache:'no-store'});const o=await r.json();const tc={};
     (o.catalog||[]).forEach(c=>{tc[c.code]=(c.tier||'free').toLowerCase()});
     SAVE.bankTiers=tc;save();                        // 缓存目录,供下次取失败时兜底
     countBy(tc);
