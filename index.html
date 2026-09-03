@@ -44,6 +44,11 @@ a.game:hover::before,a.game:hover::after{width:26px;height:26px;opacity:1}
 padding:9px 26px;font-size:13px;letter-spacing:.3em;transition:all .2s}
 a.game:hover .g-go{background:var(--gold);color:var(--bg)}
 footer{margin-top:56px;font-size:11px;letter-spacing:.25em;color:var(--ink3);text-transform:uppercase}
+.log{margin-top:40px;max-width:520px;width:90vw;border-top:1px solid var(--line);padding-top:12px;font-size:13px;color:var(--ink2);line-height:1.9}
+.log summary{cursor:pointer;letter-spacing:.3em;color:var(--ink3);font-size:12px;list-style:none;text-align:center}
+.log summary::-webkit-details-marker{display:none}
+.log[open] summary{color:var(--gold)}
+.log p{margin:6px 0} .log p span{color:var(--gold);letter-spacing:.1em;margin-right:10px;font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -79,6 +84,13 @@ apply(pref());
     <span class="g-go">出 征</span>
   </a>
 </div>
+<details class="log"><summary>更新记录</summary>
+  <p><span>09-03</span>首页新增这份更新记录，以后每次改版都在这里记一行。</p>
+  <p><span>09-02</span>题库增至 47 辑：SP12《对账》人物传番外卷入库，卷上短链 myskme.com/q/SP12 直达。</p>
+  <p><span>08-27</span>题库地址从 GitHub Pages 改到 myskme.com，正门 quiz.myskme.com。</p>
+  <p><span>08-24</span>清掉界面上的表情符号与装饰符。</p>
+  <p><span>08-03</span>词灵榜接口改走 myskme.com/api 网关。</p>
+</details>
 <footer><a href="https://myskme.com/" aria-label="返回 MYSKME 作品总目" style="color:inherit;text-decoration:underline dotted rgba(201,166,74,.55)">作品总目</a>　·　MYSKME · Mr. Wang · 2026</footer>
 
 <!-- MYSKME 印章水印 -->
