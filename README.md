@@ -11,9 +11,13 @@
 | `assets/chars/` | 无名之原 27 位正典角色透明立绘（webp） |
 | `_headers` | 旧 Netlify 缓存策略遗留（GitHub Pages 不识别，无害；缓存击穿靠 `ART_V` 查询参数） |
 
-## 发布（2026-07-12 起）
+## 发布（2026-09 起：EdgeOne，正式域名 quiz.myskme.com）
 
-改文件 → `git commit` → `git push`，GitHub Pages 约 1 分钟生效。**不再走 Netlify，不需要口令。**
+GitHub 已停用，`git push` 到 GitLab **不会**自动上线。发布照 hub 仓库 `deploy/LOCAL-EDGEONE-RELEASE.md`：
+`git archive HEAD` 导出目录，`edgeone makers deploy <目录> -n myskme-quiz -a overseas`，先 `-e preview` 验，再 `-e production`。
+发布前跑 `node selftest-vs.mjs .`（本机没有 playwright 自带浏览器时加 `PW_CHANNEL=chrome`）。
+
+（2026-07-12 到 2026-08 是 GitHub Pages：改文件 push 约 1 分钟生效。）
 
 ## 历史与注意
 

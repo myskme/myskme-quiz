@@ -1413,6 +1413,8 @@ function vsAnswer(i,btn){
   else{
     if(btn)btn.classList.add('wrong');
     VS.streak[t]=0;sfx('wrong');flash('red');
+    // 二选一的题（0924 起卷宗集题库带进来的雷区题）：一方答错，剩下那个必然是对的，抢答等于白送分——直接亮正解
+    if(q.sh.ops.length<=2){ops[q.sh.ans].classList.add('correct');vsDone(q);return}
     // 抢答阶段
     const other=1-t;
     const sb=document.createElement('div');sb.className='steal-box';
