@@ -1,6 +1,6 @@
 # MYSKME 题库训练场 · QUIZ TRAINER
 
-线上：**https://myskme.github.io/myskme-quiz/** （GitHub Pages，git push 即上线）
+线上：https://quiz.myskme.com/（EdgeOne，需手动发布，见下方「发布」）
 
 | 文件 | 作品 |
 |---|---|
@@ -9,7 +9,7 @@
 | `index.html` | 入口页（讲清两个玩法的分工） |
 | `banks/` | 内置题库 JSON（书架目录取自 hub；新卷题库放这里 push 即上架） |
 | `assets/chars/` | 无名之原 27 位正典角色透明立绘（webp） |
-| `_headers` | 旧 Netlify 缓存策略遗留（GitHub Pages 不识别，无害；缓存击穿靠 `ART_V` 查询参数） |
+| `_headers` | 旧 Netlify 缓存策略遗留（EdgeOne 是否识别待确认，无害；缓存击穿靠 `ART_V` 查询参数） |
 
 ## 发布（2026-09 起：EdgeOne，正式域名 quiz.myskme.com）
 
